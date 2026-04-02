@@ -1,0 +1,12 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  <rect x="220" y="140" width="360" height="320" rx="24" fill="#0A2463" opacity="0.08"/>
+  <rect x="250" y="120" width="300" height="360" rx="28" fill="#FFFFFF" stroke="#0A2463" stroke-width="10"/>
+  <rect x="330" y="200" width="140" height="220" rx="18" fill="#1A1A2E"/>
+  <circle cx="400" cy="172" r="10" fill="#3E92CC"/>
+  <rect x="120" y="260" width="160" height="20" rx="10" fill="#3E92CC"/>
+  <rect x="520" y="260" width="160" height="20" rx="10" fill="#3E92CC"/>
+  <text x="400" y="540" text-anchor="middle" fill="#0A2463" font-size="36" font-family="Arial, sans-serif" font-weight="700">
+    Magnetic Car Phone Holder
+  </text>
+</svg>

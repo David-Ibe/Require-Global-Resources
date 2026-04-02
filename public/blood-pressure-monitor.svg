@@ -1,0 +1,13 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  <rect x="240" y="120" width="320" height="360" rx="40" fill="#FFFFFF" stroke="#0A2463" stroke-width="10"/>
+  <rect x="290" y="190" width="220" height="130" rx="18" fill="#1A1A2E"/>
+  <text x="400" y="268" text-anchor="middle" fill="#FFFFFF" font-size="42" font-family="Arial, sans-serif" font-weight="700">
+    120/80
+  </text>
+  <circle cx="400" cy="380" r="26" fill="#3E92CC"/>
+  <path d="M386 378L397 390L416 367" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="400" y="540" text-anchor="middle" fill="#0A2463" font-size="34" font-family="Arial, sans-serif" font-weight="700">
+    Digital Blood Pressure Monitor
+  </text>
+</svg>
