@@ -1,33 +1,53 @@
-import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { MessageCircle } from "lucide-react";
 
-import { storeCta, storePage, storeType } from "@/lib/store-ui";
-
-export const metadata: Metadata = {
-  title: "Page not found",
-  description: "The page you are looking for does not exist or has been moved."
-};
+import { brand, getWhatsAppLink } from "@/lib/site-config";
 
 export default function NotFound() {
+  const whatsappHref = getWhatsAppLink(
+    "Hi, I need help finding a product on your website."
+  );
+
   return (
-    <div
-      className={`${storePage.narrow} flex min-h-[70vh] flex-col items-center justify-center text-center`}
-    >
-      <p className="text-7xl font-semibold tabular-nums text-rgr-navy md:text-8xl">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-rgr-navy px-6 text-center">
+      <Image
+        src="/logo-mark.png"
+        alt={brand.shortName}
+        width={64}
+        height={64}
+        className="h-16 w-16"
+      />
+      <h1 className="mt-6 font-display text-6xl uppercase tracking-tight text-white md:text-8xl">
         404
+      </h1>
+      <p className="mt-4 font-display text-xl uppercase tracking-wider text-rgr-gold">
+        Page Not Found
       </p>
-      <h1 className={`${storeType.h1} mt-6`}>Page not found</h1>
-      <p className="mt-4 max-w-md text-rgr-gray700">
-        The page you are looking for does not exist or has been moved.
+      <p className="mt-3 max-w-md text-sm text-white/60">
+        The page you&apos;re looking for doesn&apos;t exist or has been moved.
+        Head back to the store or chat with us on WhatsApp for help.
       </p>
-      <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-        <Link href="/#products" className={storeCta.navy}>
-          Browse products
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-sm uppercase tracking-wider text-rgr-navy transition hover:bg-amber-400"
+        >
+          ← Back to Store
         </Link>
-        <Link href="/contact" className={storeCta.ghost}>
-          Contact us
-        </Link>
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-sm uppercase tracking-wider text-white transition hover:bg-[#20bd5a]"
+        >
+          <MessageCircle className="h-4 w-4" />
+          WhatsApp Support
+        </a>
       </div>
+      <p className="mt-12 text-xs text-white/30">
+        {brand.name} &middot; {brand.legalName} &middot; CAC Registered
+      </p>
     </div>
   );
 }

@@ -1,18 +1,23 @@
 export const brand = {
   name: "Require Global Resources",
   shortName: "Require Global Resources",
-  tagline: "Verified Smart Upgrades for Your Car & Home",
+  tagline: "Verified. Delivered. Trusted.",
   oneLiner:
-    "Secure checkout, WhatsApp-first support, and nationwide delivery. Pay on delivery in eligible locations.",
+    "Smart car and home upgrade products for the modern Nigerian.",
+  corePromise:
+    "Every product verified before it reaches you. Pay only when it arrives.",
+  positioning: "Not the cheapest. The most trusted.",
   legalName: "Require Trading Limited",
   colors: {
     navy: "#08142A",
     blue: "#1246D6",
-    white: "#FFFFFF"
+    blueLight: "#2563EB",
+    gold: "#F5A623",
+    white: "#FFFFFF",
   },
   location: "Lagos, Nigeria",
   phoneDisplay: "+234 802 913 8335",
-  website: "requireglobalresources.com"
+  website: "requireglobalresources.com",
 } as const;
 
 const configuredWhatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2348029138335";
@@ -26,17 +31,18 @@ export const contact = {
   instagramUrl: "https://www.instagram.com/requireglobalresources",
   tiktokHandle: "@requireglobalresources",
   tiktokUrl: "https://www.tiktok.com/@requireglobalresources",
-  facebookName: "Require Global",
+  facebookName: "Require Global Resources",
   facebookUrl: "https://www.facebook.com/people/Require-Global-Resources",
-  email: "info@requireglobalresources.com"
+  email: "info@requireglobalresources.com",
 } as const;
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobalresources.com";
 
-/** Default page title, meta description, and OG/Twitter preview text for the site. */
-export const defaultSiteTitle = `${brand.shortName} | ${brand.tagline}`;
-export const defaultSiteDescription = `${brand.tagline}. ${brand.oneLiner}`;
+export const defaultSiteTitle =
+  "Require Global Resources — Verified Car & Home Products. Delivered Nigeria-Wide.";
+export const defaultSiteDescription =
+  "Shop verified car accessories and home upgrade products. Pay on delivery. Delivered anywhere in Nigeria in 2–5 days. CAC registered Nigerian business.";
 
 export function getWhatsAppLink(message: string): string {
   return `https://wa.me/${cleanedWhatsAppNumber}?text=${encodeURIComponent(message)}`;

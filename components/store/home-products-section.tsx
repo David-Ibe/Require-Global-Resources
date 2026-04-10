@@ -6,11 +6,14 @@ import { fetchHomeProducts } from "@/lib/home-data";
 export function HomeProductsHeading() {
   return (
     <FadeInView>
-      <h2 className="text-3xl font-semibold tracking-tight text-rgr-navy md:text-4xl">
-        Featured products
+      <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-blue">
+        Best Sellers
+      </p>
+      <h2 className="mt-2 font-display text-3xl uppercase tracking-tight text-rgr-navy md:text-4xl">
+        FEATURED PRODUCTS
       </h2>
-      <p className="mt-3 max-w-md text-[15px] leading-relaxed text-rgr-gray500 md:text-base">
-        Verified quality, fast dispatch, and clean pricing.
+      <p className="mt-3 max-w-md text-base text-rgr-gray500">
+        Our most popular verified products — loved by Nigerian drivers.
       </p>
     </FadeInView>
   );
@@ -18,18 +21,21 @@ export function HomeProductsHeading() {
 
 export function HomeProductsSkeleton() {
   return (
-    <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3" aria-hidden>
-      {Array.from({ length: 6 }).map((_, i) => (
+    <div
+      className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+      aria-hidden
+    >
+      {Array.from({ length: 3 }).map((_, i) => (
         <div
           key={i}
-          className="overflow-hidden rounded-2xl bg-rgr-surface shadow-soft ring-1 ring-rgr-gray300/40"
+          className="overflow-hidden rounded-2xl bg-white shadow-soft ring-1 ring-rgr-gray300/40"
         >
           <div className="aspect-[4/3] animate-pulse bg-rgr-gray100" />
           <div className="space-y-4 px-6 pb-7 pt-6">
             <div className="h-6 max-w-[88%] animate-pulse rounded bg-rgr-gray100" />
+            <div className="h-4 w-full animate-pulse rounded bg-rgr-gray100" />
             <div className="h-8 w-28 animate-pulse rounded bg-rgr-gray100" />
-            <div className="h-3.5 w-16 animate-pulse rounded bg-rgr-gray100" />
-            <div className="h-11 animate-pulse rounded-lg bg-rgr-gray100" />
+            <div className="h-12 animate-pulse rounded-xl bg-rgr-gray100" />
           </div>
         </div>
       ))}
@@ -44,7 +50,15 @@ export async function HomeProductsGrid() {
   if (!fetchError && loadedProducts.length === 0) {
     return (
       <p className="mt-12 text-center text-rgr-gray700">
-        More products coming soon. Follow @requireglobalresources
+        More products coming soon. Follow{" "}
+        <a
+          href="https://instagram.com/requireglobalresources"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-rgr-blue underline underline-offset-2"
+        >
+          @requireglobalresources
+        </a>
       </p>
     );
   }
@@ -58,7 +72,7 @@ export async function HomeProductsGrid() {
       </div>
       {fetchError ? (
         <p className="mt-8 text-center text-sm text-rgr-gray500">
-          Showing featured items — reconnecting to catalog.
+          Showing featured items &mdash; reconnecting to catalog.
         </p>
       ) : null}
     </>

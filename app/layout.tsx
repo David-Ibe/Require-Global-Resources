@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 import { AnalyticsProvider } from "@/components/analytics-provider";
 import { ClientMetrics } from "@/components/client-metrics";
-import { brand, defaultSiteDescription, defaultSiteTitle, siteUrl } from "@/lib/site-config";
+import { brand, contact, defaultSiteDescription, defaultSiteTitle, siteUrl } from "@/lib/site-config";
 
 import "./globals.css";
 

@@ -156,12 +156,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (body.paymentMethod === "card") {
-      return NextResponse.json(
-        { error: "Card payment is currently unavailable. Please continue via WhatsApp." },
-        { status: 400 }
-      );
-    }
+    const isCardPayment = body.paymentMethod === "card" && body.paystackReference;
+    const paymentMethodValue = isCardPayment ? "card" : "cod";
+    const orderStatus = isCardPayment ? "paid" : "pending";
 
     const options = Array.isArray(product.pricing_options)
       ? (product.pricing_options as PricingOption[])
@@ -199,9 +196,9 @@ export async function POST(request: Request) {
         whatsapp: safeWhatsapp,
         address: safeAddress,
         state: safeState,
-        payment_method: "cod",
-        status: "pending",
-        paystack_reference: null
+        payment_method: paymentMethodValue,
+        status: orderStatus,
+        paystack_reference: isCardPayment ? (body.paystackReference ?? null) : null
       })
       .select("id")
       .single();

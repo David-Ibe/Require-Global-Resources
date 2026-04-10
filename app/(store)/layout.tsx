@@ -12,7 +12,7 @@ export default function StoreLayout({
     <>
       <AnnouncementBar />
       <StoreNavbar />
-      <div className="pb-24 sm:pb-20">{children}</div>
+      <main>{children}</main>
       <StoreFooter />
       <FloatingWhatsApp />
     </>

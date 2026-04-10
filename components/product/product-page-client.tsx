@@ -1,17 +1,28 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { getWhatsAppLink } from "@/lib/site-config";
-import {
-  waEntryNotifyStock
-} from "@/lib/whatsapp-sales";
+import { waEntryNotifyStock, waOrderFormBody } from "@/lib/whatsapp-sales";
 import type { PricingOption, ProductRow } from "@/lib/supabase/types";
+import { NIGERIAN_STATES } from "@/lib/nigeria-states";
+import {
+  trackInitiateCheckout,
+  trackPurchase,
+} from "@/lib/analytics";
 
 import { UrgencyBar } from "@/components/product/urgency-bar";
+import { FadeInView } from "@/components/fade-in-view";
 import { featureBlurbFor } from "@/lib/feature-blurb";
+
+const ProductPaystackBridge = dynamic(
+  () => import("@/components/product/product-paystack-bridge").then((m) => m.ProductPaystackBridge),
+  { ssr: false }
+);
+
 function youtubeId(url: string): string | null {
   const m = url.match(/(?:youtu\.be\/|v=)([^&?]+)/);
   return m?.[1] ?? null;
@@ -22,15 +33,39 @@ function digitsFromPrice(raw: string): number {
   return Number.isFinite(n) && n > 0 ? n : 0;
 }
 
-const trustMini = [
-  "Verified products",
-  "Manual payment verification",
-  "CAC registered",
-  "Fast delivery"
-] as const;
+function validateNigerianPhone(phone: string): boolean {
+  const d = phone.replace(/\D/g, "");
+  if (d.length === 11 && d.startsWith("0")) return true;
+  if (d.length === 13 && d.startsWith("234")) return true;
+  if (d.length === 10 && /^[789]/.test(d)) return true;
+  return false;
+}
+
+type FormState = {
+  fullName: string;
+  phone: string;
+  whatsapp: string;
+  address: string;
+  state: string;
+};
+
+const initialForm: FormState = {
+  fullName: "",
+  phone: "",
+  whatsapp: "",
+  address: "",
+  state: "",
+};
+
+const trustCards = [
+  { emoji: "✅", title: "Verified Products", desc: "Every item inspected before shipping" },
+  { emoji: "💵", title: "Pay on Delivery", desc: "Pay only when it arrives at your door" },
+  { emoji: "🏢", title: "CAC Registered", desc: "Legitimate Nigerian business" },
+  { emoji: "🚀", title: "Fast Delivery", desc: "2–5 days nationwide" },
+];
 
 export function ProductPageClient({
-  product
+  product,
 }: {
   product: ProductRow;
 }) {
@@ -42,7 +77,6 @@ export function ProductPageClient({
 
   const [selectedIdx, setSelectedIdx] = useState(0);
   const selected = options[selectedIdx] ?? options[0];
-  const [orderQty, setOrderQty] = useState(1);
 
   const images = product.images.length ? product.images : ["/og-default.svg"];
   const [imgIdx, setImgIdx] = useState(0);
@@ -56,46 +90,189 @@ export function ProductPageClient({
     return digitsFromPrice(raw);
   }, [selected, product.current_price]);
 
-  const lineEstimate = unitPriceDigits * orderQty;
+  // Order form state
+  const [form, setForm] = useState<FormState>(initialForm);
+  const [sameAsPhone, setSameAsPhone] = useState(true);
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod");
+  const [submitting, setSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [apiError, setApiError] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successName, setSuccessName] = useState("");
+  const [paystackReady, setPaystackReady] = useState(false);
 
-  useEffect(() => {
-    const max = Math.max(1, product.stock_count);
-    setOrderQty((q) => Math.min(Math.max(1, q), max));
-  }, [product.stock_count, selectedIdx]);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  function bumpOrderQty(delta: number) {
-    const max = Math.max(1, product.stock_count);
-    setOrderQty((q) => Math.min(Math.max(1, q + delta), max));
+  function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    setFieldErrors((prev) => ({ ...prev, [key]: undefined }));
   }
+
+  function validateForm(): boolean {
+    const nextErrors: Partial<Record<keyof FormState, string>> = {};
+    if (!form.fullName.trim()) nextErrors.fullName = "Full name is required.";
+    if (!form.phone.trim()) nextErrors.phone = "Phone is required.";
+    else if (!validateNigerianPhone(form.phone)) nextErrors.phone = "Enter a valid Nigerian number.";
+    if (!form.whatsapp.trim()) nextErrors.whatsapp = "WhatsApp number is required.";
+    else if (!validateNigerianPhone(form.whatsapp)) nextErrors.whatsapp = "Enter a valid Nigerian number.";
+    if (!form.address.trim()) nextErrors.address = "Address is required.";
+    if (!form.state.trim()) nextErrors.state = "State is required.";
+    setFieldErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  }
+
+  const isFormValid = useMemo(() => {
+    return (
+      form.fullName.trim() !== "" &&
+      form.phone.trim() !== "" &&
+      form.whatsapp.trim() !== "" &&
+      form.address.trim() !== "" &&
+      form.state.trim() !== ""
+    );
+  }, [form]);
+
+  async function saveOrder(paystackRef?: string) {
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          phone: form.phone,
+          whatsapp: form.whatsapp,
+          address: form.address,
+          state: form.state,
+          productSlug: product.slug,
+          quantity: 1,
+          packageLabel: selected?.label,
+          packagePrice: selected?.price ?? product.current_price,
+          paymentMethod: paystackRef ? "card" : "cod",
+          paystackReference: paystackRef || undefined,
+        }),
+      });
+      const data = await response.json();
+
+      trackPurchase({
+        value: unitPriceDigits,
+        transactionId: data.orderId ?? crypto.randomUUID(),
+        contentName: product.name,
+      });
+
+      setSuccessName(form.fullName);
+      setShowSuccess(true);
+
+      setTimeout(() => {
+        const msg = waOrderFormBody({
+          productName: product.name,
+          packageLabel: selected?.label ?? "Standard",
+          price: selected?.price ?? product.current_price,
+          paymentLabel: paystackRef ? "Paid with Card" : "Pay on Delivery",
+          name: form.fullName,
+          phone: form.phone,
+          whatsapp: form.whatsapp,
+          address: form.address,
+          state: form.state,
+        });
+        window.open(getWhatsAppLink(msg), "_blank", "noopener,noreferrer");
+      }, 1500);
+    } catch {
+      setSuccessName(form.fullName);
+      setShowSuccess(true);
+    }
+  }
+
+  async function handleCodSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    trackInitiateCheckout(unitPriceDigits);
+    setSubmitting(true);
+    setApiError("");
+
+    try {
+      await saveOrder();
+    } catch {
+      setApiError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function handlePaystackSubmit() {
+    if (!validateForm()) return;
+    trackInitiateCheckout(unitPriceDigits);
+    setPaystackReady(true);
+  }
+
+  function handlePaystackSuccess(reference: string) {
+    setPaystackReady(false);
+    void saveOrder(reference);
+  }
+
+  function handlePaystackClose() {
+    setPaystackReady(false);
+  }
+
+  // Auto dismiss success after 8 seconds
+  useEffect(() => {
+    if (!showSuccess) return;
+    const timer = setTimeout(() => setShowSuccess(false), 8000);
+    return () => clearTimeout(timer);
+  }, [showSuccess]);
 
   return (
     <div className="bg-rgr-surface">
       {product.stock_count > 0 ? <UrgencyBar stockCount={product.stock_count} /> : null}
 
+      {/* Header breadcrumb */}
       <div className="border-b border-rgr-gray300/40 bg-[#fcfcfc]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-10">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-4 md:px-10">
           <div className="space-y-1">
             <p className="text-xs uppercase tracking-[0.14em] text-rgr-gray500">
               Home / {product.category}
             </p>
             <Link
               href="/"
-              className="text-sm font-medium text-rgr-gray700 underline decoration-rgr-gray300 underline-offset-4 transition hover:text-rgr-navy hover:decoration-rgr-navy"
+              className="text-sm font-medium text-rgr-blue underline underline-offset-4 transition hover:text-rgr-navy"
             >
-              ← Back to store
+              ← Back to All Products
             </Link>
           </div>
-          <a
-            href={`/order/${product.slug}`}
-            className="inline-flex items-center justify-center rounded-lg bg-rgr-navy px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rgr-charcoal"
-          >
-            Continue to checkout
-          </a>
+          <span className="hidden items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-600 md:inline-flex">
+            ✅ CAC Registered
+          </span>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-10">
+      {/* Hero section */}
+      <section className="bg-rgr-navy py-10 md:py-16">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <FadeInView>
+            <span className="inline-block rounded-full bg-rgr-blue/20 px-4 py-1.5 text-sm font-medium text-rgr-gold">
+              {product.category}
+            </span>
+            <h1 className="mt-4 font-display text-3xl uppercase tracking-tight text-white md:text-4xl lg:text-5xl">
+              {product.name}
+            </h1>
+            <p className="mt-4 max-w-2xl text-base text-white/70">
+              {product.description}
+            </p>
+            {product.features.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {product.features.slice(0, 4).map((f) => (
+                  <span key={f} className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80">
+                    {f}
+                  </span>
+                ))}
+              </div>
+            )}
+          </FadeInView>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-12">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:items-start">
+          {/* Left: Image gallery */}
           <div className="lg:sticky lg:top-24 lg:self-start">
             <div className="flex gap-3">
               <div className="hidden shrink-0 gap-2 lg:flex lg:w-20 lg:flex-col">
@@ -119,12 +296,17 @@ export function ProductPageClient({
                   src={mainImg}
                   alt={product.name}
                   fill
-                  className="object-contain"
+                  className="object-contain transition-opacity duration-300"
                   priority
                   sizes="(max-width:1024px) 100vw, 50vw"
                 />
                 {product.badge ? (
-                  <span className="absolute left-4 top-4 rounded-md bg-rgr-navy/90 px-2.5 py-1 text-xs font-medium text-white">
+                  <span className={`absolute left-4 top-4 rounded-md px-2.5 py-1 text-xs font-bold uppercase tracking-wider shadow-sm ${
+                    product.badge === "HOT SELLER" ? "bg-red-500 text-white" :
+                    product.badge === "NEW" ? "bg-rgr-blue text-white" :
+                    product.badge === "BEST VALUE" ? "bg-rgr-gold text-rgr-navy" :
+                    "bg-rgr-navy/90 text-white"
+                  }`}>
                     {product.badge}
                   </span>
                 ) : null}
@@ -144,46 +326,63 @@ export function ProductPageClient({
                 </button>
               ))}
             </div>
+
+            {/* YouTube video (below images) */}
+            {yt ? (
+              <div className="mt-8">
+                <h2 className="font-display text-xl uppercase tracking-wider text-rgr-navy">
+                  HOW IT WORKS
+                </h2>
+                <div className="mt-4 aspect-video overflow-hidden rounded-2xl bg-black shadow-soft">
+                  <iframe
+                    title="Product video"
+                    src={`https://www.youtube.com/embed/${yt}`}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Why you need this — feature cards */}
+            {product.features.length > 0 && (
+              <div className="mt-10">
+                <h2 className="font-display text-xl uppercase tracking-wider text-rgr-navy">
+                  WHY YOU NEED THIS
+                </h2>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {product.features.map((f) => (
+                    <FadeInView key={f}>
+                      <div className="rounded-xl border border-rgr-gray300/40 bg-white p-4 shadow-sm">
+                        <p className="font-semibold text-rgr-navy">{f}</p>
+                        <p className="mt-1 text-sm text-rgr-gray500">{featureBlurbFor(f)}</p>
+                      </div>
+                    </FadeInView>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-2">
-            <div className="rounded-2xl border border-rgr-gray300/50 bg-rgr-surface p-5 shadow-soft md:p-6">
-              <p className="text-sm text-rgr-gray500">{product.category}</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-rgr-navy md:text-[2.05rem]">
-                {product.name}
-              </h1>
-              <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
-                <span
-                  className={`rounded-full px-3 py-1 font-medium ${
-                    soldOut
-                      ? "bg-rgr-gray200 text-rgr-gray700"
-                      : "bg-rgr-success/15 text-rgr-success"
-                  }`}
-                >
-                  {soldOut ? "Out of stock" : "In stock"}
-                </span>
-                <span className="text-rgr-gray500">SKU: {product.slug}</span>
-              </div>
-              <p className="mt-4 text-base leading-relaxed text-rgr-gray700">
-                {product.description}
+          {/* Right: Order form */}
+          <div className="space-y-6 lg:sticky lg:top-24">
+            {/* Free delivery offer banner */}
+            <div className="rounded-2xl border border-green-200 bg-green-50 p-5">
+              <p className="font-display text-sm uppercase tracking-wider text-green-800">
+                🎁 FREE DELIVERY OFFER
               </p>
-              <div className="mt-6 rounded-xl border border-rgr-gray300/50 bg-[#fafafa] px-4 py-3">
-                <p className="text-sm text-rgr-gray600">Current price</p>
-                <p className="mt-1 text-3xl font-bold tracking-tight text-rgr-navy">
-                  {selected?.price ?? product.current_price}
-                </p>
-                {product.old_price ? (
-                  <p className="mt-1 text-sm text-rgr-gray500">
-                    <span className="line-through">{product.old_price}</span>
-                    <span className="ml-2 font-medium text-rgr-navy">Promo</span>
-                  </p>
-                ) : null}
-              </div>
+              <p className="mt-2 text-sm text-green-700">
+                Next 5 customers who order get FREE delivery anywhere in Nigeria.
+              </p>
+            </div>
 
-              <h2 className="mt-6 text-base font-semibold uppercase tracking-[0.08em] text-rgr-gray600">
-                Choose package
+            {/* Package selector */}
+            <div className="rounded-2xl border border-rgr-gray300/50 bg-white p-5 shadow-soft md:p-6">
+              <h2 className="font-display text-lg uppercase tracking-wider text-rgr-navy">
+                SELECT YOUR PACKAGE
               </h2>
-              <p className="mt-2 text-sm text-rgr-gray500">Choose what fits your need best.</p>
               <div className="mt-4 space-y-2.5">
                 {options.map((opt, i) => (
                   <button
@@ -192,174 +391,338 @@ export function ProductPageClient({
                     onClick={() => setSelectedIdx(i)}
                     className={`w-full rounded-xl border p-4 text-left transition ${
                       selectedIdx === i
-                        ? "border-rgr-navy bg-[#fafafa] ring-1 ring-rgr-navy"
-                        : "border-rgr-gray300/60 bg-rgr-surface hover:border-rgr-gray300"
+                        ? "border-l-4 border-l-rgr-blue border-rgr-blue bg-[#EFF6FF] ring-1 ring-rgr-blue"
+                        : "border-rgr-gray300/60 bg-white hover:border-rgr-gray300"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-base font-semibold text-rgr-navy">{opt.label}</p>
+                        <p className="font-semibold text-rgr-navy">{opt.label}</p>
                         <p className="text-xs text-rgr-gray500">Qty: {opt.qty}</p>
                         {opt.savings ? (
-                          <p className="mt-1 text-sm font-medium text-rgr-gray700">
+                          <span className="mt-1 inline-block rounded-full bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700">
                             {opt.savings}
-                          </p>
+                          </span>
                         ) : null}
                       </div>
-                      <span className="text-lg font-bold tabular-nums text-rgr-navy">{opt.price}</span>
+                      <span className="font-display text-xl tabular-nums text-rgr-navy">{opt.price}</span>
                     </div>
                   </button>
                 ))}
               </div>
 
-              <ul className="mt-6 space-y-2 text-sm text-rgr-gray700">
-                {product.features.slice(0, 3).map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rgr-navy" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {!soldOut ? (
-                <div className="mt-6 rounded-xl border border-rgr-gray300/60 bg-[#fafafa] p-4">
-                  <p className="text-sm font-medium text-rgr-gray700">Quantity</p>
-                  <div className="mt-2 flex max-w-[220px] items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => bumpOrderQty(-1)}
-                      disabled={orderQty <= 1}
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-rgr-gray300 bg-white text-lg font-semibold text-rgr-navy transition hover:bg-rgr-gray100 disabled:cursor-not-allowed disabled:opacity-40"
-                      aria-label="Decrease quantity"
-                    >
-                      −
-                    </button>
-                    <span className="min-w-[2.5rem] text-center text-lg font-semibold tabular-nums text-rgr-navy">
-                      {orderQty}
+              {/* Price summary */}
+              <div className="mt-5 rounded-xl border border-rgr-gray300/50 bg-[#fafafa] px-4 py-3">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-sm text-rgr-gray600">Price</span>
+                  <div className="flex items-baseline gap-2">
+                    {product.old_price ? (
+                      <span className="text-sm text-rgr-gray500 line-through">{product.old_price}</span>
+                    ) : null}
+                    <span className="font-display text-2xl tabular-nums text-rgr-blue">
+                      {selected?.price ?? product.current_price}
                     </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Order form */}
+            {soldOut ? (
+              <div className="rounded-2xl border border-rgr-gray300/60 bg-[#fafafa] p-8 text-center">
+                <p className="font-display text-xl uppercase text-rgr-navy">SOLD OUT</p>
+                <p className="mt-2 text-sm text-rgr-gray700">
+                  Join the waitlist to be notified when it&apos;s back.
+                </p>
+                <a
+                  href={getWhatsAppLink(waEntryNotifyStock(product.name))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-sm uppercase tracking-wider text-white transition hover:brightness-110"
+                >
+                  📲 Notify Me When Back in Stock
+                </a>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-rgr-gray300/50 bg-white p-5 shadow-soft md:p-6">
+                <h2 className="font-display text-lg uppercase tracking-wider text-rgr-navy">
+                  📦 PLACE YOUR ORDER NOW
+                </h2>
+                <p className="mt-1 text-sm text-rgr-gray500">
+                  Only serious buyers — fill the form below
+                </p>
+
+                {/* Pay on delivery badge */}
+                <div className="mt-4 rounded-xl border border-green-200 bg-green-50 p-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🚚</span>
+                    <div>
+                      <p className="font-display text-sm uppercase tracking-wider text-green-800">
+                        💵 PAY ON DELIVERY
+                      </p>
+                      <p className="text-xs text-green-700">
+                        You pay ONLY when your order arrives. Zero upfront risk.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <form ref={formRef} className="mt-5 space-y-4" onSubmit={handleCodSubmit} noValidate>
+                  <label className="block">
+                    <span className="text-sm font-medium text-rgr-gray700">Full Name</span>
+                    <input
+                      value={form.fullName}
+                      onChange={(e) => updateField("fullName", e.target.value)}
+                      className={`mt-1 w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                        fieldErrors.fullName
+                          ? "border-red-400 focus:ring-2 focus:ring-red-200"
+                          : "border-rgr-gray300 focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
+                      }`}
+                      placeholder="Your full name"
+                    />
+                    {fieldErrors.fullName && (
+                      <p className="mt-1 text-xs text-red-600">{fieldErrors.fullName}</p>
+                    )}
+                  </label>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-rgr-gray700">Phone Number</span>
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => {
+                        updateField("phone", e.target.value);
+                        if (sameAsPhone) updateField("whatsapp", e.target.value);
+                      }}
+                      className={`mt-1 w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                        fieldErrors.phone
+                          ? "border-red-400 focus:ring-2 focus:ring-red-200"
+                          : "border-rgr-gray300 focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
+                      }`}
+                      placeholder="080..."
+                    />
+                    {fieldErrors.phone && (
+                      <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+                    )}
+                  </label>
+
+                  <div>
+                    <label className="block">
+                      <span className="text-sm font-medium text-rgr-gray700">WhatsApp Number</span>
+                      <input
+                        type="tel"
+                        value={form.whatsapp}
+                        onChange={(e) => updateField("whatsapp", e.target.value)}
+                        disabled={sameAsPhone}
+                        className={`mt-1 w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                          fieldErrors.whatsapp
+                            ? "border-red-400 focus:ring-2 focus:ring-red-200"
+                            : "border-rgr-gray300 focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
+                        } disabled:bg-rgr-gray100`}
+                        placeholder="080..."
+                      />
+                    </label>
+                    <label className="mt-2 flex items-center gap-2 text-xs text-rgr-gray700">
+                      <input
+                        type="checkbox"
+                        checked={sameAsPhone}
+                        onChange={(e) => {
+                          setSameAsPhone(e.target.checked);
+                          if (e.target.checked) updateField("whatsapp", form.phone);
+                        }}
+                        className="rounded"
+                      />
+                      Same as phone number
+                    </label>
+                    {fieldErrors.whatsapp && (
+                      <p className="mt-1 text-xs text-red-600">{fieldErrors.whatsapp}</p>
+                    )}
+                  </div>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-rgr-gray700">Delivery Address</span>
+                    <input
+                      value={form.address}
+                      onChange={(e) => updateField("address", e.target.value)}
+                      className={`mt-1 w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                        fieldErrors.address
+                          ? "border-red-400 focus:ring-2 focus:ring-red-200"
+                          : "border-rgr-gray300 focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
+                      }`}
+                      placeholder="Street address, estate, landmark"
+                    />
+                    {fieldErrors.address && (
+                      <p className="mt-1 text-xs text-red-600">{fieldErrors.address}</p>
+                    )}
+                  </label>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-rgr-gray700">Delivery State</span>
+                    <select
+                      value={form.state}
+                      onChange={(e) => updateField("state", e.target.value)}
+                      className={`mt-1 w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                        fieldErrors.state
+                          ? "border-red-400 focus:ring-2 focus:ring-red-200"
+                          : "border-rgr-gray300 focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
+                      }`}
+                    >
+                      <option value="">Select state</option>
+                      {NIGERIAN_STATES.map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    {fieldErrors.state && (
+                      <p className="mt-1 text-xs text-red-600">{fieldErrors.state}</p>
+                    )}
+                  </label>
+
+                  {/* Selected package display */}
+                  <div className="rounded-lg border border-rgr-gray300/50 bg-[#fafafa] p-3 text-sm text-rgr-gray700">
+                    Selected: <span className="font-semibold text-rgr-navy">{selected?.label}</span>
+                    {" — "}
+                    <span className="font-semibold text-rgr-blue">{selected?.price ?? product.current_price}</span>
+                  </div>
+
+                  {/* Payment method toggle */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-rgr-gray700">Payment Method</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod("cod")}
+                        className={`rounded-xl border p-3 text-left transition ${
+                          paymentMethod === "cod"
+                            ? "border-green-500 bg-green-50 ring-1 ring-green-500"
+                            : "border-rgr-gray300/60 bg-white hover:border-rgr-gray300"
+                        }`}
+                      >
+                        <p className="text-sm font-semibold text-rgr-navy">💵 Pay on Delivery</p>
+                        <p className="text-[11px] text-rgr-gray500">Pay when it arrives</p>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod("card")}
+                        className={`rounded-xl border p-3 text-left transition ${
+                          paymentMethod === "card"
+                            ? "border-rgr-blue bg-[#EFF6FF] ring-1 ring-rgr-blue"
+                            : "border-rgr-gray300/60 bg-white hover:border-rgr-gray300"
+                        }`}
+                      >
+                        <p className="text-sm font-semibold text-rgr-navy">💳 Pay Now with Card</p>
+                        <p className="text-[11px] text-rgr-gray500">Secure Paystack checkout</p>
+                      </button>
+                    </div>
+                  </div>
+
+                  {apiError && (
+                    <p className="text-sm text-red-600">{apiError}</p>
+                  )}
+
+                  {paymentMethod === "cod" ? (
+                    <button
+                      type="submit"
+                      disabled={submitting || !isFormValid}
+                      className="w-full rounded-xl bg-rgr-gold px-6 py-4 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {submitting ? (
+                        <span className="inline-flex items-center gap-2">
+                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-rgr-navy/30 border-t-rgr-navy" />
+                          Processing...
+                        </span>
+                      ) : (
+                        "🛒 ORDER NOW — PAY ON DELIVERY"
+                      )}
+                    </button>
+                  ) : (
                     <button
                       type="button"
-                      onClick={() => bumpOrderQty(1)}
-                      disabled={orderQty >= product.stock_count}
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-rgr-gray300 bg-white text-lg font-semibold text-rgr-navy transition hover:bg-rgr-gray100 disabled:cursor-not-allowed disabled:opacity-40"
-                      aria-label="Increase quantity"
+                      disabled={!isFormValid}
+                      onClick={handlePaystackSubmit}
+                      className="w-full rounded-xl bg-rgr-blue px-6 py-4 font-display text-base uppercase tracking-wider text-white shadow-lg transition hover:bg-rgr-blueLight disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      +
+                      💳 PAY NOW WITH CARD
                     </button>
-                  </div>
-                  {unitPriceDigits > 0 ? (
-                    <p className="mt-3 text-sm font-semibold text-rgr-navy">
-                      Estimated total: ₦{lineEstimate.toLocaleString()}
-                    </p>
-                  ) : null}
-                </div>
-              ) : null}
+                  )}
 
-              <button
-                type="button"
-                disabled={soldOut}
-                onClick={() => {
-                  if (soldOut) return;
-                  window.location.href = `/order/${product.slug}?qty=${orderQty}`;
-                }}
-                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-rgr-navy px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-rgr-charcoal disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Continue to secure checkout
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {yt ? (
-          <div className="mt-16">
-            <h2 className="text-xl font-semibold tracking-tight text-rgr-navy md:text-2xl">
-              Video
-            </h2>
-            <p className="mt-2 text-sm text-rgr-gray600">
-              See what you get before you order.
-            </p>
-            <div className="mt-4 aspect-video overflow-hidden rounded-2xl bg-black shadow-soft">
-              <iframe
-                title="Product video"
-                src={`https://www.youtube.com/embed/${yt}`}
-                className="h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        ) : null}
-
-        <div className="mt-16">
-          <h2 className="text-xl font-semibold tracking-tight text-rgr-navy md:text-2xl">
-            Details
-          </h2>
-          <ul className="mt-6 space-y-4 text-rgr-gray700">
-            {product.features.map((f) => (
-              <li key={f} className="flex gap-3 border-b border-rgr-gray300/40 pb-4 last:border-0">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rgr-navy" aria-hidden />
-                <div>
-                  <p className="font-medium text-rgr-navy">{f}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-rgr-gray700">
-                    {featureBlurbFor(f)}
+                  <p className="text-center text-xs text-rgr-gray500">
+                    Your order confirmed via WhatsApp within 30 minutes
                   </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </form>
+
+                {paystackReady && (
+                  <ProductPaystackBridge
+                    amount={unitPriceDigits}
+                    email={`${form.phone.replace(/\D/g, "")}@order.requireglobalresources.com`}
+                    name={form.fullName}
+                    phone={form.phone}
+                    onSuccess={handlePaystackSuccess}
+                    onClose={handlePaystackClose}
+                  />
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
-        {soldOut ? (
-          <div className="mt-16 rounded-2xl border border-rgr-gray300/60 bg-[#fafafa] p-8 text-center">
-            <p className="text-xl font-semibold text-rgr-navy">Out of stock</p>
-            <p className="mt-2 text-sm text-rgr-gray700">
-              Message us to get notified when it is back.
-            </p>
-            <a
-              href={getWhatsAppLink(waEntryNotifyStock(product.name))}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex rounded-lg bg-rgr-whatsapp px-8 py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
-            >
-              Notify me on WhatsApp
-            </a>
-          </div>
-        ) : (
-          <div className="mx-auto mt-16 max-w-3xl rounded-2xl border border-rgr-gray300/40 bg-rgr-surface p-6 text-center shadow-soft md:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-rgr-navy md:text-3xl">
-              Ready to order?
-            </h2>
-            <p className="mt-2 text-sm text-rgr-gray600">
-              Continue on WhatsApp and we will confirm your order details there.
-            </p>
-            <div className="mt-5 rounded-xl border border-rgr-gray300/50 bg-[#fafafa] px-4 py-3 text-sm text-rgr-gray700">
-              Selected package:{" "}
-              <span className="font-semibold text-rgr-navy">
-                {selected?.label ?? "Choose a package"} - {selected?.price ?? product.current_price}
-              </span>
-            </div>
-            <a
-              href={`/order/${product.slug}?qty=${orderQty}`}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-rgr-navy px-6 py-4 text-base font-semibold text-white transition hover:bg-rgr-charcoal"
-            >
-              Continue to secure checkout
-            </a>
-          </div>
-        )}
-
-        <div className="mt-16 border-t border-rgr-gray300/40 pt-10">
-          <p className="text-center text-sm font-medium text-rgr-gray600">
-            {trustMini.join(" · ")}
-          </p>
+        {/* Trust signals */}
+        <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {trustCards.map(({ emoji, title, desc }) => (
+            <FadeInView key={title}>
+              <div className="rounded-2xl border border-rgr-gray300/40 bg-white p-5 text-center shadow-sm">
+                <span className="text-2xl">{emoji}</span>
+                <p className="mt-2 font-display text-sm uppercase tracking-wider text-rgr-navy">
+                  {title}
+                </p>
+                <p className="mt-1 text-xs text-rgr-gray500">{desc}</p>
+              </div>
+            </FadeInView>
+          ))}
         </div>
 
-        <div className="mt-10 text-center">
-          <Link href="/" className="text-sm font-medium text-rgr-navy underline decoration-rgr-gray300 underline-offset-4 hover:decoration-rgr-navy">
-            ← Back to store
+        {/* Product footer */}
+        <div className="mt-12 border-t border-rgr-gray300/40 pt-8 text-center">
+          <Link
+            href="/"
+            className="font-display text-sm uppercase tracking-wider text-rgr-gold underline underline-offset-4 hover:text-amber-500"
+          >
+            ← Back to Main Store
           </Link>
         </div>
       </div>
 
+      {/* Success overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/75 p-4">
+          <div className="w-full max-w-md animate-fade-in-up rounded-2xl bg-white p-8 text-center shadow-2xl">
+            <div className="text-5xl">🎉</div>
+            <h2 className="mt-4 font-display text-3xl uppercase text-green-600">
+              ORDER PLACED!
+            </h2>
+            <p className="mt-3 text-sm text-rgr-gray700">
+              Thank you {successName}! Your order has been received. Our team will
+              confirm via WhatsApp within 30 minutes.
+            </p>
+            <a
+              href={getWhatsAppLink(`Hi, I just placed an order for ${product.name}. Please confirm.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-sm uppercase tracking-wider text-white transition hover:bg-[#20bd5a]"
+            >
+              💬 Chat With Us on WhatsApp
+            </a>
+            <div className="mt-4">
+              <Link
+                href="/"
+                className="text-sm font-medium text-rgr-blue underline underline-offset-4"
+                onClick={() => setShowSuccess(false)}
+              >
+                Continue Shopping
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

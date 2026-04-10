@@ -21,19 +21,21 @@ export function AnnouncementBar() {
   if (!visible) return null;
 
   return (
-    <div className="relative z-[110] w-full border-b border-rgr-gray300/50 bg-[#fafafa] px-4 py-2.5 text-center text-[13px] font-medium text-rgr-gray700 md:text-sm">
+    <div className="relative z-[110] w-full bg-rgr-gold px-4 py-2.5 text-center">
       <button
         type="button"
         onClick={() => {
-          document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+          document
+            .getElementById("products")
+            ?.scrollIntoView({ behavior: "smooth" });
         }}
-        className="mx-auto block w-full max-w-4xl px-8 md:px-0"
+        className="mx-auto block w-full max-w-4xl px-8 text-[13px] font-bold uppercase tracking-wide text-rgr-navy md:px-0 md:text-sm"
       >
-        Lagos dispatch · Pay on delivery in eligible locations · Nationwide support
+        🎁 FREE delivery for next 5 orders today &mdash; Order Now
       </button>
       <button
         type="button"
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-rgr-gray600 transition hover:bg-rgr-gray100 md:hidden"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-rgr-navy/60 transition hover:text-rgr-navy md:right-4"
         aria-label="Dismiss announcement"
         onClick={() => {
           try {
@@ -44,7 +46,7 @@ export function AnnouncementBar() {
           setVisible(false);
         }}
       >
-        <X className="h-5 w-5" strokeWidth={2.25} />
+        <X className="h-4 w-4" strokeWidth={2.5} />
       </button>
     </div>
   );
