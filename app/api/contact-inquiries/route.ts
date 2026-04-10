@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getSupabaseAnon } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = getSupabaseServerClient();
+    const supabase = getSupabaseAnon();
     const { error } = await supabase.from("contact_inquiries").insert({
       name,
       phone,

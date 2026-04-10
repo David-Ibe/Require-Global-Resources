@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 
+import { getWhatsAppLink } from "@/lib/site-config";
+import { waEntryQuestion } from "@/lib/whatsapp-sales";
+
 type Variant = "footer" | "contact";
 
 interface SocialMediaIconsProps {
@@ -11,8 +14,7 @@ interface SocialMediaIconsProps {
 const facebookUrl = process.env.NEXT_PUBLIC_FACEBOOK_URL ?? "https://facebook.com/requireglobalresources";
 const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com/requireglobalresources";
 const tiktokUrl = process.env.NEXT_PUBLIC_TIKTOK_URL ?? "https://tiktok.com/@requireglobalresources";
-const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2348029138335";
-const whatsappUrl = `https://wa.me/${whatsappNumber}`;
+const whatsappUrl = getWhatsAppLink(waEntryQuestion());
 
 function FacebookIcon({ size }: { size: number }) {
   return (
@@ -94,7 +96,7 @@ export function SocialMediaIcons({ variant }: SocialMediaIconsProps) {
             style={{
               width: circleSize,
               height: circleSize,
-              backgroundColor: "#F3F4F6",
+              backgroundColor: "#F4F4F5",
               color: platform.color,
             }}
             onMouseEnter={(e) => {
@@ -104,14 +106,14 @@ export function SocialMediaIcons({ variant }: SocialMediaIconsProps) {
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget;
-              el.style.backgroundColor = "#F3F4F6";
+              el.style.backgroundColor = "#F4F4F5";
               el.style.color = platform.color;
             }}
           >
             <platform.icon size={iconSize} />
           </Link>
           {variant === "contact" && (
-            <span className="text-xs text-slate-600">{platform.name}</span>
+            <span className="text-xs text-rgr-gray700">{platform.name}</span>
           )}
         </div>
       ))}

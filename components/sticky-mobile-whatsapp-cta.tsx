@@ -17,7 +17,7 @@ export function StickyMobileWhatsappCTA({
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white p-3 shadow-soft md:hidden">
       <WhatsAppOrderButton
-        label={`Order on WhatsApp - ₦${formatNaira(price)}`}
+        label={`Continue on WhatsApp - ₦${formatNaira(price)}`}
         productName={productName}
         sourcePage={sourcePage}
         message={message}

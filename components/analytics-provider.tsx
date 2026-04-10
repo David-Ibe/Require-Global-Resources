@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useEffect } from "react";
 
-import { trackPageView } from "@/lib/analytics";
+import { facebookPixelId, trackPageView } from "@/lib/analytics";
 
-const fbPixelId = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
-const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_ID;
+const fbPixelId = facebookPixelId();
+const gaMeasurementId =
+  process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || process.env.NEXT_PUBLIC_GA4_ID;
 
 export function AnalyticsProvider() {
   const pathname = usePathname();

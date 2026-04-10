@@ -1,22 +1,17 @@
 "use client";
 
-import { trackLead, trackWhatsAppClick } from "@/lib/analytics";
-
-const whatsappMessage =
-  "Hi,%20I%20want%20to%20enquire%20about%20your%20products";
+import { trackWhatsAppClick } from "@/lib/analytics";
+import { getWhatsAppLink } from "@/lib/site-config";
+import { waEntryQuestion } from "@/lib/whatsapp-sales";
 
 export function FloatingWhatsApp() {
-  const cleanedNumber = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
-  const whatsappLink = `https://wa.me/${cleanedNumber}?text=${whatsappMessage}`;
-
   return (
     <button
       type="button"
       aria-label="Chat with us on WhatsApp"
       onClick={() => {
-        trackLead({ productName: "General Enquiry", price: "" });
         trackWhatsAppClick("Floating WhatsApp Button");
-        window.open(whatsappLink, "_blank", "noopener,noreferrer");
+        window.open(getWhatsAppLink(waEntryQuestion()), "_blank", "noopener,noreferrer");
       }}
       className="fixed bottom-6 right-6 z-[9999] inline-flex h-[60px] w-[60px] items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition duration-200 hover:scale-110 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 animate-[pulse_2.6s_ease-in-out_infinite]"
     >

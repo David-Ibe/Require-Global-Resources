@@ -1,6 +1,7 @@
-Add product images here:
-01-face.png — main front facing product shot
-02-dashboard.png — mounted on car dashboard
-03-product.png — product detail angle shot
-04-variants.png — color or style variants
-Recommended size: 800x800px, compressed under 200kb each
+Gallery order (product page + home fallback):
+01-vacuum-magnet.png — hero: vacuum suction base, fold/extend, key features
+02-compatibility.png — iPhone / Android & MagSafe compatibility
+03-live-streaming.png — desk / vanity stand for video & streaming
+04-shoot-outdoors.png — car-window mount for outdoor photos
+
+Older numbered placeholders (01-face, etc.) are unused; safe to delete after confirming the new set.

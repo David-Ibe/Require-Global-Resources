@@ -1,37 +1,46 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Bebas_Neue, DM_Sans } from "next/font/google";
+import { Suspense } from "react";
 
 import { AnalyticsProvider } from "@/components/analytics-provider";
-import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { ClientMetrics } from "@/components/client-metrics";
 import { brand, siteUrl } from "@/lib/site-config";
 
 import "./globals.css";
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  display: "swap"
+  display: "swap",
+  variable: "--font-dm"
 });
+
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-bebas"
+});
+
+const defaultTitle = `${brand.shortName} | Original accessories for Nigerian drivers`;
+const defaultDescription = `Verified items, delivered nationwide. Secure checkout, then confirm on WhatsApp. Pay on delivery in eligible locations. ${brand.oneLiner}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Require Global Resources | Quality Products Delivered Across Nigeria",
-    template: "%s"
+    default: defaultTitle,
+    template: `%s | ${brand.shortName}`
   },
-  description:
-    "Quality products delivered across Nigeria with secure WhatsApp ordering.",
+  description: defaultDescription,
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || ""
   },
   other: {
-    "facebook-domain-verification": process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION || "",
+    "facebook-domain-verification":
+      process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION || ""
   },
   openGraph: {
-    title: "Require Global Resources | Quality Products Delivered Across Nigeria",
-    description:
-      "Quality products delivered across Nigeria with secure WhatsApp ordering.",
+    title: defaultTitle,
+    description: defaultDescription,
     type: "website",
     locale: "en_NG",
     url: siteUrl,
@@ -47,6 +56,12 @@ export const metadata: Metadata = {
   }
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#08142A"
+};
+
 export default function RootLayout({
   children
 }: Readonly<{
@@ -54,12 +69,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AnalyticsProvider />
-        <SiteHeader />
-        <main>{children}</main>
-        <FloatingWhatsApp />
-        <SiteFooter />
+      <body
+        className={`${dmSans.variable} ${bebasNeue.variable} font-sans antialiased`}
+      >
+        <Suspense fallback={null}>
+          <AnalyticsProvider />
+        </Suspense>
+        {children}
+        <ClientMetrics />
       </body>
     </html>
   );

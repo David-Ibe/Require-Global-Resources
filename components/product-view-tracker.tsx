@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { trackViewContent } from "@/lib/analytics";
+import { nairaStringToNumber } from "@/lib/parse-price";
 
 type ProductViewTrackerProps = {
   productName: string;
@@ -11,7 +12,10 @@ type ProductViewTrackerProps = {
 
 export function ProductViewTracker({ productName, price }: ProductViewTrackerProps) {
   useEffect(() => {
-    trackViewContent({ productName, price });
+    trackViewContent({
+      contentName: productName,
+      value: nairaStringToNumber(price)
+    });
   }, [price, productName]);
 
   return null;

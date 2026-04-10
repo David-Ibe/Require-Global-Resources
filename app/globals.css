@@ -6,6 +6,10 @@
   color-scheme: light;
 }
 
+html {
+  scroll-padding-top: 6rem;
+}
+
 html,
 body {
   padding: 0;
@@ -14,7 +18,8 @@ body {
 
 body {
   background: #ffffff;
-  color: #0b0f19;
+  color: #08142a;
+  overflow-x: hidden;
 }
 
 a {
@@ -24,23 +29,70 @@ a {
 
 .hero-stagger > * {
   opacity: 0;
-  animation: fade-in-up 0.4s ease-out forwards;
+  animation: fade-in-up 0.5s ease-out forwards;
 }
 
-.hero-stagger > *:nth-child(1) { animation-delay: 0s; }
-.hero-stagger > *:nth-child(2) { animation-delay: 0.07s; }
-.hero-stagger > *:nth-child(3) { animation-delay: 0.14s; }
-.hero-stagger > *:nth-child(4) { animation-delay: 0.21s; }
-.hero-stagger > *:nth-child(5) { animation-delay: 0.28s; }
-.hero-stagger > *:nth-child(6) { animation-delay: 0.35s; }
+.hero-stagger > *:nth-child(1) {
+  animation-delay: 0s;
+}
+.hero-stagger > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.hero-stagger > *:nth-child(3) {
+  animation-delay: 0.16s;
+}
+.hero-stagger > *:nth-child(4) {
+  animation-delay: 0.24s;
+}
+.hero-stagger > *:nth-child(5) {
+  animation-delay: 0.32s;
+}
+.hero-stagger > *:nth-child(6) {
+  animation-delay: 0.4s;
+}
+.hero-stagger > *:nth-child(7) {
+  animation-delay: 0.48s;
+}
 
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+.trust-marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+@keyframes how-line-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+.how-it-works-line {
+  animation: how-line-pulse 2.8s ease-in-out infinite;
 }

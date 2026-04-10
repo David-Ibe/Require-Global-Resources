@@ -1,0 +1,59 @@
+import { brand } from "@/lib/site-config";
+
+/**
+ * Pre-filled WhatsApp entry messages — REQUIRE sales system.
+ * Every outbound link should use one of these so chats open with intent + context.
+ */
+
+/** General site entry — homepage, floating button, nav when no SKU context. */
+export function waEntrySiteInterest(): string {
+  return `Hi, I'm interested in ordering. I saw your website.`;
+}
+
+export function waEntryQuestion(): string {
+  return `Hi, I have a question. I saw your website.`;
+}
+
+export function waEntryReturnOrExchange(): string {
+  return `Hi, I need help with a return or exchange for my order from ${brand.name}.`;
+}
+
+export function waEntryOrderConfirmation(): string {
+  return `Hi, I just placed an order on your website and want to confirm.`;
+}
+
+export function waEntryNotFound(): string {
+  return `Hi, I need help finding a product on your website.`;
+}
+
+export function waEntryNotifyStock(productName: string): string {
+  return `Hi, please notify me when the ${productName.trim()} is back in stock.`;
+}
+
+/** After the customer fills the checkout form — structured close (matches sales script step 5). */
+export function waOrderFormBody(params: {
+  productName: string;
+  packageLabel: string;
+  price: string;
+  paymentLabel: string;
+  name: string;
+  phone: string;
+  whatsapp: string;
+  address: string;
+  state: string;
+}): string {
+  return `Hi, please place my order.
+
+Full Name: ${params.name}
+Phone Number: ${params.phone}
+WhatsApp: ${params.whatsapp}
+Delivery Address: ${params.address}
+State: ${params.state}
+
+📦 Product: ${params.productName}
+📋 Package: ${params.packageLabel}
+💰 Price: ${params.price}
+💵 Payment: ${params.paymentLabel}
+
+I confirmed this on your website. Thank you!`;
+}

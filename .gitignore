@@ -11,6 +11,9 @@
 .env.production.local
 .env.development.local
 
+# typescript
+*.tsbuildinfo
+
 # misc
 .DS_Store
 *.log

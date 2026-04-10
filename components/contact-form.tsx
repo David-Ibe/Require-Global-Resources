@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from "react";
 
+import { storeSurface } from "@/lib/store-ui";
+
 type FormState = {
   name: string;
   phone: string;
@@ -13,6 +15,9 @@ const initialState: FormState = {
   phone: "",
   message: ""
 };
+
+const inputClass =
+  "w-full rounded-lg border border-rgr-gray300 bg-rgr-surface px-3 py-2.5 text-sm text-rgr-navy outline-none transition focus:border-rgr-navy focus:ring-2 focus:ring-rgr-navy/15";
 
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState);
@@ -47,9 +52,12 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-xl border border-slate-100 bg-white p-6">
+    <form
+      onSubmit={onSubmit}
+      className={`space-y-5 ${storeSurface.cardSm}`}
+    >
       <div>
-        <label htmlFor="name" className="mb-2 block text-sm font-medium text-brand-dark">
+        <label htmlFor="name" className="mb-2 block text-sm font-medium text-rgr-navy">
           Name
         </label>
         <input
@@ -57,23 +65,23 @@ export function ContactForm() {
           required
           value={form.name}
           onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-brand-electric focus:ring-2"
+          className={inputClass}
         />
       </div>
       <div>
-        <label htmlFor="phone" className="mb-2 block text-sm font-medium text-brand-dark">
-          Phone Number
+        <label htmlFor="phone" className="mb-2 block text-sm font-medium text-rgr-navy">
+          Phone number
         </label>
         <input
           id="phone"
           required
           value={form.phone}
           onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-brand-electric focus:ring-2"
+          className={inputClass}
         />
       </div>
       <div>
-        <label htmlFor="message" className="mb-2 block text-sm font-medium text-brand-dark">
+        <label htmlFor="message" className="mb-2 block text-sm font-medium text-rgr-navy">
           Message
         </label>
         <textarea
@@ -82,20 +90,20 @@ export function ContactForm() {
           rows={5}
           value={form.message}
           onChange={(event) => setForm((prev) => ({ ...prev, message: event.target.value }))}
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-brand-electric focus:ring-2"
+          className={inputClass}
         />
       </div>
       <button
         type="submit"
         disabled={submitting}
-        className="inline-flex w-full items-center justify-center rounded-md bg-brand-electric px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-navy disabled:cursor-not-allowed disabled:opacity-80"
+        className="inline-flex w-full items-center justify-center rounded-lg bg-rgr-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-rgr-charcoal disabled:cursor-not-allowed disabled:opacity-80"
       >
-        {submitting ? "Submitting..." : "Submit"}
+        {submitting ? "Submitting…" : "Send"}
       </button>
       {status ? (
         <p
           className={`text-sm ${
-            status.includes("successfully") ? "text-emerald-600" : "text-red-600"
+            status.includes("successfully") ? "text-rgr-success" : "text-rgr-danger"
           }`}
         >
           {status}

@@ -5,10 +5,13 @@
   "description": "Require Global Resources website",
   "scripts": {
     "dev": "next dev -p 3000 -H localhost",
+    "dev:3001": "next dev -p 3001 -H localhost",
+    "dev:3002": "next dev -p 3002 -H localhost",
     "dev:clean": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-clean.ps1",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node scripts/seed.mjs"
   },
   "keywords": [
     "nextjs",
@@ -18,17 +21,25 @@
   "author": "Require Global Resources",
   "license": "UNLICENSED",
   "dependencies": {
+    "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.100.0",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "lucide-react": "^1.7.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-paystack": "^6.0.0",
+    "recharts": "^3.8.1"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.4.27",
+    "dotenv": "^17.4.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.35",
     "postcss": "^8.5.8",

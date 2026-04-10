@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { SocialMediaIcons } from "@/components/SocialMediaIcons";
 import { brand, contact, getWhatsAppLink } from "@/lib/site-config";
+import { waEntryQuestion } from "@/lib/whatsapp-sales";
 
 export function SiteFooter() {
   return (
@@ -16,7 +17,7 @@ export function SiteFooter() {
             {brand.tagline}
           </p>
           <p className="mt-4 text-xs text-slate-400">
-            Trusted by customers across Lagos&nbsp;&amp;&nbsp;nationwide
+            Lagos, Nigeria · Delivered nationwide
           </p>
         </div>
 
@@ -37,13 +38,8 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link
-                href={getWhatsAppLink("Hi, I want to place an order.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors duration-200 hover:text-slate-900"
-              >
-                WhatsApp Order
+              <Link href="/#products" className="transition-colors duration-200 hover:text-slate-900">
+                Shop products
               </Link>
             </li>
             <li>
@@ -77,7 +73,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-2.5 text-sm text-slate-600">
               <li>
                 <Link
-                  href={getWhatsAppLink("Hi, I have a question.")}
+                  href={getWhatsAppLink(waEntryQuestion())}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-colors duration-200 hover:text-slate-900"
