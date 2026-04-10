@@ -86,6 +86,11 @@ export function ProductPageClient({
     return digitsFromPrice(raw);
   }, [selected, product.current_price]);
 
+  const maxQty = Math.max(1, product.stock_count);
+  const [quantity, setQuantity] = useState(1);
+  const totalDigits = unitPriceDigits * quantity;
+  const formatNaira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
+
   // Order form state
   const [form, setForm] = useState<FormState>(initialForm);
   const [sameAsPhone, setSameAsPhone] = useState(true);
@@ -127,9 +132,9 @@ export function ProductPageClient({
     e.preventDefault();
     if (!validateForm()) return;
 
-    trackInitiateCheckout(unitPriceDigits);
+    trackInitiateCheckout(totalDigits);
     trackPurchase({
-      value: unitPriceDigits,
+      value: totalDigits,
       transactionId: crypto.randomUUID(),
       contentName: product.name,
     });
@@ -138,6 +143,8 @@ export function ProductPageClient({
       productName: product.name,
       packageLabel: selected?.label ?? "Standard",
       price: selected?.price ?? product.current_price,
+      quantity,
+      total: formatNaira(totalDigits),
       paymentLabel: "Pay on Delivery",
       name: form.fullName,
       phone: form.phone,
@@ -321,16 +328,6 @@ export function ProductPageClient({
 
           {/* Right: Order form */}
           <div className="space-y-6 lg:sticky lg:top-24">
-            {/* Free delivery offer banner */}
-            <div className="rounded-2xl border border-green-200 bg-green-50 p-5">
-              <p className="font-display text-sm uppercase tracking-wider text-green-800">
-                🎁 FREE DELIVERY OFFER
-              </p>
-              <p className="mt-2 text-sm text-green-700">
-                Next 5 customers who order get FREE delivery anywhere in Nigeria.
-              </p>
-            </div>
-
             {/* Package selector */}
             <div className="rounded-2xl border border-rgr-gray300/50 bg-white p-5 shadow-soft md:p-6">
               <h2 className="font-display text-lg uppercase tracking-wider text-rgr-navy">
@@ -364,19 +361,56 @@ export function ProductPageClient({
                 ))}
               </div>
 
+              {/* Quantity selector */}
+              <div className="mt-5">
+                <p className="text-sm font-medium text-rgr-gray700">Quantity</p>
+                <div className="mt-2 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    disabled={quantity <= 1}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-rgr-gray300 text-lg font-semibold text-rgr-navy transition hover:bg-rgr-gray100 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[2.5rem] text-center font-display text-xl tabular-nums text-rgr-navy">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+                    disabled={quantity >= maxQty}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-rgr-gray300 text-lg font-semibold text-rgr-navy transition hover:bg-rgr-gray100 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    +
+                  </button>
+                  <span className="text-xs text-rgr-gray500">
+                    {maxQty} available
+                  </span>
+                </div>
+              </div>
+
               {/* Price summary */}
               <div className="mt-5 rounded-xl border border-rgr-gray300/50 bg-[#fafafa] px-4 py-3">
                 <div className="flex items-baseline justify-between">
-                  <span className="text-sm text-rgr-gray600">Price</span>
+                  <span className="text-sm text-rgr-gray600">Unit price</span>
                   <div className="flex items-baseline gap-2">
                     {product.old_price ? (
                       <span className="text-sm text-rgr-gray500 line-through">{product.old_price}</span>
                     ) : null}
-                    <span className="font-display text-2xl tabular-nums text-rgr-blue">
+                    <span className="font-display text-lg tabular-nums text-rgr-navy">
                       {selected?.price ?? product.current_price}
                     </span>
                   </div>
                 </div>
+                {quantity > 1 && (
+                  <div className="mt-1.5 flex items-baseline justify-between border-t border-rgr-gray300/40 pt-1.5">
+                    <span className="text-sm font-medium text-rgr-gray700">Total ({quantity} items)</span>
+                    <span className="font-display text-2xl tabular-nums text-rgr-blue">
+                      {formatNaira(totalDigits)}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -532,9 +566,10 @@ export function ProductPageClient({
 
                   {/* Selected package display */}
                   <div className="rounded-lg border border-rgr-gray300/50 bg-[#fafafa] p-3 text-sm text-rgr-gray700">
-                    Selected: <span className="font-semibold text-rgr-navy">{selected?.label}</span>
-                    {" — "}
-                    <span className="font-semibold text-rgr-blue">{selected?.price ?? product.current_price}</span>
+                    <span className="font-semibold text-rgr-navy">{selected?.label}</span>
+                    {" × "}{quantity}
+                    {" = "}
+                    <span className="font-semibold text-rgr-blue">{formatNaira(totalDigits)}</span>
                   </div>
 
                   <button

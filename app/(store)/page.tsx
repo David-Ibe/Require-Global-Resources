@@ -109,14 +109,16 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* 1. Hero Banner Slider */}
-      <HomeHero />
-
-      {/* 2. Scrolling Trust Bar */}
-      <TrustMarquee />
+      {/* Above-the-fold: navbar (4rem) + this block = 100dvh — no scroll to see products */}
+      <div className="flex h-[calc(100dvh-4rem)] min-h-0 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col">
+          <HomeHero />
+        </div>
+        <TrustMarquee />
+      </div>
 
       {/* 3. Shop By Category */}
-      <section className="bg-[#F8F9FC] py-12 md:py-20">
+      <section className="bg-[#F8F9FC] py-10 md:py-14">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <FadeInView>
             <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-blue">
@@ -127,7 +129,7 @@ export default async function HomePage() {
             </h2>
           </FadeInView>
 
-          <div className="mt-10 grid grid-cols-2 gap-4 md:gap-6">
+          <div className="mt-8 grid grid-cols-2 gap-4 md:gap-6">
             {shopCategories.map(({ name, tagline, Icon, href, available, badge, bgClass }, i) => (
               <FadeInView key={name} delay={i * 80}>
                 <Link
@@ -161,7 +163,7 @@ export default async function HomePage() {
       </section>
 
       {/* 4. Featured Products */}
-      <section id="products" className="bg-white py-12 md:py-20">
+      <section id="products" className="bg-white py-10 md:py-14">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <HomeProductsHeading />
           <Suspense fallback={<HomeProductsSkeleton />}>
@@ -171,7 +173,7 @@ export default async function HomePage() {
       </section>
 
       {/* 5. How It Works (navy) */}
-      <section id="how-it-works" className="bg-rgr-navy py-12 md:py-24">
+      <section id="how-it-works" className="bg-rgr-navy py-10 md:py-16">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <FadeInView>
             <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold">
@@ -214,7 +216,7 @@ export default async function HomePage() {
       </section>
 
       {/* 6. Why Choose Us */}
-      <section className="bg-[#F8F9FC] py-12 md:py-20">
+      <section className="bg-[#F8F9FC] py-10 md:py-14">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <FadeInView>
             <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-blue">
@@ -247,7 +249,7 @@ export default async function HomePage() {
 
       {/* 7. Customer Reviews */}
       {displayReviews.length > 0 && (
-        <section className="bg-rgr-gray100 py-12 md:py-20">
+        <section className="bg-rgr-gray100 py-10 md:py-14">
           <div className="mx-auto max-w-7xl px-5 md:px-10">
             <FadeInView>
               <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-blue">
@@ -273,7 +275,7 @@ export default async function HomePage() {
       )}
 
       {/* 8. CTA Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-rgr-blue to-rgr-navy py-16 md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-rgr-blue to-rgr-navy py-12 md:py-16">
         <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-rgr-gold/10 blur-3xl" aria-hidden />
         <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-rgr-gold/10 blur-3xl" aria-hidden />
         <div className="relative mx-auto max-w-2xl px-5 text-center md:px-10">

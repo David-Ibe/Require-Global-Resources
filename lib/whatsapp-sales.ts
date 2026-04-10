@@ -35,6 +35,8 @@ export function waOrderFormBody(params: {
   productName: string;
   packageLabel: string;
   price: string;
+  quantity: number;
+  total: string;
   paymentLabel: string;
   name: string;
   phone: string;
@@ -46,8 +48,10 @@ export function waOrderFormBody(params: {
 
 📦 Product: ${params.productName}
 🔢 Package: ${params.packageLabel}
-💰 Price: ${params.price}
-💵 Payment: ${params.paymentLabel}
+💰 Unit Price: ${params.price}
+📊 Quantity: ${params.quantity}
+💵 Total: ${params.total}
+💳 Payment: ${params.paymentLabel}
 ━━━━━━━━━━━━━━━
 👤 Name: ${params.name}
 📱 Phone: ${params.phone}

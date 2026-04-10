@@ -84,6 +84,7 @@ export const STATIC_FEATURED_PRODUCTS: ProductRow[] = [
       "Car Seat Gap Organiser included"
     ],
     images: [
+      "/products/lagos-driver-bundle-2in1.png",
       "/products/car-phone-holder-gallery/01-vacuum-magnet.png",
       "/products/car-phone-holder-gallery/02-compatibility.png",
       "/products/Car-Seat-Gap-Organiser/1.png",

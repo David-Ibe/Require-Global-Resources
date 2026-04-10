@@ -34,7 +34,7 @@ function PillSet() {
 
 export function TrustMarquee() {
   return (
-    <div className="overflow-hidden border-y border-rgr-gray300/40 bg-white py-4">
+    <div className="shrink-0 overflow-hidden border-y border-rgr-gray300/40 bg-white py-2.5 md:py-3">
       <div className="trust-marquee-track animate-marquee">
         <div className="flex items-center gap-3 pr-3">
           <PillSet />

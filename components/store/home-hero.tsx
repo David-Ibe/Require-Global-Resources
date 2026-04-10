@@ -11,62 +11,12 @@ const whatsappHref = getWhatsAppLink(
   `Hi ${brand.shortName}, I'd like to place an order.`
 );
 
-function pad(n: number): string {
-  return String(n).padStart(2, "0");
-}
-
-function getSecondsUntilMidnightWAT(): number {
-  const now = new Date();
-  const watOffset = 1 * 60;
-  const localOffset = now.getTimezoneOffset();
-  const watTime = new Date(now.getTime() + (watOffset + localOffset) * 60000);
-  const midnight = new Date(watTime);
-  midnight.setHours(24, 0, 0, 0);
-  return Math.max(0, Math.floor((midnight.getTime() - watTime.getTime()) / 1000));
-}
-
-function CountdownTimer() {
-  const [seconds, setSeconds] = useState<number | null>(null);
-
-  useEffect(() => {
-    setSeconds(getSecondsUntilMidnightWAT());
-    const timer = setInterval(() => {
-      setSeconds(getSecondsUntilMidnightWAT());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const s = seconds ?? 0;
-  const hrs = Math.floor(s / 3600);
-  const mins = Math.floor((s % 3600) / 60);
-  const secs = s % 60;
-
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-white/60">OFFER ENDS IN:</span>
-      <div className="flex gap-1.5">
-        {[pad(hrs), pad(mins), pad(secs)].map((v, i) => (
-          <span key={i}>
-            <span className="inline-block min-w-[2.2rem] rounded-lg bg-rgr-gold px-2 py-1.5 text-center font-display text-lg tabular-nums text-rgr-navy">
-              {v}
-            </span>
-            {i < 2 && <span className="mx-0.5 font-display text-lg text-white/40">:</span>}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const HERO_H = "h-[calc(100vh-6.5rem)]";
-const HERO_FLEX = "flex items-center";
-
 export function HomeHero() {
   const [current, setCurrent] = useState(0);
   const [animKey, setAnimKey] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const totalSlides = 3;
+  const totalSlides = 2;
 
   const goTo = useCallback((idx: number) => {
     setCurrent(idx);
@@ -89,12 +39,12 @@ export function HomeHero() {
 
   return (
     <section
-      className="relative w-full overflow-hidden"
+      className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden"
       aria-label="Hero"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className={`relative ${HERO_H}`}>
+      <div className="relative min-h-0 flex-1 overflow-hidden">
         {/* SLIDE 1 — Brand Hero */}
         <div
           className={`absolute inset-0 transition-opacity duration-600 ${current === 0 ? "z-10 opacity-100" : "z-0 opacity-0"}`}
@@ -112,31 +62,31 @@ export function HomeHero() {
           <div className="absolute inset-0 bg-gradient-to-t from-rgr-navy/60 via-transparent to-transparent" />
           <div className="absolute bottom-0 left-0 h-80 w-80 rounded-full bg-rgr-gold/[0.06] blur-[100px]" />
 
-          <div className={`relative z-10 mx-auto ${HERO_FLEX} ${HERO_H} w-full max-w-7xl px-5 md:px-10`}>
+          <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-7xl items-center px-5 py-8 pb-16 md:px-10 md:py-10 md:pb-20">
             {current === 0 && (
               <div key={`s1-${animKey}`} className="hero-slide-enter mx-auto max-w-3xl text-center md:mx-0 md:max-w-2xl md:text-left">
-                <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold/90 md:text-base">
+                <p className="font-display text-xs uppercase tracking-[0.2em] text-rgr-gold/90 sm:text-sm md:text-base">
                   Premium Upgrades for Your Car &amp; Home
                 </p>
 
-                <h1 className="mt-3 font-display text-[3.2rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+                <h1 className="mt-2 font-display text-[clamp(1.75rem,5.5vw,3.5rem)] uppercase leading-[0.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                   <span className="block text-white">Real Products.</span>
                   <span className="block text-rgr-gold">Zero Fakes.</span>
                 </h1>
 
-                <p className="mt-4 max-w-lg text-base font-medium leading-relaxed text-white/75 md:text-xl">
+                <p className="mt-3 max-w-lg text-sm font-medium leading-relaxed text-white/75 sm:text-base md:text-lg">
                   Premium car accessories and smart home solutions
                   for the modern Nigerian.
                 </p>
 
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55 md:text-base">
+                <p className="mt-1.5 max-w-md text-xs leading-relaxed text-white/55 sm:text-sm md:text-base">
                   Pay only when it arrives. No wahala.
                 </p>
 
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
+                <div className="mt-4 flex flex-col gap-2.5 sm:flex-row sm:justify-center sm:gap-3 md:mt-5 md:justify-start">
                   <Link
                     href="/#products"
-                    className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
+                    className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 font-display text-sm uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98] sm:px-8 sm:py-3.5 sm:text-base"
                   >
                     SHOP NOW
                   </Link>
@@ -144,7 +94,7 @@ export function HomeHero() {
                     href={whatsappHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-base uppercase tracking-wider text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-[#20bd5a] hover:shadow-xl active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-display text-sm uppercase tracking-wider text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-[#20bd5a] hover:shadow-xl active:scale-[0.98] sm:px-8 sm:py-3.5 sm:text-base"
                   >
                     <WhatsAppIcon size={18} />
                     Chat on WhatsApp
@@ -186,22 +136,22 @@ export function HomeHero() {
             <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-rgr-navy/40 to-transparent" />
           </div>
 
-          <div className={`relative z-10 mx-auto ${HERO_FLEX} ${HERO_H} w-full max-w-7xl px-5 md:px-10`}>
+          <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-7xl items-center px-5 py-8 pb-16 md:px-10 md:py-10 md:pb-20">
             {current === 1 && (
               <div key={`s2-${animKey}`} className="hero-slide-enter max-w-2xl">
-                <h1 className="font-display text-[3rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.2rem]">
+                <h1 className="font-display text-[clamp(1.75rem,5vw,3.25rem)] uppercase leading-[0.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                   <span className="block text-white">Lagos Traffic</span>
                   <span className="block text-rgr-gold">Just Got Easier.</span>
                 </h1>
 
-                <p className="mt-4 max-w-lg text-base font-medium leading-relaxed text-white/75 md:text-lg">
+                <p className="mt-3 max-w-lg text-sm font-medium leading-relaxed text-white/75 sm:text-base md:text-lg">
                   Smart car accessories for the modern Nigerian driver. Quality you can see and feel.
                 </p>
 
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-4 flex flex-col gap-2.5 sm:flex-row md:mt-5">
                   <Link
                     href="/auto"
-                    className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
+                    className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 font-display text-sm uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98] sm:px-8 sm:py-3.5 sm:text-base"
                   >
                     SHOP CAR ACCESSORIES
                   </Link>
@@ -209,7 +159,7 @@ export function HomeHero() {
 
                 <Link
                   href="/products/lagos-driver-bundle"
-                  className="mt-3 inline-block text-sm font-medium text-white underline-offset-4 transition hover:underline"
+                  className="mt-2 inline-block text-xs font-medium text-white underline-offset-4 transition hover:underline sm:text-sm"
                 >
                   View The Lagos Driver Bundle →
                 </Link>
@@ -218,60 +168,6 @@ export function HomeHero() {
           </div>
         </div>
 
-        {/* SLIDE 3 — Free Delivery */}
-        <div
-          className={`absolute inset-0 transition-opacity duration-600 ${current === 2 ? "z-10 opacity-100" : "z-0 opacity-0"}`}
-        >
-          <Image
-            src="/hero-home-driver.png"
-            alt="Driver on a Lagos highway at sunset"
-            fill
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-rgr-blue/60 to-rgr-navy/70" />
-          <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-rgr-gold/[0.12] blur-[100px]" />
-
-          <div className={`relative z-10 mx-auto ${HERO_FLEX} ${HERO_H} w-full max-w-7xl px-5 md:px-10`}>
-            {current === 2 && (
-              <div key={`s3-${animKey}`} className="hero-slide-enter mx-auto max-w-3xl text-center md:mx-0 md:max-w-2xl md:text-left">
-                <span className="inline-block rounded-full border border-rgr-gold/60 bg-rgr-gold/15 px-5 py-1.5 font-display text-xs uppercase tracking-widest text-rgr-gold">
-                  Limited Offer
-                </span>
-
-                <h1 className="mt-4 font-display text-[3rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5rem]">
-                  <span className="block text-white">Free Delivery.</span>
-                  <span className="block text-rgr-gold">Next 5 Orders Only.</span>
-                </h1>
-
-                <p className="mt-4 max-w-lg text-base font-medium leading-relaxed text-white/75 md:text-lg">
-                  Car accessories and smart home upgrades shipped anywhere in Nigeria.
-                </p>
-
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55">
-                  Order before the timer runs out.
-                </p>
-
-                <div className="mt-5">
-                  <CountdownTimer />
-                </div>
-
-                <div className="mt-5">
-                  <Link
-                    href="/#products"
-                    className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
-                  >
-                    ORDER NOW — FREE DELIVERY
-                  </Link>
-                </div>
-
-                <p className="mt-3 text-sm italic text-white/50">
-                  Only 5 free delivery slots remaining today
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Navigation dots */}

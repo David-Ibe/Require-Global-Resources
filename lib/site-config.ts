@@ -32,7 +32,7 @@ export const contact = {
   tiktokHandle: "@requireglobalresources",
   tiktokUrl: "https://www.tiktok.com/@requireglobalresources",
   facebookName: "Require Global Resources",
-  facebookUrl: "https://www.facebook.com/people/Require-Global-Resources",
+  facebookUrl: "https://www.facebook.com/requireglobalresources/",
   email: "info@requireglobalresources.com",
 } as const;
 
