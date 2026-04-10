@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 import { AnalyticsProvider } from "@/components/analytics-provider";
 import { ClientMetrics } from "@/components/client-metrics";
-import { brand, siteUrl } from "@/lib/site-config";
+import { brand, defaultSiteDescription, defaultSiteTitle, siteUrl } from "@/lib/site-config";
 
 import "./globals.css";
 
@@ -21,16 +21,13 @@ const bebasNeue = Bebas_Neue({
   variable: "--font-bebas"
 });
 
-const defaultTitle = `${brand.shortName} | Original accessories for Nigerian drivers`;
-const defaultDescription = `Verified items, delivered nationwide. Secure checkout, then confirm on WhatsApp. Pay on delivery in eligible locations. ${brand.oneLiner}`;
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: defaultTitle,
+    default: defaultSiteTitle,
     template: `%s | ${brand.shortName}`
   },
-  description: defaultDescription,
+  description: defaultSiteDescription,
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || ""
   },
@@ -39,8 +36,8 @@ export const metadata: Metadata = {
       process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION || ""
   },
   openGraph: {
-    title: defaultTitle,
-    description: defaultDescription,
+    title: defaultSiteTitle,
+    description: defaultSiteDescription,
     type: "website",
     locale: "en_NG",
     url: siteUrl,
@@ -53,6 +50,12 @@ export const metadata: Metadata = {
         alt: `${brand.shortName} website`
       }
     ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultSiteTitle,
+    description: defaultSiteDescription,
+    images: ["/og-default.svg"]
   }
 };
 

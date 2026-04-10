@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import type { LucideIcon } from "lucide-react";
 import {
   BadgeCheck,
@@ -19,38 +18,9 @@ import {
 } from "@/components/store/home-products-section";
 import { ReviewCard } from "@/components/store/review-card";
 import { TrustMarquee } from "@/components/store/trust-marquee";
-import { brand, siteUrl } from "@/lib/site-config";
+import { brand } from "@/lib/site-config";
 import { fetchHomeReviews } from "@/lib/home-data";
 import { mergeReviewsForHome } from "@/lib/reviews-display";
-
-const pageTitleShort = "Original car accessories for Nigerian drivers";
-const pageTitleFull = `${brand.shortName} | ${pageTitleShort}`;
-const pageDesc =
-  "Verified car accessories, secure checkout, fast support, and nationwide delivery across Nigeria.";
-
-export const metadata: Metadata = {
-  title: pageTitleShort,
-  description: pageDesc,
-  openGraph: {
-    title: pageTitleFull,
-    description: pageDesc,
-    url: siteUrl,
-    images: [
-      {
-        url: "/og-default.svg",
-        width: 1200,
-        height: 630,
-        alt: `${brand.shortName} — ${brand.tagline}`
-      }
-    ]
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: pageTitleFull,
-    description: pageDesc,
-    images: ["/og-default.svg"]
-  }
-};
 
 const trustBadges = [
   { label: "CAC Registered", Icon: Landmark },
@@ -109,7 +79,7 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-12 pt-2 md:grid-cols-2 md:gap-12 md:px-10 md:pb-14 md:pt-6 lg:gap-16 lg:pb-16 lg:pt-8">
           <div className="hero-stagger max-w-xl">
             <h1 className="text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-rgr-navy sm:text-5xl lg:text-[3.5rem]">
-              Verified Smart Upgrades for Your Car & Home
+              {brand.tagline}
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-rgr-gray700 md:text-xl md:leading-relaxed">
               No fakes • Pay on Delivery • Nationwide

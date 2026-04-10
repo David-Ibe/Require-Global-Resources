@@ -1,9 +1,9 @@
 export const brand = {
   name: "Require Global Resources",
   shortName: "Require Global Resources",
-  tagline: "Original accessories. Verified quality. Nationwide delivery.",
+  tagline: "Verified Smart Upgrades for Your Car & Home",
   oneLiner:
-    "Trusted car accessories for Nigerian drivers, with WhatsApp-first support.",
+    "Secure checkout, WhatsApp-first support, and nationwide delivery. Pay on delivery in eligible locations.",
   legalName: "Require Trading Limited",
   colors: {
     navy: "#08142A",
@@ -33,6 +33,10 @@ export const contact = {
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobalresources.com";
+
+/** Default page title, meta description, and OG/Twitter preview text for the site. */
+export const defaultSiteTitle = `${brand.shortName} | ${brand.tagline}`;
+export const defaultSiteDescription = `${brand.tagline}. ${brand.oneLiner}`;
 
 export function getWhatsAppLink(message: string): string {
   return `https://wa.me/${cleanedWhatsAppNumber}?text=${encodeURIComponent(message)}`;
