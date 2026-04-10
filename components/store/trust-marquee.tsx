@@ -1,14 +1,9 @@
 const pills = [
-  "✅ All products verified",
-  "🚀 Nationwide delivery",
-  "💵 Pay on delivery",
-  "🏢 CAC registered",
-  "💬 WhatsApp support 24/7",
-  "🔄 Easy returns",
-  "🇳🇬 Lagos based",
-  "🔍 Quality checked",
-  "📦 Fast shipping",
-  "💯 No fake products",
+  "Verified Products",
+  "Pay on Delivery",
+  "CAC Registered",
+  "2–5 Days Delivery",
+  "WhatsApp Support",
 ];
 
 function PillSet() {

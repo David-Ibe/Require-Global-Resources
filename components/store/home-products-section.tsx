@@ -10,11 +10,8 @@ export function HomeProductsHeading() {
         Best Sellers
       </p>
       <h2 className="mt-2 font-display text-3xl uppercase tracking-tight text-rgr-navy md:text-4xl">
-        FEATURED PRODUCTS
+        BEST SELLERS
       </h2>
-      <p className="mt-3 max-w-md text-base text-rgr-gray500">
-        Our most popular verified products — loved by Nigerian drivers.
-      </p>
     </FadeInView>
   );
 }

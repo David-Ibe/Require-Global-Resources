@@ -13,7 +13,7 @@ export const STATIC_FEATURED_PRODUCTS: ProductRow[] = [
     category: "Car Accessories",
     badge: "HOT SELLER",
     description:
-      "Stop driving dangerously in Lagos traffic. This magnetic car phone holder clips to your air vent in 30 seconds — keeping your phone visible, secure, and hands-free through every pothole and sharp turn.",
+      "Strong magnetic grip. 360\u00B0 rotation. Air vent mount. Universal fit. Clips to your air vent in 30 seconds \u2014 keeping your phone visible, secure, and hands-free.",
     features: [
       "360° Rotation",
       "Universal Fit — all phones and cases",
@@ -43,7 +43,7 @@ export const STATIC_FEATURED_PRODUCTS: ProductRow[] = [
     category: "Car Accessories",
     badge: "NEW",
     description:
-      "Stop losing your phone, keys and coins between your car seats every day. The Car Seat Gap Organiser fills that annoying gap completely and adds smart storage within easy reach while driving.",
+      "Stop losing your phone and keys between your seats. Smart storage within easy reach while driving.",
     features: [
       "Fits all car models universally",
       "Built-in cup holder",
@@ -77,7 +77,7 @@ export const STATIC_FEATURED_PRODUCTS: ProductRow[] = [
     category: "Bundle Deal",
     badge: "BEST VALUE",
     description:
-      "The complete car upgrade every Lagos driver needs. Phone Holder plus Seat Gap Organiser in one order — solving the two biggest daily frustrations for Nigerian drivers in one delivery.",
+      "Phone Holder + Seat Organiser. The complete car upgrade every Lagos driver needs.",
     features: [
       "2 premium products in 1 order",
       "Magnetic Car Phone Holder included",
@@ -106,17 +106,17 @@ export const STATIC_FEATURED_PRODUCTS: ProductRow[] = [
   }
 ];
 
-/** Shown when there are no rows in `reviews` yet — same stories as seed, editable copy. */
+/** Shown when there are no rows in `reviews` yet — editable copy. */
 export const STATIC_HOME_REVIEWS: (ReviewRow & { product_name?: string | null })[] =
   [
     {
       id: "00000000-0000-4000-8000-000000000101",
       product_id: null,
-      reviewer_name: "Adaeze O.",
-      reviewer_location: "Lagos Island",
+      reviewer_name: "Yusuf M.",
+      reviewer_location: "Port Harcourt",
       rating: 5,
       review_text:
-        "Used on my Corolla for one week before reviewing. Delivery took 2 days to Lagos Island, and the magnet still holds my phone steady on Third Mainland Bridge even with potholes.",
+        "CAC registration and professionalism stood out. Delivery was perfect.",
       verified: true,
       created_at: new Date().toISOString(),
       product_name: HOME_PRODUCT_TITLE["magnetic-car-phone-holder"]
@@ -124,11 +124,11 @@ export const STATIC_HOME_REVIEWS: (ReviewRow & { product_name?: string | null })
     {
       id: "00000000-0000-4000-8000-000000000102",
       product_id: null,
-      reviewer_name: "Emeka I.",
+      reviewer_name: "Funke A.",
       reviewer_location: "Abuja",
       rating: 5,
       review_text:
-        "I was skeptical after getting fake accessories online before. They confirmed quickly on WhatsApp, sent delivery updates, and my order arrived in 3 days to Abuja exactly as shown.",
+        "Pay on delivery gave me total peace of mind. Excellent service.",
       verified: true,
       created_at: new Date().toISOString(),
       product_name: HOME_PRODUCT_TITLE["car-seat-gap-organiser"]
@@ -136,37 +136,13 @@ export const STATIC_HOME_REVIEWS: (ReviewRow & { product_name?: string | null })
     {
       id: "00000000-0000-4000-8000-000000000103",
       product_id: null,
-      reviewer_name: "Tolu A.",
-      reviewer_location: "Ibadan",
-      rating: 5,
-      review_text:
-        "I bought the Lagos Driver Bundle for my Camry. Both items came together in one delivery to Ibadan, and the team followed up after delivery to confirm everything worked well.",
-      verified: true,
-      created_at: new Date().toISOString(),
-      product_name: HOME_PRODUCT_TITLE["lagos-driver-bundle"]
-    },
-    {
-      id: "00000000-0000-4000-8000-000000000104",
-      product_id: null,
-      reviewer_name: "Nkechi U.",
-      reviewer_location: "Port Harcourt",
-      rating: 5,
-      review_text:
-        "The seat gap organiser solved the daily problem of losing keys and cards between seats. Packaging was neat, installation was easy, and delivery to Port Harcourt was smooth.",
-      verified: true,
-      created_at: new Date().toISOString(),
-      product_name: HOME_PRODUCT_TITLE["car-seat-gap-organiser"]
-    },
-    {
-      id: "00000000-0000-4000-8000-000000000105",
-      product_id: null,
-      reviewer_name: "Musa K.",
+      reviewer_name: "Chidi N.",
       reviewer_location: "Lekki, Lagos",
       rating: 5,
       review_text:
-        "Ordered at night on WhatsApp and got confirmation almost immediately. I paid on delivery in Lekki, and the holder fits my vent properly without shaking while driving.",
+        "Product exactly as shown. Finally found a trustworthy seller.",
       verified: true,
       created_at: new Date().toISOString(),
-      product_name: HOME_PRODUCT_TITLE["magnetic-car-phone-holder"]
+      product_name: HOME_PRODUCT_TITLE["lagos-driver-bundle"]
     }
   ];

@@ -1,12 +1,8 @@
 import {
-  BadgeCheck,
   Building2,
   Car,
-  Camera,
-  Crown,
   Home,
   MessageCircle,
-  RefreshCw,
   Rocket,
   Search,
   Wallet,
@@ -31,7 +27,7 @@ import { mergeReviewsForHome } from "@/lib/reviews-display";
 const shopCategories = [
   {
     name: "CAR ACCESSORIES",
-    tagline: "Upgrade your ride",
+    tagline: "Upgrade Your Ride",
     Icon: Car,
     href: "/auto",
     available: true,
@@ -39,30 +35,12 @@ const shopCategories = [
   },
   {
     name: "SMART HOME",
-    tagline: "Upgrade your space",
+    tagline: "Coming Soon",
     Icon: Home,
     href: "/home",
     available: false,
     badge: "COMING SOON",
     bgClass: "bg-gradient-to-br from-[#1a2744] to-rgr-navy",
-  },
-  {
-    name: "CREATOR TOOLS",
-    tagline: "Build your setup",
-    Icon: Camera,
-    href: "#",
-    available: false,
-    badge: "COMING SOON",
-    bgClass: "bg-gradient-to-br from-[#162038] to-rgr-navy",
-  },
-  {
-    name: "REQUIRE HAIR",
-    tagline: "Your crown, verified",
-    Icon: Crown,
-    href: "#",
-    available: false,
-    badge: "COMING SOON",
-    bgClass: "bg-gradient-to-br from-[#1c2a48] to-rgr-navy",
   },
 ];
 
@@ -70,67 +48,52 @@ const shopCategories = [
 const steps = [
   {
     num: "01",
-    emoji: "🔍",
-    title: "Choose Your Product",
-    desc: "Browse our verified product catalogue and select what you need. Every product is real and quality-checked.",
+    title: "Choose your product",
+    desc: "Browse our verified catalogue.",
   },
   {
     num: "02",
-    emoji: "📝",
-    title: "Place Your Order",
-    desc: "Fill your details on the product page or message us on WhatsApp. Takes less than 2 minutes.",
+    title: "Order via WhatsApp or website",
+    desc: "Takes under 2 minutes.",
   },
   {
     num: "03",
-    emoji: "💬",
-    title: "We Confirm via WhatsApp",
-    desc: "Our team confirms your order within 30 minutes and gives you a delivery timeline.",
+    title: "We confirm in 30 minutes",
+    desc: "Your order is locked in.",
   },
   {
     num: "04",
-    emoji: "🚀",
-    title: "Delivered to Your Door",
-    desc: "Your order arrives in 2–5 days. You pay only when it's in your hands. Zero risk.",
+    title: "Receive & pay on delivery",
+    desc: "Arrives in 2\u20135 days.",
   },
 ];
 
-/* ─── Why-Choose-Us cards (6) ─── */
+/* ─── Why-Choose-Us cards (5) ─── */
 const whyCards = [
   {
-    emoji: "🔍",
     title: "Product Verification",
-    desc: "Every item inspected before shipping. What you see is what you get.",
+    desc: "Every product physically verified before shipping.",
     Icon: Search,
   },
   {
-    emoji: "💵",
     title: "Pay on Delivery",
-    desc: "Pay only when your order arrives at your door. Absolutely zero risk.",
+    desc: "Zero risk \u2014 pay only when it arrives.",
     Icon: Wallet,
   },
   {
-    emoji: "🏢",
     title: "CAC Registered",
-    desc: "Registered Nigerian company under Require Trading Limited. Not a random vendor.",
+    desc: "Legitimate Nigerian company you can trust.",
     Icon: Building2,
   },
   {
-    emoji: "💬",
-    title: "WhatsApp Support",
-    desc: "Real humans available to answer your questions any time of day.",
+    title: "Real Support",
+    desc: "Real human support on WhatsApp.",
     Icon: MessageCircle,
   },
   {
-    emoji: "🚀",
     title: "Fast Delivery",
-    desc: "Nationwide delivery in 2–5 days. Lagos often same day or next day.",
+    desc: "Nationwide in 2\u20135 days. Lagos often same/next day.",
     Icon: Rocket,
-  },
-  {
-    emoji: "🔄",
-    title: "Easy Returns",
-    desc: "If it is not right, we make it right. No stress. No argument.",
-    Icon: RefreshCw,
   },
 ];
 
@@ -160,12 +123,9 @@ export default async function HomePage() {
             <h2 className="mt-2 font-display text-3xl uppercase tracking-tight text-rgr-navy md:text-4xl">
               SHOP BY CATEGORY
             </h2>
-            <p className="mt-3 text-base text-rgr-gray500">
-              Every product carefully selected and verified before it reaches you.
-            </p>
           </FadeInView>
 
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+          <div className="mt-10 grid grid-cols-2 gap-4 md:gap-6">
             {shopCategories.map(({ name, tagline, Icon, href, available, badge, bgClass }, i) => (
               <FadeInView key={name} delay={i * 80}>
                 <Link
@@ -218,27 +178,21 @@ export default async function HomePage() {
             <h2 className="mt-2 font-display text-3xl uppercase tracking-tight text-white md:text-4xl">
               HOW IT WORKS
             </h2>
-            <p className="mt-3 text-base text-white/60">
-              Ordering from Require Global Resources is simple and completely safe.
-            </p>
           </FadeInView>
 
           <div className="relative mt-14">
             <div className="absolute left-6 top-0 hidden h-full w-0.5 bg-gradient-to-b from-rgr-blue to-rgr-gold md:block" aria-hidden />
             <div className="grid gap-8 md:gap-10">
-              {steps.map(({ num, emoji, title, desc }, i) => (
+              {steps.map(({ num, title, desc }, i) => (
                 <FadeInView key={num} delay={i * 120}>
                   <div className="flex gap-6">
                     <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-rgr-blue text-lg font-bold text-white shadow-lg">
                       {num}
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{emoji}</span>
-                        <h3 className="font-display text-lg uppercase tracking-wider text-white">
-                          {title}
-                        </h3>
-                      </div>
+                      <h3 className="font-display text-lg uppercase tracking-wider text-white">
+                        {title}
+                      </h3>
                       <p className="mt-3 text-sm leading-relaxed text-white/70">
                         {desc}
                       </p>
@@ -248,6 +202,12 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
+
+          <FadeInView delay={500}>
+            <p className="mt-12 text-center font-display text-lg uppercase tracking-wider text-white/60">
+              Simple. Safe. Stress-free.
+            </p>
+          </FadeInView>
         </div>
       </section>
 
@@ -259,15 +219,12 @@ export default async function HomePage() {
               Our Promise
             </p>
             <h2 className="mt-2 font-display text-3xl uppercase tracking-tight text-rgr-navy md:text-4xl">
-              THE REQUIRE DIFFERENCE
+              BUILT ON TRUST
             </h2>
-            <p className="mt-3 max-w-lg text-base text-rgr-gray500">
-              We&apos;re not just another Instagram vendor. Here&apos;s what makes us genuinely different.
-            </p>
           </FadeInView>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {whyCards.map(({ emoji, title, desc, Icon }, i) => (
+            {whyCards.map(({ title, desc, Icon }, i) => (
               <FadeInView key={title} delay={i * 60}>
                 <article className="rounded-2xl border border-rgr-gray300/50 bg-white p-6 shadow-soft transition duration-300 hover:-translate-y-0.5 hover:border-l-4 hover:border-l-rgr-blue hover:shadow-lift">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-rgr-navy/5">
@@ -298,7 +255,7 @@ export default async function HomePage() {
                 HAPPY CUSTOMERS
               </h2>
               <p className="mt-3 text-base text-rgr-gray500">
-                Real Nigerians. Real orders. Real experiences. No fake reviews.
+                Real Nigerians. Real orders. Real experiences.
               </p>
             </FadeInView>
 
@@ -320,10 +277,10 @@ export default async function HomePage() {
         <div className="relative mx-auto max-w-2xl px-5 text-center md:px-10">
           <FadeInView>
             <h2 className="font-display text-4xl uppercase tracking-tight text-white md:text-5xl lg:text-6xl">
-              READY TO ORDER?
+              READY TO UPGRADE?
             </h2>
             <p className="mt-4 text-base text-white/65 md:text-lg">
-              Join Nigerians already enjoying verified quality products at their door.
+              Chat with us on WhatsApp or browse our verified products.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <a
@@ -333,18 +290,15 @@ export default async function HomePage() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-10 py-4 font-display text-sm uppercase tracking-wider text-white shadow-lg transition duration-200 hover:bg-[#20bd5a] active:scale-[0.98]"
               >
                 <MessageCircle className="h-5 w-5" />
-                Chat Us on WhatsApp Now
+                Chat With Us on WhatsApp Now
               </a>
               <Link
                 href="/#products"
                 className="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-10 py-4 font-display text-sm uppercase tracking-wider text-white transition duration-200 hover:border-white/60 hover:bg-white/10 active:scale-[0.98]"
               >
-                🛒 Browse All Products
+                Browse All Products
               </Link>
             </div>
-            <p className="mt-8 text-xs text-white/50">
-              Pay on Delivery · No Upfront Payment · Verified Products · CAC Registered
-            </p>
           </FadeInView>
         </div>
       </section>

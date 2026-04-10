@@ -71,7 +71,7 @@ export function ReviewCard({
             )}
           </div>
           <span className="text-xs text-rgr-gray500">
-            📍 {review.reviewer_location}
+            {review.reviewer_location}
           </span>
         </div>
       </div>

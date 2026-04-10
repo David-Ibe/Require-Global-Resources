@@ -13,10 +13,10 @@ const quickLinks = [
 ];
 
 const social = [
-  { label: "📸 Instagram", href: contact.instagramUrl },
-  { label: "🎵 TikTok", href: contact.tiktokUrl },
-  { label: "💬 WhatsApp", href: contact.whatsappUrl },
-  { label: "👥 Facebook", href: contact.facebookUrl },
+  { label: "Instagram", href: contact.instagramUrl },
+  { label: "TikTok", href: contact.tiktokUrl },
+  { label: "WhatsApp", href: contact.whatsappUrl },
+  { label: "Facebook", href: contact.facebookUrl },
 ] as const;
 
 export function StoreFooter() {
@@ -41,7 +41,6 @@ export function StoreFooter() {
           </p>
           <p className="mt-4 text-sm leading-relaxed text-white/60">
             Smart car and home upgrade products for the modern Nigerian.
-            Every product verified before it reaches you.
           </p>
           <p className="mt-3 text-xs text-white/40">
             A trading brand of {brand.legalName}
@@ -79,7 +78,7 @@ export function StoreFooter() {
                 href={`tel:+${contact.whatsappNumber.replace(/\D/g, "")}`}
                 className="text-white/70 transition hover:text-white"
               >
-                📱 {brand.phoneDisplay}
+                {brand.phoneDisplay}
               </a>
             </li>
             <li>
@@ -87,11 +86,11 @@ export function StoreFooter() {
                 href={`mailto:${contact.email}`}
                 className="text-white/70 transition hover:text-white"
               >
-                📧 {contact.email}
+                {contact.email}
               </a>
             </li>
-            <li className="text-white/50">📍 {brand.location}</li>
-            <li className="text-white/50">🕐 Mon–Sat 8am–8pm WAT</li>
+            <li className="text-white/50">{brand.location}</li>
+            <li className="text-white/50">Mon–Sat 8am–8pm WAT</li>
           </ul>
         </div>
 

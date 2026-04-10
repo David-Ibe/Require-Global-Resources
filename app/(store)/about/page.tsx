@@ -32,10 +32,6 @@ export default function AboutPage() {
           you want the real thing: inspected before dispatch, delivered to your door,
           and you pay when it arrives.
         </p>
-        <p className={storeType.body}>
-          Our team is on WhatsApp because that is how Nigerians actually shop — fast
-          questions, fast answers, no ticket numbers and no runaround.
-        </p>
         <div className={`mt-12 ${storeSurface.card}`}>
           <p className="text-lg font-semibold text-rgr-navy">{brand.tagline}</p>
           <p className="mt-2 text-rgr-gray700">{brand.oneLiner}</p>

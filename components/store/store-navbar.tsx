@@ -64,7 +64,7 @@ export function StoreNavbar() {
               {brand.shortName.toUpperCase()}
             </span>
             <span className="hidden text-[10px] font-medium tracking-wider text-white/50 md:block">
-              Verified Products
+              Verified Smart Upgrades for Your Car &amp; Home
             </span>
           </div>
         </Link>

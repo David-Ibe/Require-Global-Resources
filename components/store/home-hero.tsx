@@ -40,7 +40,7 @@ function CountdownTimer() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-white/60">⏱️ OFFER ENDS IN:</span>
+      <span className="text-sm font-medium text-white/60">OFFER ENDS IN:</span>
       <div className="flex gap-1.5">
         {[pad(hrs), pad(mins), pad(secs)].map((v, i) => (
           <span key={i}>
@@ -112,17 +112,22 @@ export function HomeHero() {
           <div className={`relative z-10 mx-auto ${HERO_FLEX} ${HERO_H} w-full max-w-7xl px-5 md:px-10`}>
             {current === 0 && (
               <div key={`s1-${animKey}`} className="hero-slide-enter mx-auto max-w-3xl text-center md:mx-0 md:max-w-2xl md:text-left">
-                <h1 className="font-display text-[3.2rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+                <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold/90 md:text-base">
+                  Verified Smart Upgrades for Your Car &amp; Home
+                </p>
+
+                <h1 className="mt-3 font-display text-[3.2rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem]">
                   <span className="block text-white">Real Products.</span>
                   <span className="block text-rgr-gold">Zero Fakes.</span>
                 </h1>
 
                 <p className="mt-4 max-w-lg text-base font-medium leading-relaxed text-white/75 md:text-xl">
-                  Verified car accessories and smart home upgrades for the modern Nigerian.
+                  Premium car accessories and smart home solutions
+                  for the modern Nigerian.
                 </p>
 
                 <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55 md:text-base">
-                  Every product quality-checked before it ships to you. No wahala. No disappointment. Pay only when it arrives.
+                  Pay only when it arrives. No wahala.
                 </p>
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
@@ -130,7 +135,7 @@ export function HomeHero() {
                     href="/#products"
                     className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl active:scale-[0.98]"
                   >
-                    🛒 SHOP NOW
+                    SHOP NOW
                   </Link>
                   <a
                     href={whatsappHref}
@@ -138,7 +143,7 @@ export function HomeHero() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/30 px-8 py-3.5 font-display text-base uppercase tracking-wider text-white transition duration-200 hover:border-white hover:bg-white hover:text-rgr-navy active:scale-[0.98]"
                   >
-                    💬 Chat on WhatsApp
+                    Chat on WhatsApp
                   </a>
                 </div>
 
@@ -198,16 +203,12 @@ export function HomeHero() {
                   Smart car accessories for the modern Nigerian driver. Verified. Delivered fast.
                 </p>
 
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55">
-                  Magnetic phone holders, seat organisers, and more. Every product checked before it ships to you.
-                </p>
-
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/auto"
                     className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl active:scale-[0.98]"
                   >
-                    🚗 SHOP CAR ACCESSORIES
+                    SHOP CAR ACCESSORIES
                   </Link>
                 </div>
 
@@ -240,7 +241,7 @@ export function HomeHero() {
             {current === 2 && (
               <div key={`s3-${animKey}`} className="hero-slide-enter mx-auto max-w-3xl text-center md:mx-0 md:max-w-2xl md:text-left">
                 <span className="inline-block animate-pulse rounded-full bg-rgr-gold px-5 py-1.5 font-display text-xs uppercase tracking-widest text-rgr-navy">
-                  🎁 Limited Offer
+                  Limited Offer
                 </span>
 
                 <h1 className="mt-4 font-display text-[3rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5rem]">
@@ -253,7 +254,7 @@ export function HomeHero() {
                 </p>
 
                 <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55">
-                  Order before the timer runs out and get free delivery on your first order.
+                  Order before the timer runs out.
                 </p>
 
                 <div className="mt-5">
@@ -265,7 +266,7 @@ export function HomeHero() {
                     href="/#products"
                     className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl active:scale-[0.98]"
                   >
-                    🛒 ORDER NOW — FREE DELIVERY
+                    ORDER NOW — FREE DELIVERY
                   </Link>
                 </div>
 

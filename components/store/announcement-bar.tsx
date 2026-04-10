@@ -31,7 +31,7 @@ export function AnnouncementBar() {
         }}
         className="mx-auto block w-full max-w-4xl px-8 text-[13px] font-bold uppercase tracking-wide text-rgr-navy md:px-0 md:text-sm"
       >
-        🎁 FREE delivery for next 5 orders today &mdash; Order Now
+        FREE Delivery on Next 5 Orders Today &mdash; Order Now
       </button>
       <button
         type="button"
