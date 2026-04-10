@@ -5,10 +5,11 @@ import { getSupabaseAnon } from "@/lib/supabase/server";
 
 const STATIC_ROUTES = [
   "",
+  "/auto",
+  "/home",
   "/about",
   "/contact",
   "/returns",
-  "/order-confirmation",
   "/privacy-policy",
   "/terms"
 ];

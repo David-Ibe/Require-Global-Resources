@@ -57,6 +57,9 @@ const config: Config = {
           "50%": { opacity: "0.65" }
         }
       },
+      transitionDuration: {
+        "600": "600ms"
+      },
       animation: {
         "fade-in-up": "fade-in-up 0.55s ease-out forwards",
         pulseStock: "pulseStock 1.4s ease-in-out infinite"

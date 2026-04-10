@@ -208,7 +208,21 @@ export function AdminDashboard() {
     return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
   }, [analyticsOrders]);
 
+  const paymentMethodSplit = useMemo(() => {
+    let cod = 0;
+    let card = 0;
+    analyticsOrders.forEach((o) => {
+      if (o.payment_method === "card") card++;
+      else cod++;
+    });
+    const result = [];
+    if (cod > 0) result.push({ name: "Pay on Delivery", value: cod });
+    if (card > 0) result.push({ name: "Card (Paystack)", value: card });
+    return result;
+  }, [analyticsOrders]);
+
   const COLORS = ["#1246D6", "#F5A623", "#16A34A", "#DC2626", "#9333EA", "#64748B"];
+  const PAYMENT_COLORS = ["#16A34A", "#1246D6"];
 
   async function updateOrderStatus(id: string, status: string) {
     await supabase.from("orders").update({ status }).eq("id", id);
@@ -591,6 +605,43 @@ export function AdminDashboard() {
                       </ResponsiveContainer>
                     </div>
                   </div>
+                  <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm lg:col-span-2">
+                    <h3 className="font-display text-lg text-[#08142A]">
+                      Payment method split
+                    </h3>
+                    {paymentMethodSplit.length > 0 ? (
+                      <div className="mt-4 h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={paymentMethodSplit}
+                              dataKey="value"
+                              nameKey="name"
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={50}
+                              outerRadius={80}
+                              paddingAngle={3}
+                              label
+                            >
+                              {paymentMethodSplit.map((_, i) => (
+                                <Cell
+                                  key={i}
+                                  fill={PAYMENT_COLORS[i % PAYMENT_COLORS.length]}
+                                />
+                              ))}
+                            </Pie>
+                            <Tooltip />
+                            <Legend />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    ) : (
+                      <p className="mt-8 text-center text-sm text-slate-500">
+                        No data for selected period
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : null}
@@ -834,6 +885,7 @@ function OrdersPanel({
               <th className="p-2">Price</th>
               <th className="p-2">State</th>
               <th className="p-2">Status</th>
+              <th className="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -872,6 +924,16 @@ function OrdersPanel({
                       </option>
                     ))}
                   </select>
+                </td>
+                <td className="p-2">
+                  <a
+                    href={`https://wa.me/${o.whatsapp.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#25D366] hover:underline text-xs font-medium"
+                  >
+                    💬 WhatsApp
+                  </a>
                 </td>
               </tr>
             ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -46,46 +47,57 @@ export function AdminLoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
-        <h1 className="font-display text-3xl tracking-wide text-[#08142A]">
-          Login to Require Global Resources Admin
-        </h1>
-        <p className="mt-2 text-sm text-slate-600">
-          Supabase email and password required.
-        </p>
+    <div className="flex min-h-screen items-center justify-center bg-rgr-navy px-4">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white p-8 shadow-2xl">
+        <div className="flex flex-col items-center">
+          <Image
+            src="/logo-mark.png"
+            alt="Require Global Resources"
+            width={56}
+            height={56}
+            className="h-14 w-14"
+          />
+          <h1 className="mt-4 font-display text-3xl tracking-wide text-rgr-navy">
+            ADMIN LOGIN
+          </h1>
+          <p className="mt-2 text-center text-sm text-rgr-gray500">
+            Require Global Resources Dashboard
+          </p>
+        </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <label className="block">
-            <span className="text-sm font-medium text-slate-700">Email</span>
+            <span className="text-sm font-medium text-rgr-gray700">Email</span>
             <input
               type="email"
               autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none ring-[#1246D6] focus:ring-2"
+              className="mt-1 w-full rounded-xl border border-rgr-gray300 px-4 py-3 text-sm outline-none transition focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
             />
           </label>
           <label className="block">
-            <span className="text-sm font-medium text-slate-700">Password</span>
+            <span className="text-sm font-medium text-rgr-gray700">Password</span>
             <input
               type="password"
               autoComplete="current-password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none ring-[#1246D6] focus:ring-2"
+              className="mt-1 w-full rounded-xl border border-rgr-gray300 px-4 py-3 text-sm outline-none transition focus:border-rgr-blue focus:ring-2 focus:ring-rgr-blue/20"
             />
           </label>
-          {error ? (
-            <p className="text-sm text-red-600">{error}</p>
-          ) : null}
+          {error && (
+            <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+              {error}
+            </p>
+          )}
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-[#1246D6] py-3 font-display text-lg tracking-wide text-white disabled:opacity-60"
+            className="w-full rounded-xl bg-rgr-gold py-3.5 font-display text-lg uppercase tracking-wider text-rgr-navy shadow-lg transition hover:bg-amber-400 disabled:opacity-60"
           >
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? "Signing in…" : "LOGIN"}
           </button>
         </form>
       </div>

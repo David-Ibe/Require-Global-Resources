@@ -14,7 +14,7 @@ export const NIGERIAN_STATES = [
   "Edo",
   "Ekiti",
   "Enugu",
-  "Federal Capital Territory",
+  "FCT (Abuja)",
   "Gombe",
   "Imo",
   "Jigawa",

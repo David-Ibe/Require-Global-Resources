@@ -42,18 +42,18 @@ export function waOrderFormBody(params: {
   address: string;
   state: string;
 }): string {
-  return `Hi, please place my order.
-
-Full Name: ${params.name}
-Phone Number: ${params.phone}
-WhatsApp: ${params.whatsapp}
-Delivery Address: ${params.address}
-State: ${params.state}
+  return `🛒 NEW ORDER — REQUIRE GLOBAL RESOURCES
 
 📦 Product: ${params.productName}
-📋 Package: ${params.packageLabel}
+🔢 Package: ${params.packageLabel}
 💰 Price: ${params.price}
 💵 Payment: ${params.paymentLabel}
-
-I confirmed this on your website. Thank you!`;
+━━━━━━━━━━━━━━━
+👤 Name: ${params.name}
+📱 Phone: ${params.phone}
+📲 WhatsApp: ${params.whatsapp}
+📍 Address: ${params.address}
+🗺️ State: ${params.state}
+━━━━━━━━━━━━━━━
+Please confirm my order. Thank you!`;
 }
