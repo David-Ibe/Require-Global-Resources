@@ -109,7 +109,18 @@ export function ProductCardHome({
             ) : null}
           </div>
 
-          <div className="mt-auto pt-5">
+          <p className="mt-3 text-xs text-rgr-gray500">
+            {product.stock_count > 0 ? (
+              <span className="inline-flex items-center gap-1 text-green-600">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500" />
+                In Stock&nbsp;&middot;&nbsp;Ready to ship
+              </span>
+            ) : (
+              <span className="text-rgr-gray500">Out of stock</span>
+            )}
+          </p>
+
+          <div className="mt-auto pt-4">
             <Link
               href={`/products/${product.slug}`}
               className="inline-flex w-full items-center justify-center rounded-xl bg-rgr-navy px-6 py-3.5 font-display text-sm uppercase tracking-wider text-white transition duration-200 hover:bg-rgr-gold hover:text-rgr-navy active:scale-[0.98]"

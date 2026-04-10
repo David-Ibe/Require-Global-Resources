@@ -7,7 +7,7 @@ export function HomeProductsHeading() {
   return (
     <FadeInView>
       <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-blue">
-        Best Sellers
+        Our Top Picks
       </p>
       <h2 className="mt-2 font-display text-3xl uppercase tracking-tight text-rgr-navy md:text-4xl">
         BEST SELLERS

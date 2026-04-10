@@ -40,9 +40,9 @@ export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobalresources.com";
 
 export const defaultSiteTitle =
-  "Require Global Resources — Verified Car & Home Products. Delivered Nigeria-Wide.";
+  "Require Global Resources — Premium Car & Home Products for Nigeria";
 export const defaultSiteDescription =
-  "Shop verified car accessories and home upgrade products. Pay on delivery. Delivered anywhere in Nigeria in 2–5 days. CAC registered Nigerian business.";
+  "Shop premium car accessories and smart home upgrades. Pay on delivery. Shipped anywhere in Nigeria. CAC-registered business.";
 
 export function getWhatsAppLink(message: string): string {
   return `https://wa.me/${cleanedWhatsAppNumber}?text=${encodeURIComponent(message)}`;

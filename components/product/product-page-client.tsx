@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -17,11 +16,6 @@ import {
 import { UrgencyBar } from "@/components/product/urgency-bar";
 import { FadeInView } from "@/components/fade-in-view";
 import { featureBlurbFor } from "@/lib/feature-blurb";
-
-const ProductPaystackBridge = dynamic(
-  () => import("@/components/product/product-paystack-bridge").then((m) => m.ProductPaystackBridge),
-  { ssr: false }
-);
 
 function youtubeId(url: string): string | null {
   const m = url.match(/(?:youtu\.be\/|v=)([^&?]+)/);
@@ -58,16 +52,18 @@ const initialForm: FormState = {
 };
 
 const trustCards = [
-  { emoji: "✅", title: "Verified Products", desc: "Every item inspected before shipping" },
-  { emoji: "💵", title: "Pay on Delivery", desc: "Pay only when it arrives at your door" },
-  { emoji: "🏢", title: "CAC Registered", desc: "Legitimate Nigerian business" },
-  { emoji: "🚀", title: "Fast Delivery", desc: "2–5 days nationwide" },
+  { emoji: "✅", title: "Quality Inspected", desc: "Every item checked before dispatch" },
+  { emoji: "💵", title: "Pay on Arrival", desc: "No upfront payment required" },
+  { emoji: "🏢", title: "Registered Business", desc: "CAC-registered Nigerian company" },
+  { emoji: "🚀", title: "Nationwide Shipping", desc: "Lagos same/next day. All 36 states covered." },
 ];
 
 export function ProductPageClient({
   product,
+  localVideoUrl,
 }: {
   product: ProductRow;
+  localVideoUrl?: string;
 }) {
   const options = useMemo(() => {
     const raw = product.pricing_options;
@@ -93,13 +89,9 @@ export function ProductPageClient({
   // Order form state
   const [form, setForm] = useState<FormState>(initialForm);
   const [sameAsPhone, setSameAsPhone] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod");
-  const [submitting, setSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof FormState, string>>>({});
-  const [apiError, setApiError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [successName, setSuccessName] = useState("");
-  const [paystackReady, setPaystackReady] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -131,86 +123,32 @@ export function ProductPageClient({
     );
   }, [form]);
 
-  async function saveOrder(paystackRef?: string) {
-    try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: form.fullName,
-          phone: form.phone,
-          whatsapp: form.whatsapp,
-          address: form.address,
-          state: form.state,
-          productSlug: product.slug,
-          quantity: 1,
-          packageLabel: selected?.label,
-          packagePrice: selected?.price ?? product.current_price,
-          paymentMethod: paystackRef ? "card" : "cod",
-          paystackReference: paystackRef || undefined,
-        }),
-      });
-      const data = await response.json();
-
-      trackPurchase({
-        value: unitPriceDigits,
-        transactionId: data.orderId ?? crypto.randomUUID(),
-        contentName: product.name,
-      });
-
-      setSuccessName(form.fullName);
-      setShowSuccess(true);
-
-      setTimeout(() => {
-        const msg = waOrderFormBody({
-          productName: product.name,
-          packageLabel: selected?.label ?? "Standard",
-          price: selected?.price ?? product.current_price,
-          paymentLabel: paystackRef ? "Paid with Card" : "Pay on Delivery",
-          name: form.fullName,
-          phone: form.phone,
-          whatsapp: form.whatsapp,
-          address: form.address,
-          state: form.state,
-        });
-        window.open(getWhatsAppLink(msg), "_blank", "noopener,noreferrer");
-      }, 1500);
-    } catch {
-      setSuccessName(form.fullName);
-      setShowSuccess(true);
-    }
-  }
-
-  async function handleCodSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateForm()) return;
 
     trackInitiateCheckout(unitPriceDigits);
-    setSubmitting(true);
-    setApiError("");
+    trackPurchase({
+      value: unitPriceDigits,
+      transactionId: crypto.randomUUID(),
+      contentName: product.name,
+    });
 
-    try {
-      await saveOrder();
-    } catch {
-      setApiError("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
+    const msg = waOrderFormBody({
+      productName: product.name,
+      packageLabel: selected?.label ?? "Standard",
+      price: selected?.price ?? product.current_price,
+      paymentLabel: "Pay on Delivery",
+      name: form.fullName,
+      phone: form.phone,
+      whatsapp: form.whatsapp,
+      address: form.address,
+      state: form.state,
+    });
+    window.open(getWhatsAppLink(msg), "_blank", "noopener,noreferrer");
 
-  function handlePaystackSubmit() {
-    if (!validateForm()) return;
-    trackInitiateCheckout(unitPriceDigits);
-    setPaystackReady(true);
-  }
-
-  function handlePaystackSuccess(reference: string) {
-    setPaystackReady(false);
-    void saveOrder(reference);
-  }
-
-  function handlePaystackClose() {
-    setPaystackReady(false);
+    setSuccessName(form.fullName);
+    setShowSuccess(true);
   }
 
   // Auto dismiss success after 8 seconds
@@ -245,7 +183,7 @@ export function ProductPageClient({
       </div>
 
       {/* Hero section */}
-      <section className="bg-rgr-navy py-10 md:py-16">
+      <section className="bg-rgr-navy py-8 md:py-12">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <FadeInView>
             <span className="inline-block rounded-full bg-rgr-blue/20 px-4 py-1.5 text-sm font-medium text-rgr-gold">
@@ -327,24 +265,39 @@ export function ProductPageClient({
               ))}
             </div>
 
-            {/* YouTube video (below images) */}
-            {yt ? (
+            {/* Product video (below images) */}
+            {(localVideoUrl || yt) && (
               <div className="mt-8">
                 <h2 className="font-display text-xl uppercase tracking-wider text-rgr-navy">
-                  HOW IT WORKS
+                  SEE IT IN ACTION
                 </h2>
-                <div className="mt-4 aspect-video overflow-hidden rounded-2xl bg-black shadow-soft">
-                  <iframe
-                    title="Product video"
-                    src={`https://www.youtube.com/embed/${yt}`}
-                    className="h-full w-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                </div>
+                {localVideoUrl ? (
+                  <div className="mt-4 overflow-hidden rounded-2xl bg-black shadow-soft">
+                    <video
+                      src={localVideoUrl}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="w-full"
+                      poster=""
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                ) : yt ? (
+                  <div className="mt-4 aspect-video overflow-hidden rounded-2xl bg-black shadow-soft">
+                    <iframe
+                      title="Product video"
+                      src={`https://www.youtube.com/embed/${yt}`}
+                      className="h-full w-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                    />
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            )}
 
             {/* Why you need this — feature cards */}
             {product.features.length > 0 && (
@@ -467,7 +420,7 @@ export function ProductPageClient({
                   </div>
                 </div>
 
-                <form ref={formRef} className="mt-5 space-y-4" onSubmit={handleCodSubmit} noValidate>
+                <form ref={formRef} className="mt-5 space-y-4" onSubmit={handleSubmit} noValidate>
                   <label className="block">
                     <span className="text-sm font-medium text-rgr-gray700">Full Name</span>
                     <input
@@ -584,89 +537,26 @@ export function ProductPageClient({
                     <span className="font-semibold text-rgr-blue">{selected?.price ?? product.current_price}</span>
                   </div>
 
-                  {/* Payment method toggle */}
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-rgr-gray700">Payment Method</p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setPaymentMethod("cod")}
-                        className={`rounded-xl border p-3 text-left transition ${
-                          paymentMethod === "cod"
-                            ? "border-green-500 bg-green-50 ring-1 ring-green-500"
-                            : "border-rgr-gray300/60 bg-white hover:border-rgr-gray300"
-                        }`}
-                      >
-                        <p className="text-sm font-semibold text-rgr-navy">💵 Pay on Delivery</p>
-                        <p className="text-[11px] text-rgr-gray500">Pay when it arrives</p>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPaymentMethod("card")}
-                        className={`rounded-xl border p-3 text-left transition ${
-                          paymentMethod === "card"
-                            ? "border-rgr-blue bg-[#EFF6FF] ring-1 ring-rgr-blue"
-                            : "border-rgr-gray300/60 bg-white hover:border-rgr-gray300"
-                        }`}
-                      >
-                        <p className="text-sm font-semibold text-rgr-navy">💳 Pay Now with Card</p>
-                        <p className="text-[11px] text-rgr-gray500">Secure Paystack checkout</p>
-                      </button>
-                    </div>
-                  </div>
-
-                  {apiError && (
-                    <p className="text-sm text-red-600">{apiError}</p>
-                  )}
-
-                  {paymentMethod === "cod" ? (
-                    <button
-                      type="submit"
-                      disabled={submitting || !isFormValid}
-                      className="w-full rounded-xl bg-rgr-gold px-6 py-4 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      {submitting ? (
-                        <span className="inline-flex items-center gap-2">
-                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-rgr-navy/30 border-t-rgr-navy" />
-                          Processing...
-                        </span>
-                      ) : (
-                        "🛒 ORDER NOW — PAY ON DELIVERY"
-                      )}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      disabled={!isFormValid}
-                      onClick={handlePaystackSubmit}
-                      className="w-full rounded-xl bg-rgr-blue px-6 py-4 font-display text-base uppercase tracking-wider text-white shadow-lg transition hover:bg-rgr-blueLight disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      💳 PAY NOW WITH CARD
-                    </button>
-                  )}
+                  <button
+                    type="submit"
+                    disabled={!isFormValid}
+                    className="w-full rounded-xl bg-rgr-gold px-6 py-4 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    🛒 ORDER NOW — PAY ON DELIVERY
+                  </button>
 
                   <p className="text-center text-xs text-rgr-gray500">
-                    Your order confirmed via WhatsApp within 30 minutes
+                    You'll be redirected to WhatsApp to send your order details
                   </p>
                 </form>
 
-                {paystackReady && (
-                  <ProductPaystackBridge
-                    amount={unitPriceDigits}
-                    email={`${form.phone.replace(/\D/g, "")}@order.requireglobalresources.com`}
-                    name={form.fullName}
-                    phone={form.phone}
-                    onSuccess={handlePaystackSuccess}
-                    onClose={handlePaystackClose}
-                  />
-                )}
               </div>
             )}
           </div>
         </div>
 
         {/* Trust signals */}
-        <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
           {trustCards.map(({ emoji, title, desc }) => (
             <FadeInView key={title}>
               <div className="rounded-2xl border border-rgr-gray300/40 bg-white p-5 text-center shadow-sm">
@@ -681,7 +571,7 @@ export function ProductPageClient({
         </div>
 
         {/* Product footer */}
-        <div className="mt-12 border-t border-rgr-gray300/40 pt-8 text-center">
+        <div className="mt-8 border-t border-rgr-gray300/40 pt-6 text-center">
           <Link
             href="/"
             className="font-display text-sm uppercase tracking-wider text-rgr-gold underline underline-offset-4 hover:text-amber-500"
@@ -697,11 +587,11 @@ export function ProductPageClient({
           <div className="w-full max-w-md animate-fade-in-up rounded-2xl bg-white p-8 text-center shadow-2xl">
             <div className="text-5xl">🎉</div>
             <h2 className="mt-4 font-display text-3xl uppercase text-green-600">
-              ORDER PLACED!
+              ALMOST DONE!
             </h2>
             <p className="mt-3 text-sm text-rgr-gray700">
-              Thank you {successName}! Your order has been received. Our team will
-              confirm via WhatsApp within 30 minutes.
+              Thank you {successName}! Send the message on WhatsApp to complete
+              your order. Our team will confirm within 30 minutes.
             </p>
             <a
               href={getWhatsAppLink(`Hi, I just placed an order for ${product.name}. Please confirm.`)}
@@ -709,7 +599,7 @@ export function ProductPageClient({
               rel="noopener noreferrer"
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-sm uppercase tracking-wider text-white transition hover:bg-[#20bd5a]"
             >
-              💬 Chat With Us on WhatsApp
+              💬 Confirm on WhatsApp
             </a>
             <div className="mt-4">
               <Link

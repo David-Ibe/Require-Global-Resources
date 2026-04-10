@@ -1,6 +1,7 @@
 "use client";
 
-import { BadgeCheck, Menu, MessageCircle, X } from "lucide-react";
+import { Menu, X } from "@/components/icons";
+import { WhatsAppIcon } from "@/components/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -64,7 +65,7 @@ export function StoreNavbar() {
               {brand.shortName.toUpperCase()}
             </span>
             <span className="hidden text-[10px] font-medium tracking-wider text-white/50 md:block">
-              Verified Smart Upgrades for Your Car &amp; Home
+              Premium Car &amp; Home Upgrades
             </span>
           </div>
         </Link>
@@ -84,17 +85,13 @@ export function StoreNavbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <span className="hidden items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-400 md:inline-flex">
-            <BadgeCheck className="h-3.5 w-3.5" />
-            CAC Reg.
-          </span>
           <a
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#20bd5a] sm:inline-flex"
           >
-            <MessageCircle className="h-4 w-4" />
+            <WhatsAppIcon size={16} />
             Order on WhatsApp
           </a>
           <button
@@ -127,12 +124,7 @@ export function StoreNavbar() {
                 </Link>
               ))}
             </nav>
-            <div className="mt-6 border-t border-white/10 pt-6">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-400">
-                <BadgeCheck className="h-3.5 w-3.5" />
-                CAC Registered Business
-              </span>
-            </div>
+            <div className="mt-6 border-t border-white/10 pt-6" />
             <a
               href={whatsappHref}
               target="_blank"
@@ -140,7 +132,7 @@ export function StoreNavbar() {
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-4 font-display text-base uppercase tracking-wider text-white"
               onClick={() => setOpen(false)}
             >
-              <MessageCircle className="h-5 w-5" />
+              <WhatsAppIcon size={20} />
               Order on WhatsApp
             </a>
           </div>

@@ -24,7 +24,7 @@ export async function ProductReviewsSection({
   const reviews = (reviewsData ?? []) as ReviewRow[];
 
   return (
-    <section className="border-t border-rgr-gray300/40 bg-rgr-surface py-20 md:py-24">
+    <section className="border-t border-rgr-gray300/40 bg-rgr-surface py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <FadeInView>
           <h2 className="text-2xl font-semibold tracking-tight text-rgr-navy md:text-3xl">
@@ -36,7 +36,7 @@ export async function ProductReviewsSection({
             Be the first to review this product.
           </p>
         ) : (
-          <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {reviews.map((r) => (
               <ReviewCard key={r.id} review={r} productName={productName} />
             ))}

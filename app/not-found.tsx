@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons";
 
 import { brand, getWhatsAppLink } from "@/lib/site-config";
 
@@ -41,7 +41,7 @@ export default function NotFound() {
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-sm uppercase tracking-wider text-white transition hover:bg-[#20bd5a]"
         >
-          <MessageCircle className="h-4 w-4" />
+          <WhatsAppIcon size={16} />
           WhatsApp Support
         </a>
       </div>

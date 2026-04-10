@@ -17,12 +17,12 @@ export const revalidate = 60;
 function RelatedFallback() {
   return (
     <section
-      className="border-t border-rgr-gray300/40 bg-[#fafafa] py-20 md:py-24"
+      className="border-t border-rgr-gray300/40 bg-[#fafafa] py-12 md:py-16"
       aria-hidden
     >
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="h-8 w-44 max-w-full animate-pulse rounded bg-rgr-gray100" />
-        <div className="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {[0, 1, 2].map((i) => (
             <div
               key={i}
@@ -38,12 +38,12 @@ function RelatedFallback() {
 function ReviewsFallback() {
   return (
     <section
-      className="border-t border-rgr-gray300/40 bg-rgr-surface py-20 md:py-24"
+      className="border-t border-rgr-gray300/40 bg-rgr-surface py-12 md:py-16"
       aria-hidden
     >
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="h-8 w-32 max-w-full animate-pulse rounded bg-rgr-gray100" />
-        <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {[0, 1].map((i) => (
             <div
               key={i}
@@ -135,7 +135,14 @@ export default async function ProductPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProductViewTracker productName={product.name} price={firstPrice} />
-      <ProductPageClient product={product} />
+      <ProductPageClient
+        product={product}
+        localVideoUrl={
+          slug === "magnetic-car-phone-holder"
+            ? "/products/car-phone-holder-gallery/1.mp4"
+            : undefined
+        }
+      />
       <Suspense fallback={<RelatedFallback />}>
         <ProductRelatedSection slug={slug} />
       </Suspense>

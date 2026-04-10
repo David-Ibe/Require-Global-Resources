@@ -21,7 +21,7 @@ export async function ProductRelatedSection({ slug }: { slug: string }) {
   if (related.length === 0) return null;
 
   return (
-    <section className="border-t border-rgr-gray300/40 bg-[#fafafa] py-20 md:py-24">
+    <section className="border-t border-rgr-gray300/40 bg-[#fafafa] py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <FadeInView>
           <h2 className="text-2xl font-semibold tracking-tight text-rgr-navy md:text-3xl">
@@ -31,7 +31,7 @@ export async function ProductRelatedSection({ slug }: { slug: string }) {
             Verified and ready to ship.
           </p>
         </FadeInView>
-        <div className="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {related.map((p, i) => (
             <ProductCardHome key={p.id} product={p} index={i} />
           ))}

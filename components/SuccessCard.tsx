@@ -1,6 +1,7 @@
 "use client";
 
-import { MessageCircle, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "@/components/icons";
+import { WhatsAppIcon } from "@/components/icons";
 import { buildWhatsAppURL } from "@/lib/whatsapp";
 
 type SuccessCardProps = {
@@ -52,7 +53,7 @@ export function SuccessCard({
         rel="noopener noreferrer"
         className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#16a34a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#15803d]"
       >
-        <MessageCircle className="h-4 w-4" aria-hidden />
+        <WhatsAppIcon size={16} />
         Message us on WhatsApp
       </a>
       <p className="mt-3 text-center text-xs text-rgr-gray500">

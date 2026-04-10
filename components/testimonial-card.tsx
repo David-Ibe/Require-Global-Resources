@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { Star } from "@/components/icons";
 
 type TestimonialCardProps = {
   name: string;

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { WhatsAppIcon } from "@/components/icons";
 import { brand, getWhatsAppLink } from "@/lib/site-config";
 
 const whatsappHref = getWhatsAppLink(
@@ -25,18 +26,20 @@ function getSecondsUntilMidnightWAT(): number {
 }
 
 function CountdownTimer() {
-  const [seconds, setSeconds] = useState(getSecondsUntilMidnightWAT);
+  const [seconds, setSeconds] = useState<number | null>(null);
 
   useEffect(() => {
+    setSeconds(getSecondsUntilMidnightWAT());
     const timer = setInterval(() => {
       setSeconds(getSecondsUntilMidnightWAT());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
+  const s = seconds ?? 0;
+  const hrs = Math.floor(s / 3600);
+  const mins = Math.floor((s % 3600) / 60);
+  const secs = s % 60;
 
   return (
     <div className="flex items-center gap-2">
@@ -98,7 +101,7 @@ export function HomeHero() {
         >
           <Image
             src="/hero-woman-car-new.png"
-            alt="Confident Nigerian woman in premium car"
+            alt="Woman stepping out of a premium car in Lagos"
             fill
             priority
             sizes="100vw"
@@ -113,7 +116,7 @@ export function HomeHero() {
             {current === 0 && (
               <div key={`s1-${animKey}`} className="hero-slide-enter mx-auto max-w-3xl text-center md:mx-0 md:max-w-2xl md:text-left">
                 <p className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold/90 md:text-base">
-                  Verified Smart Upgrades for Your Car &amp; Home
+                  Premium Upgrades for Your Car &amp; Home
                 </p>
 
                 <h1 className="mt-3 font-display text-[3.2rem] uppercase leading-[0.92] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem]">
@@ -133,7 +136,7 @@ export function HomeHero() {
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
                   <Link
                     href="/#products"
-                    className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl active:scale-[0.98]"
+                    className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
                   >
                     SHOP NOW
                   </Link>
@@ -141,21 +144,13 @@ export function HomeHero() {
                     href={whatsappHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/30 px-8 py-3.5 font-display text-base uppercase tracking-wider text-white transition duration-200 hover:border-white hover:bg-white hover:text-rgr-navy active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-3.5 font-display text-base uppercase tracking-wider text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-[#20bd5a] hover:shadow-xl active:scale-[0.98]"
                   >
+                    <WhatsAppIcon size={18} />
                     Chat on WhatsApp
                   </a>
                 </div>
 
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-start">
-                  {["100% Verified", "2–5 Day Delivery", "Pay on Delivery"].map((stat, i) => (
-                    <span key={stat} className="flex items-center gap-2 text-sm font-bold text-white">
-                      <span className="h-1.5 w-1.5 rounded-full bg-rgr-gold" />
-                      {stat}
-                      {i < 2 && <span className="ml-4 hidden h-4 w-px bg-white/20 sm:block" />}
-                    </span>
-                  ))}
-                </div>
               </div>
             )}
           </div>
@@ -181,7 +176,7 @@ export function HomeHero() {
           <div className="absolute right-0 top-0 hidden h-full w-[45%] md:block">
             <Image
               src="/hero-rgr-twilight.png"
-              alt="Car accessories lifestyle shot"
+              alt="RGR car accessories showcase at twilight"
               fill
               className="object-cover object-center"
               sizes="45vw"
@@ -200,13 +195,13 @@ export function HomeHero() {
                 </h1>
 
                 <p className="mt-4 max-w-lg text-base font-medium leading-relaxed text-white/75 md:text-lg">
-                  Smart car accessories for the modern Nigerian driver. Verified. Delivered fast.
+                  Smart car accessories for the modern Nigerian driver. Quality you can see and feel.
                 </p>
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/auto"
-                    className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl active:scale-[0.98]"
+                    className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
                   >
                     SHOP CAR ACCESSORIES
                   </Link>
@@ -229,7 +224,7 @@ export function HomeHero() {
         >
           <Image
             src="/hero-home-driver.png"
-            alt="Nigerian driver enjoying a smooth drive"
+            alt="Driver on a Lagos highway at sunset"
             fill
             sizes="100vw"
             className="object-cover object-center"
@@ -240,7 +235,7 @@ export function HomeHero() {
           <div className={`relative z-10 mx-auto ${HERO_FLEX} ${HERO_H} w-full max-w-7xl px-5 md:px-10`}>
             {current === 2 && (
               <div key={`s3-${animKey}`} className="hero-slide-enter mx-auto max-w-3xl text-center md:mx-0 md:max-w-2xl md:text-left">
-                <span className="inline-block animate-pulse rounded-full bg-rgr-gold px-5 py-1.5 font-display text-xs uppercase tracking-widest text-rgr-navy">
+                <span className="inline-block rounded-full border border-rgr-gold/60 bg-rgr-gold/15 px-5 py-1.5 font-display text-xs uppercase tracking-widest text-rgr-gold">
                   Limited Offer
                 </span>
 
@@ -250,7 +245,7 @@ export function HomeHero() {
                 </h1>
 
                 <p className="mt-4 max-w-lg text-base font-medium leading-relaxed text-white/75 md:text-lg">
-                  Verified car accessories and smart home upgrades. Delivered anywhere in Nigeria.
+                  Car accessories and smart home upgrades shipped anywhere in Nigeria.
                 </p>
 
                 <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55">
@@ -264,7 +259,7 @@ export function HomeHero() {
                 <div className="mt-5">
                   <Link
                     href="/#products"
-                    className="inline-flex items-center justify-center rounded-xl bg-rgr-gold px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl active:scale-[0.98]"
+                    className="inline-flex items-center justify-center rounded-xl bg-white px-8 py-3.5 font-display text-base uppercase tracking-wider text-rgr-navy shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
                   >
                     ORDER NOW — FREE DELIVERY
                   </Link>

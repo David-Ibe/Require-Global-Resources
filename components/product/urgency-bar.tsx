@@ -17,18 +17,20 @@ function getSecondsUntilMidnightWAT(): number {
 }
 
 export function UrgencyBar({ stockCount }: { stockCount: number }) {
-  const [seconds, setSeconds] = useState(getSecondsUntilMidnightWAT);
+  const [seconds, setSeconds] = useState<number | null>(null);
 
   useEffect(() => {
+    setSeconds(getSecondsUntilMidnightWAT());
     const timer = setInterval(() => {
       setSeconds(getSecondsUntilMidnightWAT());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
+  const s = seconds ?? 0;
+  const hrs = Math.floor(s / 3600);
+  const mins = Math.floor((s % 3600) / 60);
+  const secs = s % 60;
 
   const soldOut = stockCount <= 0;
 

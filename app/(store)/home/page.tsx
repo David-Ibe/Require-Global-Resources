@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Home } from "lucide-react";
+import { Wifi } from "@/components/icons";
+import { WhatsAppIcon, InstagramIcon } from "@/components/icons";
 import Link from "next/link";
 
 import { FadeInView } from "@/components/fade-in-view";
@@ -23,7 +24,7 @@ const whatsappNotify = getWhatsAppLink(
 export default function SmartHomePage() {
   return (
     <div>
-      <section className="bg-rgr-navy py-16 md:py-24">
+      <section className="bg-rgr-navy py-10 md:py-14">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <FadeInView>
             <nav className="text-sm text-white/50">
@@ -33,8 +34,9 @@ export default function SmartHomePage() {
               <span className="mx-2">→</span>
               <span className="text-rgr-gold">Smart Home</span>
             </nav>
-            <span className="mt-6 inline-block rounded-full bg-rgr-blue/20 px-4 py-1.5 text-sm font-medium text-rgr-gold">
-              🏠 Smart Home
+            <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-rgr-blue/20 px-4 py-1.5 text-sm font-medium text-rgr-gold">
+              <Wifi className="h-4 w-4" aria-hidden />
+              Smart Home
             </span>
             <h1 className="mt-4 font-display text-4xl uppercase tracking-tight text-white md:text-5xl lg:text-6xl">
               Upgrade Your Space.
@@ -46,11 +48,11 @@ export default function SmartHomePage() {
         </div>
       </section>
 
-      <section className="bg-[#F8F9FC] py-20 md:py-32">
+      <section className="bg-[#F8F9FC] py-12 md:py-20">
         <div className="mx-auto max-w-2xl px-5 text-center md:px-10">
           <FadeInView>
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-rgr-navy/5">
-              <Home className="h-10 w-10 text-rgr-gold" />
+              <Wifi className="h-10 w-10 text-rgr-gold" />
             </div>
             <span className="mt-6 inline-block rounded-full bg-rgr-gray700/90 px-4 py-1.5 font-display text-xs uppercase tracking-widest text-white">
               COMING SOON
@@ -69,7 +71,8 @@ export default function SmartHomePage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 py-4 font-display text-sm uppercase tracking-wider text-white transition hover:bg-[#20bd5a]"
               >
-                📲 Notify Me on WhatsApp
+                <WhatsAppIcon size={18} />
+                Notify Me on WhatsApp
               </a>
               <a
                 href="https://instagram.com/requireglobalresources"
@@ -77,7 +80,8 @@ export default function SmartHomePage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-xl border-2 border-rgr-navy/20 px-8 py-4 font-display text-sm uppercase tracking-wider text-rgr-navy transition hover:border-rgr-navy/40"
               >
-                📸 Follow on Instagram
+                <InstagramIcon size={18} />
+                Follow on Instagram
               </a>
             </div>
             <Link

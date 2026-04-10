@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { BadgeCheck, Star } from "@/components/icons";
 
 import type { ReviewRow } from "@/lib/supabase/types";
 
@@ -65,8 +65,9 @@ export function ReviewCard({
               {review.reviewer_name}
             </span>
             {review.verified && (
-              <span className="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700">
-                ✅ Verified Buyer
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                <BadgeCheck className="h-3 w-3" aria-hidden />
+                Verified Buyer
               </span>
             )}
           </div>

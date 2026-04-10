@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Lock, ShieldCheck, Truck } from "lucide-react";
+import { Lock, ShieldCheck, Truck } from "@/components/icons";
 
 import { NIGERIAN_STATES } from "@/lib/nigeria-states";
 

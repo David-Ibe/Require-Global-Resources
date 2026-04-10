@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { WhatsAppIcon } from "@/components/icons";
 import { trackLead, trackWhatsAppClick } from "@/lib/analytics";
 import { getWhatsAppLink } from "@/lib/site-config";
 
@@ -55,9 +56,10 @@ export function WhatsAppOrderButton({
     <button
       type="button"
       onClick={handleClick}
-      className={`inline-flex items-center justify-center rounded-lg bg-[#22C55E] px-6 py-3.5 text-base font-semibold text-white transition-all duration-200 hover:bg-[#16A34A] hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-80 ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-lg bg-[#22C55E] px-6 py-3.5 text-base font-semibold text-white transition-all duration-200 hover:bg-[#16A34A] hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-80 ${className}`}
       disabled={pending}
     >
+      <WhatsAppIcon size={18} className="shrink-0" />
       {pending ? "Opening WhatsApp..." : label}
     </button>
   );

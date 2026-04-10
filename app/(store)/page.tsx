@@ -1,12 +1,14 @@
 import {
-  Building2,
+  ArrowRight,
+  Banknote,
   Car,
-  Home,
-  MessageCircle,
-  Rocket,
-  Search,
-  Wallet,
-} from "lucide-react";
+  CheckCircle2,
+  Landmark,
+  ShieldCheck,
+  Truck,
+  Wifi,
+} from "@/components/icons";
+import { WhatsAppIcon } from "@/components/icons";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -36,7 +38,7 @@ const shopCategories = [
   {
     name: "SMART HOME",
     tagline: "Coming Soon",
-    Icon: Home,
+    Icon: Wifi,
     href: "/home",
     available: false,
     badge: "COMING SOON",
@@ -49,7 +51,7 @@ const steps = [
   {
     num: "01",
     title: "Choose your product",
-    desc: "Browse our verified catalogue.",
+    desc: "Browse our curated catalogue.",
   },
   {
     num: "02",
@@ -64,36 +66,36 @@ const steps = [
   {
     num: "04",
     title: "Receive & pay on delivery",
-    desc: "Arrives in 2\u20135 days.",
+    desc: "Delivered straight to your doorstep.",
   },
 ];
 
 /* ─── Why-Choose-Us cards (5) ─── */
 const whyCards = [
   {
-    title: "Product Verification",
-    desc: "Every product physically verified before shipping.",
-    Icon: Search,
+    title: "Quality Inspected",
+    desc: "Every product physically checked before it ships.",
+    Icon: ShieldCheck,
   },
   {
-    title: "Pay on Delivery",
-    desc: "Zero risk \u2014 pay only when it arrives.",
-    Icon: Wallet,
+    title: "Zero Upfront Risk",
+    desc: "Pay only when the product is in your hands.",
+    Icon: Banknote,
   },
   {
-    title: "CAC Registered",
-    desc: "Legitimate Nigerian company you can trust.",
-    Icon: Building2,
+    title: "Registered Business",
+    desc: "A legitimate, CAC-registered Nigerian company.",
+    Icon: Landmark,
   },
   {
-    title: "Real Support",
-    desc: "Real human support on WhatsApp.",
-    Icon: MessageCircle,
+    title: "Human Support",
+    desc: "Talk to a real person, not a chatbot.",
+    Icon: CheckCircle2,
   },
   {
-    title: "Fast Delivery",
-    desc: "Nationwide in 2\u20135 days. Lagos often same/next day.",
-    Icon: Rocket,
+    title: "Lagos Same/Next Day",
+    desc: "Fast nationwide shipping. Lagos orders often arrive next day.",
+    Icon: Truck,
   },
 ];
 
@@ -227,8 +229,8 @@ export default async function HomePage() {
             {whyCards.map(({ title, desc, Icon }, i) => (
               <FadeInView key={title} delay={i * 60}>
                 <article className="rounded-2xl border border-rgr-gray300/50 bg-white p-6 shadow-soft transition duration-300 hover:-translate-y-0.5 hover:border-l-4 hover:border-l-rgr-blue hover:shadow-lift">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-rgr-navy/5">
-                    <Icon className="h-6 w-6 text-rgr-gold" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50">
+                    <Icon className="h-6 w-6 text-emerald-500" />
                   </div>
                   <h3 className="mt-4 font-display text-base uppercase tracking-wider text-rgr-navy">
                     {title}
@@ -280,7 +282,7 @@ export default async function HomePage() {
               READY TO UPGRADE?
             </h2>
             <p className="mt-4 text-base text-white/65 md:text-lg">
-              Chat with us on WhatsApp or browse our verified products.
+              Start your order on WhatsApp or explore the full catalogue.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <a
@@ -289,14 +291,15 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-10 py-4 font-display text-sm uppercase tracking-wider text-white shadow-lg transition duration-200 hover:bg-[#20bd5a] active:scale-[0.98]"
               >
-                <MessageCircle className="h-5 w-5" />
-                Chat With Us on WhatsApp Now
+                <WhatsAppIcon size={20} />
+                Start Order on WhatsApp
               </a>
               <Link
                 href="/#products"
                 className="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-10 py-4 font-display text-sm uppercase tracking-wider text-white transition duration-200 hover:border-white/60 hover:bg-white/10 active:scale-[0.98]"
               >
                 Browse All Products
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </div>
           </FadeInView>

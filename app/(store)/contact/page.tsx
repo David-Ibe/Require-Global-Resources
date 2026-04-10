@@ -1,4 +1,5 @@
-import { Mail, MapPin, MessageCircle } from "lucide-react";
+import { Mail, MapPin } from "@/components/icons";
+import { WhatsAppIcon } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -33,7 +34,7 @@ export default function ContactPage() {
         <div className="space-y-6">
           <article className={storeSurface.cardSm}>
             <p className="flex items-center gap-2 text-sm font-semibold text-rgr-navy">
-              <MessageCircle className="h-5 w-5 text-rgr-gray600" aria-hidden />
+              <WhatsAppIcon size={20} className="text-[#25D366]" />
               WhatsApp
             </p>
             <p className="mt-2 text-sm text-rgr-gray700">

@@ -1,26 +1,43 @@
 import {
+  Banknote,
   Car,
   CircleDollarSign,
+  Clock,
   Gift,
+  Home,
+  Lock,
   Package,
   RotateCw,
   ShieldCheck,
   Smartphone,
   Sparkles,
-  type LucideIcon
-} from "lucide-react";
+  Star,
+  Truck,
+  Wifi,
+  type LucideIcon,
+} from "@/components/icons";
+
+const featureMap: [RegExp, LucideIcon][] = [
+  [/magnet|phone|mount/i, Smartphone],
+  [/rotate|360/i, RotateCw],
+  [/save|₦|naira|discount|price/i, CircleDollarSign],
+  [/free\s*delivery|free\s*ship/i, Truck],
+  [/delivery|ship/i, Gift],
+  [/gap|seat|car|vehicle|auto/i, Car],
+  [/bundle|premium|package/i, Package],
+  [/verify|quality|original|authentic/i, ShieldCheck],
+  [/leather|finish|material|fabric/i, Sparkles],
+  [/smart\s*home|wifi|wireless/i, Wifi],
+  [/home|house/i, Home],
+  [/fast|speed|quick/i, Clock],
+  [/secure|safe|lock/i, Lock],
+  [/pay\s*on\s*delivery|cod|cash/i, Banknote],
+  [/star|rating|review/i, Star],
+];
 
 export function iconForFeature(text: string): LucideIcon {
-  const t = text.toLowerCase();
-  if (t.includes("magnet") || t.includes("phone")) return Smartphone;
-  if (t.includes("rotate") || t.includes("360")) return RotateCw;
-  if (t.includes("save") || t.includes("₦") || t.includes("naira"))
-    return CircleDollarSign;
-  if (t.includes("delivery") || t.includes("free")) return Gift;
-  if (t.includes("gap") || t.includes("seat") || t.includes("car"))
-    return Car;
-  if (t.includes("bundle") || t.includes("premium")) return Package;
-  if (t.includes("verify") || t.includes("quality")) return ShieldCheck;
-  if (t.includes("leather") || t.includes("finish")) return Sparkles;
+  for (const [pattern, icon] of featureMap) {
+    if (pattern.test(text)) return icon;
+  }
   return Sparkles;
 }
