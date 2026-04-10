@@ -546,7 +546,7 @@ export function ProductPageClient({
                   </button>
 
                   <p className="text-center text-xs text-rgr-gray500">
-                    You'll be redirected to WhatsApp to send your order details
+                    You&apos;ll be redirected to WhatsApp to send your order details
                   </p>
                 </form>
 
