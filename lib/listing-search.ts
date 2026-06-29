@@ -17,6 +17,46 @@ export type ListingFilters = {
   sort?: SortOption;
 };
 
+type SearchParamValue = string | string[] | undefined;
+type SearchParams = Record<string, SearchParamValue>;
+
+function readSearchParam(params: SearchParams, key: string): string | undefined {
+  const value = params[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+/** Parse URL search params into listing filters (for server components). */
+export function parseListingFilters(
+  searchParams: SearchParams,
+  options?: { ignoreFilters?: boolean }
+): ListingFilters {
+  if (options?.ignoreFilters) {
+    return {
+      availability: "available",
+      sort: (readSearchParam(searchParams, "sort") as SortOption) ?? "newest",
+    };
+  }
+
+  const minPrice = readSearchParam(searchParams, "minPrice");
+  const maxPrice = readSearchParam(searchParams, "maxPrice");
+
+  return {
+    q: readSearchParam(searchParams, "q"),
+    category: readSearchParam(searchParams, "category"),
+    brand: readSearchParam(searchParams, "brand"),
+    condition: readSearchParam(searchParams, "condition") as ListingFilters["condition"],
+    minPrice: minPrice ? Number(minPrice) : undefined,
+    maxPrice: maxPrice ? Number(maxPrice) : undefined,
+    ram: readSearchParam(searchParams, "ram"),
+    storage: readSearchParam(searchParams, "storage"),
+    processor: readSearchParam(searchParams, "processor"),
+    availability:
+      (readSearchParam(searchParams, "availability") as ListingFilters["availability"]) ??
+      "available",
+    sort: (readSearchParam(searchParams, "sort") as SortOption) ?? "newest",
+  };
+}
+
 function specValue(listing: Listing, ...labels: string[]): string {
   const hit = listing.specs.find((s) =>
     labels.some((l) => s.label.toLowerCase().includes(l.toLowerCase()))

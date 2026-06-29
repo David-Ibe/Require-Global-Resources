@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
 import { ListingCard } from "@/components/store/listing-card";
+import { cn } from "@/lib/cn";
 import type { Listing } from "@/lib/electronics-listings";
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
   ctaHref?: string;
   ctaLabel?: string;
   id?: string;
+  className?: string;
 };
 
 export function ElectronicsListingsGrid({
@@ -24,6 +26,7 @@ export function ElectronicsListingsGrid({
   ctaHref = "/listings",
   ctaLabel = "View all",
   id = "listings",
+  className,
 }: Props) {
   const items = (limit ? listings.slice(0, limit) : listings).filter(
     (l) => l.status !== "sold"
@@ -43,7 +46,7 @@ export function ElectronicsListingsGrid({
   }
 
   return (
-    <section id={id} className="animate-fade-in bg-surface py-14 md:py-16">
+    <section id={id} className={cn("animate-fade-in py-14 md:py-16", className ?? "bg-surface")}>
       <Container>
         {showHeading && (
           <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between md:mb-14">

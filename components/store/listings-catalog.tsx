@@ -19,6 +19,8 @@ import { cn } from "@/lib/cn";
 
 type Props = {
   listings: Listing[];
+  /** Pre-filtered listings from the server — avoids client-side filter bugs. */
+  filteredListings?: Listing[];
   showHeader?: boolean;
   showFilters?: boolean;
   excludeSlug?: string;
@@ -34,6 +36,7 @@ const filterLabelClass =
 
 export function ListingsCatalog({
   listings,
+  filteredListings,
   showHeader = true,
   showFilters = true,
   excludeSlug,
@@ -79,13 +82,15 @@ export function ListingsCatalog({
   const options = useMemo(() => getUniqueFilterOptions(listings), [listings]);
 
   const filtered = useMemo(() => {
-    const results = filterListings(
-      listings.filter((l) => l.status !== "sold"),
-      filters
-    );
+    const results =
+      filteredListings ??
+      filterListings(
+        listings.filter((l) => l.status !== "sold"),
+        filters
+      );
     if (!excludeSlug) return results;
     return results.filter((l) => l.slug !== excludeSlug);
-  }, [listings, filters, excludeSlug]);
+  }, [listings, filters, excludeSlug, filteredListings]);
 
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
