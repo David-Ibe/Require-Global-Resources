@@ -21,6 +21,7 @@ export default async function HomePage() {
           listings={listings}
           showHeader={false}
           showFilters={false}
+          excludeSlug={featured?.slug}
           sectionTitle="All Products"
           className="bg-page"
         />

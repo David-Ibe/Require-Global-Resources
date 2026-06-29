@@ -1,4 +1,5 @@
 import type { Listing, ListingCondition } from "@/lib/electronics-listings";
+import { listingMatchesStoreCategory } from "@/lib/category-slugs";
 
 export type SortOption = "newest" | "price-asc" | "price-desc" | "popular";
 
@@ -99,7 +100,9 @@ export function filterListings(
   }
 
   if (filters.category) {
-    result = result.filter((l) => l.category === filters.category);
+    result = result.filter((l) =>
+      listingMatchesStoreCategory(l.category, filters.category!)
+    );
   }
 
   if (filters.brand) {

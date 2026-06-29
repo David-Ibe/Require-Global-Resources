@@ -4,6 +4,7 @@ import type {
   ListingSpec,
   RecentSale,
 } from "@/lib/electronics-listings";
+import { normalizeStoreCategorySlug } from "@/lib/category-slugs";
 import { getSupabaseAnon } from "@/lib/supabase/server";
 
 export type OsCategoryRow = {
@@ -96,7 +97,8 @@ function mapStatus(status: string): Listing["status"] {
 }
 
 export function mapOsListing(row: OsListingRow): Listing {
-  const categorySlug = row.category?.slug ?? "general-merchandise";
+  const rawCategorySlug = row.category?.slug ?? "general-merchandise";
+  const categorySlug = normalizeStoreCategorySlug(rawCategorySlug);
 
   return {
     slug: row.slug,
@@ -176,7 +178,8 @@ export async function fetchListingsByCategorySlug(
   categorySlug: string
 ): Promise<Listing[]> {
   const listings = await fetchActiveListings();
-  return listings.filter((listing) => listing.category === categorySlug);
+  const normalized = normalizeStoreCategorySlug(categorySlug);
+  return listings.filter((listing) => listing.category === normalized);
 }
 
 export async function fetchListingSlugs(): Promise<string[]> {
