@@ -1,4 +1,4 @@
-/** Require Global Resources — design tokens */
+/** Require Global — design tokens */
 export const brandColors = {
   navy: "#08142A",
   blue: "#1246D6",

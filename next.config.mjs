@@ -31,6 +31,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/shop",
+        destination: "/listings",
+        permanent: false
+      },
+      {
         source: "/car-phone-holder",
         destination: "/products/magnetic-car-phone-holder",
         permanent: true

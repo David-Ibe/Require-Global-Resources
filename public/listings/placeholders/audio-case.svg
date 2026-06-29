@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Audio case placeholder">
+  <rect width="1200" height="1200" fill="#F5F5F7"/>
+  <g transform="translate(300 380)">
+    <rect x="0" y="0" width="600" height="380" rx="56" fill="#F0F0F2"/>
+    <rect x="0" y="360" width="600" height="24" rx="8" fill="#D2D2D7"/>
+    <circle cx="300" cy="190" r="10" fill="#AEAEB2"/>
+    <rect x="240" y="280" width="120" height="8" rx="4" fill="#C7C7CC"/>
+  </g>
+  <text x="600" y="980" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" fill="#86868B">Photo coming soon</text>
+</svg>

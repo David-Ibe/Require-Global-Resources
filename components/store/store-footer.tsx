@@ -1,126 +1,142 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { Mail, MapPin, Phone } from "@/components/icons";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  TikTokIcon,
-  WhatsAppIcon,
-} from "@/components/icons";
-import { brand, contact, getWhatsAppLink } from "@/lib/site-config";
+import { Container } from "@/components/ui/container";
+import { brand, contact } from "@/lib/site-config";
 
-const quickLinks = [
-  { href: "/", label: "Home" },
-  { href: "/auto", label: "Car Accessories" },
-  { href: "/home", label: "Smart Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/returns", label: "Returns Policy" },
-];
-
-const social = [
-  { label: "Instagram", href: contact.instagramUrl, icon: InstagramIcon, color: "#E1306C" },
-  { label: "TikTok", href: contact.tiktokUrl, icon: TikTokIcon, color: "#EE1D52" },
-  { label: "WhatsApp", href: contact.whatsappUrl, icon: WhatsAppIcon, color: "#25D366" },
-  { label: "Facebook", href: contact.facebookUrl, icon: FacebookIcon, color: "#1877F2" },
+const footerColumns = [
+  {
+    title: "Shop",
+    links: [
+      { href: "/listings", label: "All Products" },
+      { href: "/laptops", label: "Laptops" },
+      { href: "/smartphones", label: "Smartphones" },
+      { href: "/audio", label: "Audio" },
+      { href: "/listings?category=gaming", label: "Gaming" },
+    ],
+  },
+  {
+    title: "Brands",
+    links: [
+      { href: "/brands/apple", label: "Apple" },
+      { href: "/brands/dell", label: "Dell" },
+      { href: "/brands/lenovo", label: "Lenovo" },
+      { href: "/brands/hp", label: "HP" },
+      { href: "/brands", label: "View All" },
+    ],
+  },
+  {
+    title: "Business",
+    links: [
+      { href: "/business", label: "Procurement" },
+      { href: "/business#quotations", label: "Quotations" },
+      { href: "/business#volume", label: "Volume Pricing" },
+      { href: "/sell", label: "Sell With Us" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { href: "/faq", label: "FAQ" },
+      { href: "/grading", label: "Grading Guide" },
+      { href: "/returns", label: "Returns" },
+      { href: contact.whatsappUrl, label: "WhatsApp", external: true },
+      { href: `mailto:${contact.email}`, label: "Contact" },
+    ],
+  },
+  {
+    title: "About",
+    links: [
+      { href: "/about", label: "Our Story" },
+      { href: "/privacy-policy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms" },
+    ],
+  },
 ] as const;
 
 export function StoreFooter() {
   return (
-    <footer className="bg-rgr-navy text-rgr-gray300">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 py-16 md:grid-cols-2 md:px-10 lg:grid-cols-4 lg:gap-8">
-        <div className="lg:col-span-1">
-          <Link href="/" className="inline-flex items-center gap-3">
-            <Image
-              src="/logo-mark.png"
-              alt=""
-              width={40}
-              height={40}
-              className="h-10 w-10"
-            />
-            <span className="font-display text-xl tracking-wide text-white">
-              {brand.shortName.toUpperCase()}
-            </span>
-          </Link>
-          <p className="mt-3 text-sm leading-relaxed text-white/60">
-            Smart car and home upgrades for the modern Nigerian.
-          </p>
+    <footer className="border-t border-border bg-white">
+      <Container className="py-14 md:py-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
+          <div className="lg:col-span-1">
+            <Link href="/" className="inline-flex items-center gap-2.5">
+              <Image
+                src="/logo-mark.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
+              <span className="text-sm font-semibold text-neutral-900">
+                {brand.shortName}
+              </span>
+            </Link>
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              {brand.tagline}
+            </p>
+            <p className="mt-2 text-xs text-muted">{brand.location}</p>
+          </div>
+
+          {footerColumns.map((column) => (
+            <div key={column.title}>
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-900">
+                {column.title}
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {column.links.map((link) => (
+                  <li key={link.label}>
+                    {"external" in link && link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-muted transition hover:text-neutral-900"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted transition hover:text-neutral-900"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div>
-          <h3 className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold">
-            Quick Links
-          </h3>
-          <ul className="mt-4 space-y-3">
-            {quickLinks.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="text-sm text-white/70 transition hover:text-white"
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold">
-            Contact Us
-          </h3>
-          <ul className="mt-4 space-y-3 text-sm">
-            <li>
-              <a
-                href={`tel:+${contact.whatsappNumber.replace(/\D/g, "")}`}
-                className="inline-flex items-center gap-2 text-white/70 transition hover:text-white"
-              >
-                <Phone className="h-3.5 w-3.5 text-rgr-gold" aria-hidden />
-                {brand.phoneDisplay}
-              </a>
-            </li>
-            <li>
-              <a
-                href={`mailto:${contact.email}`}
-                className="inline-flex items-center gap-2 text-white/70 transition hover:text-white"
-              >
-                <Mail className="h-3.5 w-3.5 text-rgr-gold" aria-hidden />
-                {contact.email}
-              </a>
-            </li>
-            <li className="inline-flex items-center gap-2 text-white/50">
-              <MapPin className="h-3.5 w-3.5 text-rgr-gold" aria-hidden />
-              {brand.location}
-            </li>
-            <li className="pl-[22px] text-white/50">Mon–Sat 8am–8pm WAT</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="font-display text-sm uppercase tracking-[0.2em] text-rgr-gold">
-            Follow Us
-          </h3>
-          <div className="mt-4 flex flex-wrap gap-3">
-            {social.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Follow us on ${s.label}`}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/60 transition hover:border-rgr-gold/40 hover:bg-white/10 hover:text-white"
-              >
-                <s.icon size={16} />
-              </a>
-            ))}
+        <div className="mt-12 flex flex-col gap-6 border-t border-border pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+            <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900">
+              Instagram
+            </a>
+            <a href={contact.tiktokUrl} target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900">
+              TikTok
+            </a>
+            <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900">
+              Facebook
+            </a>
+          </div>
+          <div className="text-sm text-muted">
+            <span>Bank Transfer · Paystack</span>
+            <span className="mx-3 text-border">|</span>
+            <span>Mon–Sat 9am–6pm WAT</span>
           </div>
         </div>
-      </div>
+      </Container>
 
-      <div className="border-t border-rgr-gold/20 px-6 py-6 md:px-10">
-        <p className="mx-auto max-w-7xl text-center text-xs text-white/40">
-          &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
-        </p>
+      <div className="border-t border-border bg-page">
+        <Container className="py-5">
+          <p className="text-center text-xs text-muted">
+            &copy; {new Date().getFullYear()} {brand.legalName}. CAC {brand.cacNumber}.
+            All rights reserved.
+          </p>
+        </Container>
       </div>
     </footer>
   );

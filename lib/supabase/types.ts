@@ -199,6 +199,96 @@ export type Database = {
         };
         Relationships: [];
       };
+      categories: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          slug?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      listings: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          description: string | null;
+          spec: string | null;
+          category_id: string | null;
+          price: number;
+          condition: string;
+          source: string;
+          consignor_id: string | null;
+          commission_amount: number | null;
+          status: string;
+          images: string[] | null;
+          whatsapp_link: string | null;
+          jiji_link: string | null;
+          sold_at: string | null;
+          sold_price: number | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          slug: string;
+          description?: string | null;
+          spec?: string | null;
+          category_id?: string | null;
+          price: number;
+          condition: string;
+          source: string;
+          consignor_id?: string | null;
+          commission_amount?: number | null;
+          status?: string;
+          images?: string[] | null;
+          whatsapp_link?: string | null;
+          jiji_link?: string | null;
+          sold_at?: string | null;
+          sold_price?: number | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          slug?: string;
+          description?: string | null;
+          spec?: string | null;
+          category_id?: string | null;
+          price?: number;
+          condition?: string;
+          source?: string;
+          consignor_id?: string | null;
+          commission_amount?: number | null;
+          status?: string;
+          images?: string[] | null;
+          whatsapp_link?: string | null;
+          jiji_link?: string | null;
+          sold_at?: string | null;
+          sold_price?: number | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -210,3 +300,5 @@ export type Database = {
 export type ProductRow = Database["public"]["Tables"]["products"]["Row"];
 export type OrderRow = Database["public"]["Tables"]["orders"]["Row"];
 export type ReviewRow = Database["public"]["Tables"]["reviews"]["Row"];
+export type ListingRow = Database["public"]["Tables"]["listings"]["Row"];
+export type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];

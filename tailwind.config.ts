@@ -4,69 +4,104 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}"
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
+        navy: {
+          DEFAULT: "#0D1F3C",
+          50: "#E8ECF2",
+          100: "#D1D9E5",
+          200: "#A3B3CB",
+          300: "#758DB1",
+          400: "#476797",
+          500: "#0D1F3C",
+          600: "#0B1A33",
+          700: "#091529",
+          800: "#07101F",
+          900: "#050B15",
+        },
+        accent: {
+          DEFAULT: "#E8601C",
+          hover: "#D45618",
+          light: "#FEF3ED",
+        },
+        page: "#F5F7FA",
+        muted: "#6B7280",
+        border: "#E5E7EB",
+        success: "#16A34A",
+        neutral: {
+          50: "#FAFAFA",
+          100: "#F5F5F5",
+          200: "#E5E7EB",
+          300: "#D1D5DB",
+          400: "#9CA3AF",
+          500: "#6B7280",
+          600: "#4B5563",
+          700: "#374151",
+          800: "#1F2937",
+          900: "#111827",
+          950: "#0A0A0A",
+        },
         rgr: {
-          navy: "#08142A",
-          charcoal: "#1a202c",
-          blue: "#1246D6",
-          blueLight: "#2563EB",
-          gold: "#F5A623",
-          off: "#f7f8fa",
+          navy: "#0D1F3C",
+          charcoal: "#1F2937",
+          blue: "#0D1F3C",
+          blueLight: "#1a3a6b",
+          gold: "#E8601C",
+          off: "#F5F7FA",
           surface: "#ffffff",
-          navBar: "#e2e8f0",
-          gray100: "#F1F5F9",
-          gray300: "#CBD5E1",
-          gray500: "#64748B",
-          gray600: "#475569",
-          gray700: "#334155",
+          navBar: "#E5E7EB",
+          gray100: "#F5F7FA",
+          gray300: "#D1D5DB",
+          gray500: "#6B7280",
+          gray600: "#4B5563",
+          gray700: "#374151",
           success: "#16A34A",
           danger: "#DC2626",
-          whatsapp: "#25D366"
+          whatsapp: "#25D366",
         },
-        brand: {
-          navy: "#08142A",
-          electric: "#1246D6",
-          dark: "#08142A",
-          light: "#FFFFFF",
-          muted: "#CBD5E1"
-        }
       },
       fontFamily: {
-        sans: ["var(--font-dm)", "system-ui", "sans-serif"],
-        display: ["var(--font-bebas)", "Impact", "sans-serif"]
+        sans: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+        display: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.75rem",
+        lg: "0.75rem",
+        xl: "0.75rem",
+        "2xl": "0.75rem",
+        full: "9999px",
       },
       boxShadow: {
-        soft: "0 8px 30px rgba(8, 20, 42, 0.08)",
-        lift: "0 12px 40px rgba(8, 20, 42, 0.12)"
+        soft: "0 1px 3px rgba(13, 31, 60, 0.04), 0 4px 12px rgba(13, 31, 60, 0.03)",
+        card: "0 2px 8px rgba(13, 31, 60, 0.06)",
+        nav: "0 1px 0 rgba(13, 31, 60, 0.06)",
+        lift: "0 8px 24px rgba(13, 31, 60, 0.08)",
       },
-      backgroundImage: {
-        "hero-radial":
-          "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(18, 70, 214, 0.35), transparent 55%), radial-gradient(ellipse 60% 50% at 10% 80%, rgba(18, 70, 214, 0.2), transparent 50%)"
+      spacing: {
+        section: "6rem",
+        "section-sm": "4.5rem",
       },
-      keyframes: {
-        "fade-in-up": {
-          from: { opacity: "0", transform: "translateY(16px)" },
-          to: { opacity: "1", transform: "translateY(0)" }
-        },
-        pulseStock: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.65" }
-        }
+      fontSize: {
+        "hero-title": [
+          "clamp(2.75rem, 6vw, 5rem)",
+          { lineHeight: "1.05", letterSpacing: "-0.03em", fontWeight: "700" },
+        ],
+        "section-title": [
+          "clamp(1.75rem, 3.5vw, 2.5rem)",
+          { lineHeight: "1.15", letterSpacing: "-0.02em", fontWeight: "600" },
+        ],
+        "card-title": ["1.125rem", { lineHeight: "1.35", letterSpacing: "-0.01em" }],
       },
       transitionDuration: {
-        "600": "600ms"
+        DEFAULT: "200ms",
       },
-      animation: {
-        "fade-in-up": "fade-in-up 0.55s ease-out forwards",
-        pulseStock: "pulseStock 1.4s ease-in-out infinite"
-      }
-    }
+    },
   },
-  plugins: []
+  plugins: [],
 };
 
 export default config;

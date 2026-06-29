@@ -1,21 +1,34 @@
 import type { MetadataRoute } from "next";
 
 import { siteUrl } from "@/lib/site-config";
+import { fetchListingSlugs } from "@/lib/os-listings";
 import { getSupabaseAnon } from "@/lib/supabase/server";
 
 const STATIC_ROUTES = [
   "",
-  "/auto",
-  "/home",
+  "/listings",
+  "/laptops",
+  "/smartphones",
+  "/audio",
+  "/brands",
+  "/business",
+  "/sell",
+  "/grading",
+  "/faq",
   "/about",
   "/contact",
   "/returns",
   "/privacy-policy",
-  "/terms"
+  "/terms",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [...STATIC_ROUTES];
+
+  const listingSlugs = await fetchListingSlugs();
+  for (const slug of listingSlugs) {
+    routes.push(`/listings/${slug}`);
+  }
 
   try {
     const supabase = getSupabaseAnon();
@@ -36,6 +49,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: route === "" ? "daily" : "weekly",
-    priority: route === "" ? 1 : 0.8
+    priority: route === "" ? 1 : 0.8,
   }));
 }

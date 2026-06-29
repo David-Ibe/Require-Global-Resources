@@ -1,19 +1,20 @@
 import {
   Banknote,
-  CheckCircle2,
   Clock,
+  Globe,
   Landmark,
-  ShieldCheck,
+  Truck,
+  WhatsAppIcon,
+  type LucideIcon,
 } from "@/components/icons";
-import { WhatsAppIcon } from "@/components/icons";
-import type { LucideIcon } from "@/components/icons";
 
 const pills: { text: string; Icon: LucideIcon | typeof WhatsAppIcon }[] = [
-  { text: "Verified Products", Icon: ShieldCheck },
-  { text: "Pay on Delivery", Icon: Banknote },
-  { text: "CAC Registered", Icon: Landmark },
-  { text: "2–5 Days Delivery", Icon: Clock },
-  { text: "WhatsApp Support", Icon: CheckCircle2 },
+  { text: "Genuine Imports", Icon: Globe },
+  { text: "Nigeria-Wide Delivery", Icon: Truck },
+  { text: "Lagos Same-Day", Icon: Clock },
+  { text: "Pay on Delivery Available", Icon: Banknote },
+  { text: "CAC Registered #7879319", Icon: Landmark },
+  { text: "Order on WhatsApp", Icon: WhatsAppIcon },
 ];
 
 function PillSet() {

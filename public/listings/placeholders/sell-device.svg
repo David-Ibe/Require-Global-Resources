@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-label="Sell with us">
+  <rect width="1600" height="1200" fill="#F5F5F7"/>
+  <g transform="translate(320 280)">
+    <rect x="0" y="0" width="960" height="560" rx="24" fill="#E8E8ED"/>
+    <rect x="32" y="32" width="896" height="496" rx="12" fill="#D2D2D7"/>
+    <rect x="100" y="100" width="320" height="20" rx="4" fill="#FFFFFF" opacity="0.9"/>
+    <rect x="100" y="140" width="480" height="12" rx="3" fill="#FFFFFF" opacity="0.5"/>
+    <rect x="-48" y="560" width="1056" height="36" rx="8" fill="#C7C7CC"/>
+  </g>
+  <text x="800" y="980" text-anchor="middle" font-family="system-ui,sans-serif" font-size="36" fill="#86868B">Your device photo here</text>
+</svg>

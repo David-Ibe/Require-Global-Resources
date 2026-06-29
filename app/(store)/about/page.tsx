@@ -1,103 +1,65 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { FadeInView } from "@/components/fade-in-view";
-import { brand, contact, siteUrl } from "@/lib/site-config";
-import { storeCta, storePage, storeSurface, storeType } from "@/lib/store-ui";
+import { getWhatsAppLink, siteUrl } from "@/lib/site-config";
+import { storeCta } from "@/lib/store-ui";
+import { waEntryQuestion } from "@/lib/whatsapp-sales";
 
 export const metadata: Metadata = {
-  title: "About",
-  description: `Learn about ${brand.name} — verified car and home upgrades for Nigerians. ${brand.tagline}`,
+  title: { absolute: "About — Require Global" },
+  description:
+    "Require Global is a consumer marketplace based in Lagos, Nigeria. Genuine products, fair prices, delivered across Nigeria.",
+  alternates: { canonical: `${siteUrl}/about` },
   openGraph: {
-    title: `About | ${brand.shortName}`,
-    description: brand.oneLiner,
+    title: "About — Require Global",
+    description:
+      "Require Global is a consumer marketplace based in Lagos, Nigeria. Genuine products, fair prices, delivered across Nigeria.",
     url: `${siteUrl}/about`,
-    images: ["/og-default.svg"]
-  }
+    images: ["/og-default.svg"],
+  },
 };
+
+const whatsappHref = getWhatsAppLink(waEntryQuestion());
 
 export default function AboutPage() {
   return (
-    <div className={`${storePage.narrow} bg-rgr-surface`}>
-      <FadeInView>
-        {/* ── WHY WE EXIST ── */}
-        <h1 className={storeType.h1}>Why We Exist</h1>
-        <p className={storeType.lead}>
-          {brand.name} is a Lagos-based company specialising in verified smart
-          car accessories and home upgrades.
-        </p>
-        <p className={storeType.body}>
-          We built this business to solve a real problem in Nigeria — fake and
-          low-quality products sold online to people who deserved better. That
-          stops here.
-        </p>
+    <div className="mx-auto max-w-[680px] bg-rgr-surface px-5 py-20 md:px-10 md:py-24">
+      <h1 className="text-3xl font-bold tracking-tight text-rgr-navy md:text-4xl">
+        Genuine products. Fair prices. Delivered across Nigeria.
+      </h1>
 
-        {/* ── WHO WE ARE ── */}
-        <h2 className={`mt-14 ${storeType.h2}`}>Who We Are</h2>
-        <p className={storeType.lead}>
-          We are a CAC-registered Nigerian company operating under{" "}
-          {brand.legalName}. Every product is physically verified before it ships
-          to you. What you see is exactly what you get.
+      <div className="mt-10 space-y-6 text-base font-normal leading-[1.7] text-rgr-gray700">
+        <p>
+          Require Global is a consumer marketplace based in Lagos, Nigeria. We
+          sell computers, smartphones, audio devices, accessories, and selected
+          consumer goods — with full transparency on what you&apos;re buying and
+          what you&apos;re paying.
         </p>
-        <p className={`mt-4 font-medium text-rgr-navy`}>Our focus is simple:</p>
-        <ul className="mt-4 space-y-3 text-rgr-gray700">
-          <li className="flex items-start gap-2">
-            <span className="mt-0.5 text-green-600">✅</span>
-            Sell only genuine, verified products
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="mt-0.5 text-green-600">✅</span>
-            Pay on Delivery — nationwide
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="mt-0.5 text-green-600">✅</span>
-            Real WhatsApp support from real people
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="mt-0.5 text-green-600">✅</span>
-            Fast delivery — 2 to 5 days anywhere in Nigeria
-          </li>
-        </ul>
+        <p>
+          We started because buying in Nigeria shouldn&apos;t require a risk
+          assessment. Whether you&apos;re spending ₦200,000 or ₦3,000,000, you
+          deserve to know exactly what you&apos;re getting.
+        </p>
+        <p>
+          Every product on Require Global is genuine. Every listing shows you the
+          real spec, the real condition, and the real price. No inflated numbers,
+          no vague descriptions, no surprises on delivery day.
+        </p>
+      </div>
 
-        {/* ── OUR PROMISE ── */}
-        <h2 className={`mt-14 ${storeType.h2}`}>Our Promise</h2>
-        <p className={storeType.lead}>
-          We are not the cheapest option on the market. We are the most reliable.
-        </p>
-        <p className={`mt-4 text-lg font-semibold text-rgr-navy`}>
-          No fakes. No upfront payment. No disappointment.
-        </p>
-        <p className={storeType.body}>
-          Whether you are upgrading your car or your home — shop with confidence
-          at {brand.name}.
-        </p>
-
-        {/* ── CTA ── */}
-        <div className={`mt-14 ${storeSurface.card} text-center`}>
-          <p className="text-lg font-semibold text-rgr-navy">
-            Ready to experience the difference?
-          </p>
-          <div className="mt-6">
-            <a
-              href={contact.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={storeCta.whatsapp}
-            >
-              Chat with us on WhatsApp →
-            </a>
-          </div>
-        </div>
-
-        <div className="mt-14 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
-          <Link href="/#products" className={storeCta.navy}>
-            Browse products
-          </Link>
-          <Link href="/contact" className={storeCta.ghost}>
-            Contact us
-          </Link>
-        </div>
-      </FadeInView>
+      <div className="mt-12 flex flex-wrap gap-3">
+        <Link href="/shop" className={storeCta.navy}>
+          Shop Now
+        </Link>
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={storeCta.ghost}
+        >
+          WhatsApp Us
+        </a>
+      </div>
     </div>
   );
 }

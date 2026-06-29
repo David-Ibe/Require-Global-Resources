@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Laptop placeholder">
+  <rect width="1200" height="1200" fill="#F5F5F7"/>
+  <g transform="translate(200 280)">
+    <rect x="0" y="0" width="800" height="520" rx="24" fill="#E8E8ED"/>
+    <rect x="24" y="24" width="752" height="472" rx="12" fill="#D2D2D7"/>
+    <rect x="80" y="80" width="280" height="16" rx="4" fill="#FFFFFF" opacity="0.9"/>
+    <rect x="80" y="112" width="420" height="10" rx="3" fill="#FFFFFF" opacity="0.5"/>
+    <rect x="80" y="132" width="360" height="10" rx="3" fill="#FFFFFF" opacity="0.35"/>
+    <rect x="-40" y="520" width="880" height="28" rx="8" fill="#C7C7CC"/>
+    <rect x="340" y="528" width="120" height="8" rx="4" fill="#AEAEB2"/>
+  </g>
+  <text x="600" y="980" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" fill="#86868B" letter-spacing="0.02em">Photo coming soon</text>
+</svg>

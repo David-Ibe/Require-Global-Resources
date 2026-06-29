@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Audio product preview">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c1e3d" />
+      <stop offset="100%" stop-color="#08142A" />
+    </linearGradient>
+    <linearGradient id="case" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5f5f7" />
+      <stop offset="100%" stop-color="#d6d7dc" />
+    </linearGradient>
+    <radialGradient id="bud" cx="0.5" cy="0.3" r="0.7">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#bcbec4" />
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg3)" />
+  <g opacity="0.18">
+    <circle cx="120" cy="120" r="160" fill="#F5A623" />
+    <circle cx="680" cy="500" r="180" fill="#1246D6" />
+  </g>
+  <g transform="translate(260 200)">
+    <rect x="0" y="0" width="260" height="180" rx="34" fill="url(#case)" />
+    <rect x="0" y="170" width="260" height="14" rx="6" fill="#a8aab1" opacity="0.6" />
+    <circle cx="130" cy="92" r="6" fill="#9ea0a7" />
+  </g>
+  <g transform="translate(200 80)">
+    <ellipse cx="60" cy="50" rx="46" ry="32" fill="url(#bud)" />
+    <rect x="48" y="76" width="22" height="80" rx="9" fill="url(#bud)" />
+  </g>
+  <g transform="translate(500 80)">
+    <ellipse cx="60" cy="50" rx="46" ry="32" fill="url(#bud)" />
+    <rect x="48" y="76" width="22" height="80" rx="9" fill="url(#bud)" />
+  </g>
+  <text x="400" y="540" text-anchor="middle"
+    font-family="'Bebas Neue', Impact, sans-serif"
+    font-size="22" letter-spacing="6" fill="#ffffff" opacity="0.55">
+    REQUIRE GLOBAL � VERIFIED LISTING
+  </text>
+</svg>

@@ -1,143 +1,199 @@
-"use client";
-
-import { Menu, X } from "@/components/icons";
-import { WhatsAppIcon } from "@/components/icons";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-
-import { brand, getWhatsAppLink } from "@/lib/site-config";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/auto", label: "Car Accessories" },
-  { href: "/home", label: "Smart Home" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-
-const whatsappHref = getWhatsAppLink(
-  `Hi ${brand.shortName}, I'd like to place an order.`
-);
-
-export function StoreNavbar() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  return (
-    <header
-      className={`sticky top-0 z-[100] bg-rgr-navy transition-shadow duration-300 ${
-        scrolled ? "shadow-[0_4px_20px_rgba(0,0,0,0.25)]" : ""
-      }`}
-    >
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:h-16 md:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/logo-mark.png"
-            alt={`${brand.shortName} logo`}
-            width={40}
-            height={40}
-            className="h-9 w-9 md:h-10 md:w-10"
-            priority
-          />
-          <div className="flex flex-col">
-            <span className="font-display text-lg tracking-wide text-white md:text-xl">
-              {brand.shortName.toUpperCase()}
-            </span>
-            <span className="hidden text-[10px] font-medium tracking-wider text-white/50 md:block">
-              Premium Car &amp; Home Upgrades
-            </span>
-          </div>
-        </Link>
-
-        <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`font-display text-sm uppercase tracking-wider transition hover:text-rgr-gold ${
-                pathname === item.href ? "text-rgr-gold" : "text-white/80"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#20bd5a] sm:inline-flex"
-          >
-            <WhatsAppIcon size={16} />
-            Order on WhatsApp
-          </a>
-          <button
-            type="button"
-            className="rounded-lg p-2 text-white lg:hidden"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </div>
-
-      {open && (
-        <div className="fixed inset-0 top-14 z-[99] bg-rgr-navy lg:hidden">
-          <div className="flex h-full flex-col px-6 py-8">
-            <nav className="flex flex-col gap-1">
-              {navLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`rounded-xl px-4 py-3.5 font-display text-lg uppercase tracking-wider transition ${
-                    pathname === item.href
-                      ? "bg-white/10 text-rgr-gold"
-                      : "text-white/80 hover:bg-white/5"
-                  }`}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-            <div className="mt-6 border-t border-white/10 pt-6" />
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-4 font-display text-base uppercase tracking-wider text-white"
-              onClick={() => setOpen(false)}
-            >
-              <WhatsAppIcon size={20} />
-              Order on WhatsApp
-            </a>
-          </div>
-        </div>
-      )}
-    </header>
-  );
-}
+"use client";
+
+import { Menu, ShoppingCart, User, X } from "@/components/icons";
+import { WhatsAppIcon } from "@/components/icons";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { MarketplaceSearch } from "@/components/store/marketplace-search";
+import { NavWishlistLink } from "@/components/store/nav-wishlist-link";
+import { Container } from "@/components/ui/container";
+import { cn } from "@/lib/cn";
+import { brand, getWhatsAppLink } from "@/lib/site-config";
+
+const navLinks = [
+  { href: "/listings", label: "Shop" },
+  { href: "/brands", label: "Brands" },
+  { href: "/business", label: "Business" },
+  { href: "/about", label: "About" },
+  { href: "/faq", label: "Support" },
+] as const;
+
+const whatsappHref = getWhatsAppLink(
+  `Hi ${brand.shortName}, I'd like help finding the right product.`
+);
+
+export function StoreNavbar() {
+  const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const solid = scrolled || open || pathname !== "/";
+  const isHome = pathname === "/";
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-[100] transition-colors duration-300",
+        solid
+          ? "border-b border-border bg-white/95 shadow-nav backdrop-blur-md"
+          : "border-b border-transparent bg-transparent"
+      )}
+    >
+      <Container>
+        <div className="flex h-[4.25rem] items-center gap-3 md:h-[4.75rem] md:gap-4">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5">
+            <Image
+              src="/logo-mark.png"
+              alt={`${brand.shortName} logo`}
+              width={36}
+              height={36}
+              className="h-9 w-9"
+              priority
+            />
+            <span className="hidden text-sm font-semibold tracking-tight text-neutral-900 sm:block">
+              {brand.shortName}
+            </span>
+          </Link>
+
+          <nav className="hidden items-center gap-6 xl:flex">
+            {navLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "text-sm text-muted transition hover:text-neutral-900",
+                  pathname === item.href && "font-medium text-neutral-900"
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden min-w-0 flex-1 md:block md:max-w-sm lg:max-w-md xl:max-w-lg">
+            <MarketplaceSearch compact />
+          </div>
+
+          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              className="rounded-xl p-2 text-muted hover:bg-neutral-100 md:hidden"
+              aria-label="Search"
+              onClick={() => setSearchOpen((v) => !v)}
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </button>
+
+            <NavWishlistLink className="hidden sm:flex" />
+
+            <Link
+              href="/listings"
+              className="hidden h-10 w-10 items-center justify-center rounded-xl text-muted transition hover:bg-neutral-100 hover:text-neutral-900 sm:flex"
+              aria-label="Cart"
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </Link>
+
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden min-h-[40px] items-center gap-2 rounded-full bg-[#25D366] px-4 text-sm font-medium text-white transition hover:bg-[#20bd5a] lg:inline-flex"
+            >
+              <WhatsAppIcon size={16} />
+              <span className="hidden xl:inline">WhatsApp</span>
+            </a>
+
+            <Link
+              href="/listings"
+              className="hidden h-10 w-10 items-center justify-center rounded-xl text-muted transition hover:bg-neutral-100 hover:text-neutral-900 xl:flex"
+              aria-label="Account"
+            >
+              <User className="h-5 w-5" />
+            </Link>
+
+            <button
+              type="button"
+              className="rounded-xl p-2 text-neutral-700 xl:hidden"
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </div>
+
+        {searchOpen && (
+          <div className="border-t border-border py-3 md:hidden">
+            <MarketplaceSearch autoFocus onClose={() => setSearchOpen(false)} />
+          </div>
+        )}
+      </Container>
+
+      {open && (
+        <div className="fixed inset-0 top-[4.25rem] z-[99] bg-page xl:hidden">
+          <Container className="flex h-full flex-col py-8">
+            <div className="mb-6 md:hidden">
+              <MarketplaceSearch onClose={() => setOpen(false)} />
+            </div>
+            <nav className="flex flex-col gap-1">
+              {navLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "rounded-xl px-4 py-3.5 text-lg text-neutral-800 transition hover:bg-white",
+                    pathname === item.href && "bg-white font-medium"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-6 flex gap-4">
+              <NavWishlistLink />
+              <Link
+                href="/listings"
+                className="flex h-10 w-10 items-center justify-center rounded-xl text-muted hover:bg-white"
+                aria-label="Cart"
+              >
+                <ShoppingCart className="h-5 w-5" />
+              </Link>
+            </div>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="mt-8 inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 text-base font-medium text-white"
+            >
+              <WhatsAppIcon size={20} />
+              Chat on WhatsApp
+            </a>
+          </Container>
+        </div>
+      )}
+    </header>
+  );
+}

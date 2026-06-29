@@ -1,23 +1,26 @@
 export const brand = {
-  name: "Require Global Resources",
-  shortName: "Require Global Resources",
-  tagline: "Verified. Delivered. Trusted.",
+  name: "Require Global",
+  shortName: "Require Global",
+  tagline: "Genuine Electronics. Delivered.",
   oneLiner:
-    "Smart car and home upgrade products for the modern Nigerian.",
-  corePromise:
-    "Every product verified before it reaches you. Pay only when it arrives.",
-  positioning: "Not the cheapest. The most trusted.",
+    "Consumer electronics for Nigeria — laptops, smartphones and audio with clear specs and nationwide delivery.",
+  shortPitch:
+    "Laptops, smartphones, audio and tech — carefully selected and delivered across Nigeria.",
   legalName: "Require Trading Limited",
+  cacNumber: "7879319",
+  parentCompany: "Require Holdings",
   colors: {
-    navy: "#08142A",
-    blue: "#1246D6",
-    blueLight: "#2563EB",
-    gold: "#F5A623",
+    navy: "#0D1F3C",
+    accent: "#E8601C",
+    blue: "#0D1F3C",
+    blueLight: "#1a3a6b",
+    gold: "#E8601C",
     white: "#FFFFFF",
+    background: "#F5F7FA",
   },
   location: "Lagos, Nigeria",
   phoneDisplay: "+234 802 913 8335",
-  website: "requireglobalresources.com",
+  website: "requireglobal.ng",
 } as const;
 
 const configuredWhatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2348029138335";
@@ -27,22 +30,26 @@ const cleanedWhatsAppNumber =
 export const contact = {
   whatsappNumber: configuredWhatsAppNumber,
   whatsappUrl: `https://wa.me/${cleanedWhatsAppNumber}`,
-  instagramHandle: "@requireglobalresources",
-  instagramUrl: "https://www.instagram.com/requireglobalresources",
-  tiktokHandle: "@requireglobalresources",
-  tiktokUrl: "https://www.tiktok.com/@requireglobalresources",
-  facebookName: "Require Global Resources",
-  facebookUrl: "https://www.facebook.com/requireglobalresources/",
-  email: "info@requireglobalresources.com",
+  instagramHandle: "@requireglobalng",
+  instagramUrl:
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://www.instagram.com/requireglobalng",
+  tiktokHandle: "@requireglobalng",
+  tiktokUrl:
+    process.env.NEXT_PUBLIC_TIKTOK_URL ?? "https://www.tiktok.com/@requireglobalng",
+  facebookName: "Require Global",
+  facebookUrl:
+    process.env.NEXT_PUBLIC_FACEBOOK_URL ?? "https://www.facebook.com/requireglobalng",
+  email: "info@requireglobal.ng",
+  jijiUrl: process.env.NEXT_PUBLIC_JIJI_URL ?? "https://jiji.ng",
 } as const;
 
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobalresources.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobal.ng";
 
 export const defaultSiteTitle =
-  "Require Global Resources — Premium Car & Home Products for Nigeria";
+  "Require Global — Genuine Electronics. Delivered.";
 export const defaultSiteDescription =
-  "Shop premium car accessories and smart home upgrades. Pay on delivery. Shipped anywhere in Nigeria. CAC-registered business.";
+  "Laptops, smartphones, audio and consumer electronics — clear specifications, transparent condition grading and nationwide delivery across Nigeria.";
 
 export function getWhatsAppLink(message: string): string {
   return `https://wa.me/${cleanedWhatsAppNumber}?text=${encodeURIComponent(message)}`;
