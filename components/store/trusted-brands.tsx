@@ -5,13 +5,13 @@ import { Container } from "@/components/ui/container";
 
 export function TrustedBrands() {
   return (
-    <section className="border-y border-border bg-white py-12 md:py-14" aria-label="Trusted brands">
+    <section className="bg-surface py-12 md:py-14" aria-label="Trusted brands">
       <Container>
         <BrandLogoWall compact />
         <div className="mt-8 text-center">
           <Link
             href="/brands"
-            className="text-sm font-medium text-navy transition hover:text-accent"
+            className="link-accent text-sm font-medium"
           >
             View All Brands →
           </Link>

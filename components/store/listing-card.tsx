@@ -3,68 +3,64 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { formatNgn, type Listing } from "@/lib/electronics-listings";
-import { getListingBadge, getListingReviewCount } from "@/lib/home-content";
 import { getListingFallbackImage } from "@/lib/listing-placeholders";
 import {
-  getListingConfiguration,
   getListingProcessor,
   getListingRam,
   getListingStorage,
 } from "@/lib/listing-search";
-import { RequireCertifiedBadge, TrustPill } from "@/components/store/require-certified-badge";
 import { WishlistButton } from "@/components/store/wishlist-button";
-import { Star } from "@/components/icons";
 import Image from "next/image";
 
 type Props = {
   listing: Listing;
   className?: string;
-  index?: number;
-  showBadge?: boolean;
 };
 
-function SpecLines({ listing }: { listing: Listing }) {
-  const processor = getListingProcessor(listing);
-  const ram = getListingRam(listing);
-  const storage = getListingStorage(listing);
-  const lines = [processor, ram, storage].filter(Boolean);
-
-  if (lines.length === 0) {
-    return (
-      <p className="mt-2 text-sm text-muted line-clamp-2">{listing.headline}</p>
-    );
-  }
-
+function ConditionBadge({ condition }: { condition: string }) {
   return (
-    <ul className="mt-2 space-y-0.5 text-sm text-muted">
-      {lines.map((line) => (
-        <li key={line}>{line}</li>
-      ))}
-    </ul>
+    <span className="inline-flex items-center rounded-full bg-accent-light px-2 py-0.5 text-[11px] font-medium text-accent-text">
+      {condition}
+    </span>
   );
 }
 
-export function ListingCard({ listing, className, index = 0, showBadge = true }: Props) {
+function SpecText({ listing }: { listing: Listing }) {
+  const processor = getListingProcessor(listing);
+  const ram = getListingRam(listing);
+  const storage = getListingStorage(listing);
+  const text = [processor, ram, storage].filter(Boolean).join(" · ") || listing.headline;
+
+  return (
+    <p className="mb-2 line-clamp-2 text-xs leading-normal text-muted">{text}</p>
+  );
+}
+
+export function ListingCard({ listing, className }: Props) {
   const hero = listing.images[0] ?? getListingFallbackImage(listing.category);
   const isSold = listing.status === "sold";
   const href = `/listings/${listing.slug}`;
-  const reviewCount = getListingReviewCount(listing.slug);
-  const badge = listing.badge ?? getListingBadge(listing.slug, index);
   const inStock = listing.status === "available";
 
   return (
-    <article className={cn("group flex h-full flex-col animate-fade-in", className)}>
+    <article
+      className={cn(
+        "group flex h-full flex-col overflow-hidden rounded-xl bg-surface shadow-sm transition-shadow duration-150 hover:shadow-md",
+        className
+      )}
+    >
       <div className="relative">
         <Link
           href={href}
-          className="product-image-zoom relative block aspect-[4/5] w-full overflow-hidden rounded-xl border border-border bg-white"
+          className="product-image-zoom relative flex aspect-[4/3] items-center justify-center bg-page p-6"
           aria-label={`View ${listing.name}`}
         >
           <Image
             src={hero}
             alt={listing.name}
-            fill
-            className="object-contain p-4 md:p-6"
+            width={240}
+            height={180}
+            className="max-h-[180px] w-auto object-contain"
             sizes="(max-width:768px) 100vw, 33vw"
           />
           {isSold && (
@@ -76,55 +72,36 @@ export function ListingCard({ listing, className, index = 0, showBadge = true }:
         {!isSold && (
           <WishlistButton slug={listing.slug} className="absolute right-3 top-3" />
         )}
-        {showBadge && badge && !isSold && (
-          <span className="absolute left-3 top-3 rounded-full bg-navy px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
-            {badge}
+        {!isSold && (
+          <span className="absolute left-3 top-3">
+            <ConditionBadge condition={listing.condition} />
           </span>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col pt-5">
-        <h3 className="text-card-title font-semibold leading-snug text-neutral-900">
-          <Link href={href} className="hover:text-navy">
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="mb-1 text-[15px] font-semibold leading-snug text-navy">
+          <Link href={href} className="hover:text-navy-secondary">
             {listing.name}
           </Link>
         </h3>
 
-        <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
+        <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-quiet">
           {listing.brand}
         </p>
 
-        <div className="mt-2 flex items-center gap-1.5">
-          <div className="flex gap-0.5" aria-hidden>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-3.5 w-3.5 fill-accent text-accent" />
-            ))}
-          </div>
-          <span className="text-xs text-muted">({reviewCount})</span>
-        </div>
+        <SpecText listing={listing} />
 
-        <SpecLines listing={listing} />
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          <RequireCertifiedBadge size="sm" />
-          {inStock && (
-            <>
-              <TrustPill>Ships Today</TrustPill>
-              <TrustPill>Warranty Included</TrustPill>
-            </>
-          )}
-        </div>
-
-        {inStock && (
-          <p className="mt-3 text-xs font-medium text-success">In Stock</p>
-        )}
-
-        <p className="mt-3 text-xl font-semibold tabular-nums tracking-tight text-neutral-900">
+        <p className="mb-2 text-lg font-bold tabular-nums tracking-tight text-navy">
           {formatNgn(listing.askingPriceNGN)}
         </p>
 
-        <div className="mt-5">
-          <Button href={href} variant="secondary" className="min-h-[44px] w-full sm:w-auto">
+        {inStock && (
+          <p className="mb-2 text-[11px] text-quiet">In Stock</p>
+        )}
+
+        <div className="mt-auto pt-2">
+          <Button href={href} variant="secondary" className="min-h-[44px] w-full rounded-lg sm:w-auto">
             View Product
           </Button>
         </div>
@@ -132,3 +109,4 @@ export function ListingCard({ listing, className, index = 0, showBadge = true }:
     </article>
   );
 }
+

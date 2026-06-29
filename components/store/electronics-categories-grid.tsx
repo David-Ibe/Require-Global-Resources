@@ -42,7 +42,7 @@ export async function ElectronicsCategoriesGrid({ listings }: Props) {
   return (
     <section className="animate-fade-in py-section-sm md:py-section">
       <Container>
-        <h2 className="mb-14 text-section-title font-semibold tracking-tight text-neutral-950 md:mb-16">
+        <h2 className="mb-14 text-section-title text-navy md:mb-16">
           Categories
         </h2>
 
@@ -57,8 +57,8 @@ export async function ElectronicsCategoriesGrid({ listings }: Props) {
                 href={`/listings?category=${category.slug}`}
                 className="block"
               >
-                <article className="card-hover group flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-soft">
-                  <div className="product-image-zoom relative aspect-[16/10] w-full overflow-hidden bg-neutral-50">
+                <article className="card-hover group flex h-full flex-col overflow-hidden rounded-xl bg-surface shadow-sm">
+                  <div className="product-image-zoom relative aspect-[16/10] w-full overflow-hidden bg-page">
                     <Image
                       src={img}
                       alt=""

@@ -25,18 +25,17 @@ const whatsappHref = getWhatsAppLink(
   `Hi ${brand.shortName}, I'd like help finding the right product.`
 );
 
+function isNavActive(pathname: string, href: string) {
+  if (href === "/listings") {
+    return pathname === "/" || pathname === "/listings" || pathname.startsWith("/listings/");
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function StoreNavbar() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -45,18 +44,8 @@ export function StoreNavbar() {
     };
   }, [open]);
 
-  const solid = scrolled || open || pathname !== "/";
-  const isHome = pathname === "/";
-
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-[100] transition-colors duration-300",
-        solid
-          ? "border-b border-border bg-white/95 shadow-nav backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
-      )}
-    >
+    <header className="sticky top-0 z-[100] border-b border-border bg-surface">
       <Container>
         <div className="flex h-[4.25rem] items-center gap-3 md:h-[4.75rem] md:gap-4">
           <Link href="/" className="flex shrink-0 items-center gap-2.5">
@@ -68,24 +57,27 @@ export function StoreNavbar() {
               className="h-9 w-9"
               priority
             />
-            <span className="hidden text-sm font-semibold tracking-tight text-neutral-900 sm:block">
+            <span className="hidden text-sm font-semibold tracking-tight text-navy sm:block">
               {brand.shortName}
             </span>
           </Link>
 
           <nav className="hidden items-center gap-6 xl:flex">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "text-sm text-muted transition hover:text-neutral-900",
-                  pathname === item.href && "font-medium text-neutral-900"
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navLinks.map((item) => {
+              const active = isNavActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "text-sm text-neutral-700 transition hover:text-navy",
+                    active && "font-medium text-accent"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="hidden min-w-0 flex-1 md:block md:max-w-sm lg:max-w-md xl:max-w-lg">
@@ -95,7 +87,7 @@ export function StoreNavbar() {
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             <button
               type="button"
-              className="rounded-xl p-2 text-muted hover:bg-neutral-100 md:hidden"
+              className="rounded-xl p-2 text-muted hover:bg-page md:hidden"
               aria-label="Search"
               onClick={() => setSearchOpen((v) => !v)}
             >
@@ -108,7 +100,7 @@ export function StoreNavbar() {
 
             <Link
               href="/listings"
-              className="hidden h-10 w-10 items-center justify-center rounded-xl text-muted transition hover:bg-neutral-100 hover:text-neutral-900 sm:flex"
+              className="hidden h-10 w-10 items-center justify-center rounded-xl text-muted transition hover:bg-page hover:text-navy sm:flex"
               aria-label="Cart"
             >
               <ShoppingCart className="h-5 w-5" />
@@ -118,7 +110,7 @@ export function StoreNavbar() {
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden min-h-[40px] items-center gap-2 rounded-full bg-[#25D366] px-4 text-sm font-medium text-white transition hover:bg-[#20bd5a] lg:inline-flex"
+              className="hidden min-h-[40px] items-center gap-2 rounded-lg bg-whatsapp px-4 text-sm font-medium text-white transition hover:bg-[#20bd5a] lg:inline-flex"
             >
               <WhatsAppIcon size={16} />
               <span className="hidden xl:inline">WhatsApp</span>
@@ -126,7 +118,7 @@ export function StoreNavbar() {
 
             <Link
               href="/listings"
-              className="hidden h-10 w-10 items-center justify-center rounded-xl text-muted transition hover:bg-neutral-100 hover:text-neutral-900 xl:flex"
+              className="hidden h-10 w-10 items-center justify-center rounded-xl text-muted transition hover:bg-page hover:text-navy xl:flex"
               aria-label="Account"
             >
               <User className="h-5 w-5" />
@@ -144,7 +136,7 @@ export function StoreNavbar() {
         </div>
 
         {searchOpen && (
-          <div className="border-t border-border py-3 md:hidden">
+          <div className="py-3 md:hidden">
             <MarketplaceSearch autoFocus onClose={() => setSearchOpen(false)} />
           </div>
         )}
@@ -157,25 +149,28 @@ export function StoreNavbar() {
               <MarketplaceSearch onClose={() => setOpen(false)} />
             </div>
             <nav className="flex flex-col gap-1">
-              {navLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "rounded-xl px-4 py-3.5 text-lg text-neutral-800 transition hover:bg-white",
-                    pathname === item.href && "bg-white font-medium"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navLinks.map((item) => {
+                const active = isNavActive(pathname, item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={cn(
+                      "rounded-xl px-4 py-3.5 text-lg text-neutral-700 transition hover:bg-surface",
+                      active && "bg-surface font-medium text-accent"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </nav>
             <div className="mt-6 flex gap-4">
               <NavWishlistLink />
               <Link
                 href="/listings"
-                className="flex h-10 w-10 items-center justify-center rounded-xl text-muted hover:bg-white"
+                className="flex h-10 w-10 items-center justify-center rounded-xl text-muted hover:bg-surface"
                 aria-label="Cart"
               >
                 <ShoppingCart className="h-5 w-5" />
@@ -186,7 +181,7 @@ export function StoreNavbar() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="mt-8 inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 text-base font-medium text-white"
+              className="mt-8 inline-flex min-h-[52px] items-center justify-center gap-2 rounded-lg bg-whatsapp px-6 text-base font-medium text-white"
             >
               <WhatsAppIcon size={20} />
               Chat on WhatsApp
@@ -197,3 +192,4 @@ export function StoreNavbar() {
     </header>
   );
 }
+

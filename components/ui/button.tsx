@@ -3,17 +3,17 @@ import Link from "next/link";
 import { cn } from "@/lib/cn";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-h-[48px]";
+  "inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-h-[48px]";
 
 const variants = {
   primary:
-    "bg-accent px-8 py-3 text-white hover:bg-accent-hover active:bg-[#c24d15]",
+    "bg-navy px-6 py-3 text-white hover:bg-navy-secondary active:bg-navy-secondary",
   secondary:
-    "border border-border bg-white px-8 py-3 text-navy hover:border-navy/30 hover:bg-neutral-50",
-  ghost: "px-4 py-2 text-muted hover:text-neutral-900",
-  navy: "bg-navy px-8 py-3 text-white hover:bg-navy-600 active:bg-navy-700",
+    "border border-navy bg-surface px-6 py-3 text-navy hover:bg-page font-medium",
+  ghost: "px-4 py-2 text-muted hover:text-navy",
+  navy: "bg-navy px-6 py-3 text-white hover:bg-navy-secondary active:bg-navy-secondary font-semibold",
   whatsapp:
-    "bg-[#25D366] px-8 py-3.5 text-white hover:bg-[#20bd5a]",
+    "bg-whatsapp px-6 py-3 text-white hover:bg-[#20bd5a]",
 } as const;
 
 type Variant = keyof typeof variants;
@@ -59,3 +59,4 @@ export function Button({
     </button>
   );
 }
+

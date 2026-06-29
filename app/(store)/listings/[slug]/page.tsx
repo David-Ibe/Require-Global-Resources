@@ -99,26 +99,26 @@ export default async function ListingDetailPage({ params }: Props) {
       />
 
       <div className="bg-page">
-        <Container className="border-b border-neutral-100 py-4">
-          <nav className="flex flex-wrap items-center gap-2 text-xs text-neutral-400">
-            <Link href="/" className="hover:text-neutral-700">
+        <Container className="py-4">
+          <nav className="flex flex-wrap items-center gap-2 text-xs text-quiet">
+            <Link href="/" className="hover:text-navy">
               Home
             </Link>
             <span>/</span>
-            <Link href="/listings" className="hover:text-neutral-700">
+            <Link href="/listings" className="hover:text-navy">
               Shop
             </Link>
             <span>/</span>
             <Link
               href={`/listings?category=${listing.category}`}
-              className="hover:text-neutral-700"
+              className="hover:text-navy"
             >
               {categoryLabel}
             </Link>
           </nav>
         </Container>
 
-        <section className="animate-fade-in py-10 md:py-16">
+        <section className="animate-fade-in bg-surface py-10 md:py-16">
           <Container>
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
               <ProductGallery
@@ -140,31 +140,31 @@ export default async function ListingDetailPage({ params }: Props) {
 
         <ProductMobileBar listing={listing} whatsappHref={whatsappHref} />
 
-        <section className="border-t border-neutral-100 py-section-sm md:py-section">
+        <section className="bg-page py-section-sm md:py-section">
           <Container className="max-w-3xl">
-            <h2 className="text-section-title font-semibold tracking-tight text-neutral-950">
+            <h2 className="text-section-title text-navy">
               Overview
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-neutral-600">
+            <p className="mt-6 text-[15px] leading-relaxed text-neutral-700">
               {listing.description}
             </p>
           </Container>
         </section>
 
         {listing.specs.length > 0 && (
-          <section className="border-t border-neutral-100 py-section-sm md:py-section">
+          <section className="bg-surface py-section-sm md:py-section">
             <Container className="max-w-3xl">
-              <h2 className="text-section-title font-semibold tracking-tight text-neutral-950">
+              <h2 className="text-section-title text-navy">
                 Specifications
               </h2>
-              <dl className="mt-8 divide-y divide-neutral-100">
+              <dl className="mt-8 divide-y divide-border">
                 {listing.specs.map((spec) => (
                   <div
                     key={spec.label}
                     className="grid grid-cols-2 gap-4 py-4 text-sm first:pt-0"
                   >
-                    <dt className="text-neutral-500">{spec.label}</dt>
-                    <dd className="text-neutral-900">{spec.value}</dd>
+                    <dt className="text-muted">{spec.label}</dt>
+                    <dd className="text-navy">{spec.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -173,12 +173,12 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {listing.conditionNote && (
-          <section className="border-t border-neutral-100 py-section-sm md:py-section">
+          <section className="bg-page py-section-sm md:py-section">
             <Container className="max-w-3xl">
-              <h2 className="text-section-title font-semibold tracking-tight text-neutral-950">
+              <h2 className="text-section-title text-navy">
                 Condition
               </h2>
-              <p className="mt-6 text-base leading-relaxed text-neutral-600">
+              <p className="mt-6 text-[15px] leading-relaxed text-neutral-700">
                 {listing.conditionNote}
               </p>
               {listing.proof.length > 0 && (
@@ -201,9 +201,9 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {listing.disclosures.length > 0 && (
-          <section className="border-t border-neutral-100 py-section-sm md:py-section">
+          <section className="bg-surface py-section-sm md:py-section">
             <Container className="max-w-3xl">
-              <h2 className="text-section-title font-semibold tracking-tight text-neutral-950">
+              <h2 className="text-section-title text-navy">
                 Shipping
               </h2>
               <ul className="mt-6 space-y-3">
@@ -221,12 +221,12 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {listing.faq.length > 0 && (
-          <section className="border-t border-neutral-100 py-section-sm md:py-section">
+          <section className="bg-page py-section-sm md:py-section">
             <Container className="max-w-3xl">
-              <h2 className="text-section-title font-semibold tracking-tight text-neutral-950">
+              <h2 className="text-section-title text-navy">
                 FAQ
               </h2>
-              <div className="mt-8 divide-y divide-neutral-100">
+              <div className="mt-8 divide-y divide-border">
                 {listing.faq.map((item) => (
                   <details key={item.q} className="group py-5">
                     <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left text-base font-medium text-neutral-900">
@@ -246,20 +246,20 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {related.length > 0 && (
-          <section className="border-t border-neutral-100 py-section-sm md:py-section">
+          <section className="bg-surface py-section-sm md:py-section">
             <Container>
               <div className="mb-14 flex items-end justify-between md:mb-16">
-                <h2 className="text-section-title font-semibold tracking-tight text-neutral-950">
+                <h2 className="text-section-title text-navy">
                   Related
                 </h2>
                 <Link
                   href="/listings"
-                  className="text-sm font-medium text-neutral-600 hover:text-neutral-900"
+                  className="link-accent text-sm font-medium"
                 >
                   View all →
                 </Link>
               </div>
-              <div className="grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((item) => (
                   <ListingCard key={item.slug} listing={item} />
                 ))}

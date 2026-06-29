@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Gamepad2,
   Headphones,
@@ -20,27 +23,71 @@ const CATEGORIES = [
   { slug: "gaming", name: "Gaming", href: "/listings?category=gaming", icon: Gamepad2, available: false },
 ] as const;
 
-export function ShopByCategory() {
+export function ShopByCategory({
+  compact = false,
+  className,
+}: {
+  compact?: boolean;
+  className?: string;
+}) {
+  const pathname = usePathname();
+
+  function isActive(href: string) {
+    if (href.startsWith("/listings?")) {
+      return false;
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
   return (
-    <section className="py-14 md:py-16" aria-label="Categories">
+    <section
+      className={cn(
+        "bg-page",
+        compact ? "py-4 md:py-5" : "py-14 md:py-16",
+        className
+      )}
+      aria-label="Categories"
+    >
       <Container>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 sm:gap-4">
+        <div
+          className={cn(
+            compact
+              ? "flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-6 sm:gap-3 sm:overflow-visible"
+              : "grid grid-cols-3 gap-3 sm:grid-cols-6 sm:gap-3"
+          )}
+        >
           {CATEGORIES.map((category) => {
             const Icon = category.icon;
+            const active = category.available && isActive(category.href);
+
             return (
               <Link
                 key={category.slug}
                 href={category.available ? category.href : "#"}
                 className={cn(
-                  "group flex flex-col items-center rounded-xl border border-border bg-white py-6 text-center transition hover:border-neutral-300 hover:shadow-soft",
+                  "group flex shrink-0 cursor-pointer flex-col items-center rounded-xl bg-surface px-4 py-5 text-center shadow-sm transition-all duration-150",
+                  compact ? "w-[5.5rem] sm:w-auto" : "",
+                  active
+                    ? "bg-highlight shadow-sm"
+                    : "hover:-translate-y-px hover:shadow-md",
                   !category.available && "pointer-events-none opacity-50"
                 )}
                 aria-disabled={!category.available}
+                aria-current={active ? "page" : undefined}
               >
-                <span className="flex h-11 w-11 items-center justify-center text-navy transition group-hover:scale-105">
-                  <Icon className="h-6 w-6" strokeWidth={1.5} />
-                </span>
-                <span className="mt-3 text-sm font-medium text-neutral-900">
+                <Icon
+                  className={cn(
+                    "mb-2.5 h-7 w-7 shrink-0 transition-colors",
+                    active ? "text-accent" : "text-muted group-hover:text-neutral-700"
+                  )}
+                  strokeWidth={1.5}
+                />
+                <span
+                  className={cn(
+                    "text-[13px] font-medium text-neutral-700",
+                    active && "font-semibold text-navy-secondary"
+                  )}
+                >
                   {category.name}
                 </span>
               </Link>
@@ -51,3 +98,4 @@ export function ShopByCategory() {
     </section>
   );
 }
+
