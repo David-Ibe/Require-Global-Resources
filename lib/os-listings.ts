@@ -5,7 +5,7 @@ import type {
   RecentSale,
 } from "@/lib/electronics-listings";
 import { normalizeStoreCategorySlug } from "@/lib/category-slugs";
-import { getSupabaseAnon } from "@/lib/supabase/server";
+import { getStoreSupabase } from "@/lib/supabase/store";
 
 export type OsCategoryRow = {
   id: string;
@@ -143,23 +143,28 @@ export function mapOsListing(row: OsListingRow): Listing {
 
 export async function fetchActiveListings(): Promise<Listing[]> {
   try {
-    const supabase = getSupabaseAnon();
+    const supabase = getStoreSupabase();
     const { data, error } = await supabase
       .from("listings")
       .select(LISTING_SELECT)
       .eq("status", "Active")
       .order("created_at", { ascending: false });
 
-    if (error || !data) return [];
+    if (error) {
+      console.error("[fetchActiveListings]", error.message);
+      return [];
+    }
+    if (!data) return [];
     return (data as OsListingRow[]).map(mapOsListing);
-  } catch {
+  } catch (err) {
+    console.error("[fetchActiveListings]", err);
     return [];
   }
 }
 
 export async function fetchListingBySlug(slug: string): Promise<Listing | null> {
   try {
-    const supabase = getSupabaseAnon();
+    const supabase = getStoreSupabase();
     const { data, error } = await supabase
       .from("listings")
       .select(LISTING_SELECT)
@@ -184,7 +189,7 @@ export async function fetchListingsByCategorySlug(
 
 export async function fetchListingSlugs(): Promise<string[]> {
   try {
-    const supabase = getSupabaseAnon();
+    const supabase = getStoreSupabase();
     const { data, error } = await supabase
       .from("listings")
       .select("slug")
@@ -200,7 +205,7 @@ export async function fetchListingSlugs(): Promise<string[]> {
 
 export async function fetchStoreCategories(): Promise<OsCategoryRow[]> {
   try {
-    const supabase = getSupabaseAnon();
+    const supabase = getStoreSupabase();
     const { data, error } = await supabase
       .from("categories")
       .select("id, name, slug")
@@ -215,7 +220,7 @@ export async function fetchStoreCategories(): Promise<OsCategoryRow[]> {
 
 export async function fetchRecentSales(limit = 5): Promise<RecentSale[]> {
   try {
-    const supabase = getSupabaseAnon();
+    const supabase = getStoreSupabase();
     const { data, error } = await supabase
       .from("listings")
       .select("title, sold_at, category:categories(slug)")

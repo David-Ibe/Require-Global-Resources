@@ -6,6 +6,7 @@ import { filterListings } from "@/lib/listing-search";
 import { fetchActiveListings } from "@/lib/os-listings";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function HomePage() {
   const listings = await fetchActiveListings();
@@ -14,7 +15,7 @@ export default async function HomePage() {
   const gridListings = filterListings(
     listings.filter((listing) => listing.status !== "sold"),
     { availability: "available", sort: "newest" }
-  ).filter((listing) => listing.slug !== featured?.slug);
+  );
 
   return (
     <div className="bg-page">
