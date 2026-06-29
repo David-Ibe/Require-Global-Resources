@@ -43,17 +43,20 @@ export function ShopByCategory({
     <section
       className={cn(
         "bg-page",
-        compact ? "py-4 md:py-5" : "py-14 md:py-16",
+        compact ? "py-6 md:py-8" : "py-14 md:py-16",
         className
       )}
       aria-label="Categories"
     >
       <Container>
+        {!compact && (
+          <h2 className="mb-8 text-section-title text-navy">Shop by category</h2>
+        )}
         <div
           className={cn(
             compact
-              ? "flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-6 sm:gap-3 sm:overflow-visible"
-              : "grid grid-cols-3 gap-3 sm:grid-cols-6 sm:gap-3"
+              ? "flex gap-6 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-6 sm:gap-6 sm:overflow-visible"
+              : "grid grid-cols-3 gap-6 sm:grid-cols-6"
           )}
         >
           {CATEGORIES.map((category) => {
@@ -65,27 +68,27 @@ export function ShopByCategory({
                 key={category.slug}
                 href={category.available ? category.href : "#"}
                 className={cn(
-                  "group flex shrink-0 cursor-pointer flex-col items-center rounded-xl bg-surface px-4 py-5 text-center shadow-sm transition-all duration-150",
+                  "group flex shrink-0 cursor-pointer flex-col items-center text-center transition-all duration-300",
                   compact ? "w-[5.5rem] sm:w-auto" : "",
-                  active
-                    ? "bg-highlight shadow-sm"
-                    : "hover:-translate-y-px hover:shadow-md",
-                  !category.available && "pointer-events-none opacity-50"
+                  !category.available && "pointer-events-none opacity-40"
                 )}
                 aria-disabled={!category.available}
                 aria-current={active ? "page" : undefined}
               >
-                <Icon
+                <div
                   className={cn(
-                    "mb-2.5 h-7 w-7 shrink-0 transition-colors",
-                    active ? "text-accent" : "text-muted group-hover:text-neutral-700"
+                    "mb-3 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300",
+                    active
+                      ? "bg-accent-light text-accent shadow-glow"
+                      : "bg-surface text-muted shadow-sm group-hover:-translate-y-0.5 group-hover:text-accent group-hover:shadow-md"
                   )}
-                  strokeWidth={1.5}
-                />
+                >
+                  <Icon className="h-6 w-6" strokeWidth={1.5} />
+                </div>
                 <span
                   className={cn(
-                    "text-[13px] font-medium text-neutral-700",
-                    active && "font-semibold text-navy-secondary"
+                    "text-[13px] font-medium text-neutral-700 transition-colors group-hover:text-accent",
+                    active && "font-semibold text-accent"
                   )}
                 >
                   {category.name}

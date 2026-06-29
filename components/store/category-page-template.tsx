@@ -26,7 +26,7 @@ export async function CategoryPageTemplate({ slug }: Props) {
 
   return (
     <div className="bg-page">
-      <header className="border-b border-neutral-100 pt-12 pb-10 md:pt-16 md:pb-14">
+      <header className="hero-glow pt-12 pb-10 md:pt-16 md:pb-14">
         <Container>
           <h1 className="text-3xl font-semibold tracking-tight text-neutral-950 md:text-4xl">
             {category.name}

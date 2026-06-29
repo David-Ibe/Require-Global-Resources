@@ -18,8 +18,8 @@ export const storeType = {
 } as const;
 
 export const storeSurface = {
-  card: "rounded-xl bg-surface p-8 shadow-sm",
-  cardSm: "rounded-xl bg-surface p-6 shadow-sm",
+  card: "rounded-2xl bg-surface p-8 shadow-card",
+  cardSm: "rounded-2xl bg-surface p-6 shadow-card",
   sectionAlt: "bg-section-alt",
 } as const;
 

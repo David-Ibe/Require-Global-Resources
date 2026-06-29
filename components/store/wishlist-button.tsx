@@ -23,13 +23,13 @@ export function WishlistButton({ slug, className }: Props) {
       aria-label={saved ? "Remove from saved" : "Save product"}
       aria-pressed={saved}
       className={cn(
-        "inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-500 backdrop-blur-sm transition hover:border-neutral-300 hover:text-neutral-900",
-        saved && "border-neutral-900 text-neutral-900",
+        "inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-neutral-400 shadow-sm backdrop-blur-sm transition hover:text-accent hover:shadow-md",
+        saved && "text-accent",
         className
       )}
     >
       <Heart
-        className={cn("h-[18px] w-[18px]", saved && "fill-neutral-900")}
+        className={cn("h-[18px] w-[18px]", saved && "fill-accent text-accent")}
         aria-hidden
       />
     </button>

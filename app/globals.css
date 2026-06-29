@@ -4,14 +4,14 @@
 
 :root {
   color-scheme: light;
-  --color-bg: #f6f7f9;
-  --color-fg: #0d1b3e;
+  --color-bg: #f8f9fb;
+  --color-fg: #111827;
   --color-muted: #6b7280;
-  --color-quiet: #94a3b8;
-  --color-border: #e8ecf0;
-  --color-accent: #378add;
-  --color-navy: #0d1b3e;
-  --color-highlight: #eef2f8;
+  --color-quiet: #9ca3af;
+  --color-border: #f3f4f6;
+  --color-accent: #2563eb;
+  --color-navy: #111827;
+  --color-highlight: #f3f4f6;
   --color-surface: #ffffff;
   --radius-default: 0.75rem;
 }
@@ -40,26 +40,37 @@ a {
 }
 
 a.link-accent {
-  color: #378add;
+  color: #2563eb;
 }
 
 a.link-accent:hover {
-  text-decoration: underline;
+  color: #1d4ed8;
 }
 
 ::selection {
-  background: rgba(55, 138, 221, 0.12);
+  background: rgba(37, 99, 235, 0.12);
 }
 
 .hero-glow {
-  background: #eef2f8;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fb 100%);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -68,25 +79,49 @@ a.link-accent:hover {
   }
 
   .animate-fade-in {
-    animation: fade-in 0.55s ease-out both;
+    animation: fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .product-image-zoom img {
-    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .product-image-zoom:hover img {
     transform: scale(1.03);
   }
 
-  .card-hover {
+  .showroom-card {
     transition:
-      transform 0.15s ease,
-      box-shadow 0.15s ease;
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .card-hover:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  .showroom-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 6px 20px rgba(17, 24, 39, 0.08),
+      0 16px 48px rgba(37, 99, 235, 0.1);
+  }
+
+  .showroom-card:hover .showroom-card-glow {
+    opacity: 1;
+  }
+
+  .wishlist-reveal {
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .showroom-card:hover .wishlist-reveal,
+  .showroom-card:focus-within .wishlist-reveal {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
