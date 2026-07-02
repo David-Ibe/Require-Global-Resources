@@ -19,13 +19,13 @@ export const brand = {
     background: "#F6F7F9",
   },
   location: "Lagos, Nigeria",
-  phoneDisplay: "+234 802 913 8335",
+  phoneDisplay: "+234 703 988 3247",
   website: "requireglobal.ng",
 } as const;
 
-const configuredWhatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2348029138335";
+const configuredWhatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2347039883247";
 const cleanedWhatsAppNumber =
-  configuredWhatsAppNumber.replace(/[^\d]/g, "") || "2348029138335";
+  configuredWhatsAppNumber.replace(/[^\d]/g, "") || "2347039883247";
 
 export const contact = {
   whatsappNumber: configuredWhatsAppNumber,

@@ -3,6 +3,7 @@
 import { ShieldCheck } from "@/components/icons";
 import { WhatsAppIcon } from "@/components/icons";
 import { buildWhatsAppURL } from "@/lib/whatsapp";
+import { brand } from "@/lib/site-config";
 
 type SuccessCardProps = {
   fullName: string;
@@ -57,7 +58,7 @@ export function SuccessCard({
         Message us on WhatsApp
       </a>
       <p className="mt-3 text-center text-xs text-rgr-gray500">
-        WhatsApp: +234 802 913 8335 — {quantity} × ₦{unitPrice.toLocaleString()} = ₦
+        WhatsApp: {brand.phoneDisplay} — {quantity} × ₦{unitPrice.toLocaleString()} = ₦
         {lineTotal.toLocaleString()}
       </p>
     </section>

@@ -1,3 +1,5 @@
+import { getWhatsAppLink } from "@/lib/site-config";
+
 export function buildWhatsAppURL(order: {
   productName: string;
   unitPrice: number;
@@ -17,5 +19,5 @@ State: ${order.state}
 
 Please send me the payment details. Thank you!`;
 
-  return `https://wa.me/2348029138335?text=${encodeURIComponent(message)}`;
+  return getWhatsAppLink(message);
 }
