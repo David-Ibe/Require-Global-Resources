@@ -1,10 +1,10 @@
 import type {
   Listing,
   ListingCondition,
-  ListingSpec,
   RecentSale,
 } from "@/lib/electronics-listings";
 import { normalizeStoreCategorySlug } from "@/lib/category-slugs";
+import { parseListingSpecField } from "@/lib/listing-spec-parser";
 import { getStoreSupabase } from "@/lib/supabase/store";
 
 export type OsCategoryRow = {
@@ -32,31 +32,6 @@ export type OsListingRow = {
 };
 
 const LISTING_SELECT = "*, category:categories(id, name, slug)";
-
-function parseSpecs(spec: string | null): ListingSpec[] {
-  if (!spec?.trim()) return [];
-
-  const parts = spec
-    .split(/[·|\n]/)
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  if (parts.length === 0) {
-    return [{ label: "Details", value: spec.trim() }];
-  }
-
-  return parts.map((part, index) => {
-    const colonIndex = part.indexOf(":");
-    if (colonIndex > 0) {
-      return {
-        label: part.slice(0, colonIndex).trim(),
-        value: part.slice(colonIndex + 1).trim(),
-      };
-    }
-
-    return { label: `Spec ${index + 1}`, value: part };
-  });
-}
 
 function inferBrand(title: string): string {
   const brands = [
@@ -120,7 +95,7 @@ export function mapOsListing(row: OsListingRow): Listing {
           : "1 unit available",
     askingPriceNGN: row.price,
     description: row.description || row.spec || row.title,
-    specs: parseSpecs(row.spec),
+    specs: parseListingSpecField(row.spec),
     proof: [],
     disclosures: [],
     images: row.images?.length ? row.images : [],

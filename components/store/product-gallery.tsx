@@ -26,11 +26,11 @@ export function ProductGallery({ images, alt, videoUrl, videoPoster, category = 
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="space-y-3">
         <button
           type="button"
           onClick={() => setZoomed(true)}
-          className="product-image-zoom relative block aspect-square w-full overflow-hidden rounded-2xl bg-image focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          className="product-image-zoom relative block h-[240px] w-full overflow-hidden rounded-2xl bg-image sm:h-[280px] md:h-[300px] lg:h-[320px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
           aria-label="Zoom image"
         >
           <Image
@@ -38,25 +38,25 @@ export function ProductGallery({ images, alt, videoUrl, videoPoster, category = 
             alt={alt}
             fill
             priority
-            className="object-cover"
-            sizes="(max-width:768px) 100vw, 50vw"
+            className="object-contain p-4 md:p-6"
+            sizes="(max-width:768px) 100vw, 560px"
           />
         </button>
 
         {gallery.length > 1 && (
-          <div className="flex gap-3 overflow-x-auto pb-1">
+          <div className="flex gap-2 overflow-x-auto pb-1">
             {gallery.map((src, i) => (
               <button
                 key={src + i}
                 type="button"
                 onClick={() => setActive(i)}
                 className={cn(
-                  "relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-neutral-100 ring-2 ring-offset-2 transition",
+                  "relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-image ring-2 ring-offset-1 transition",
                   active === i ? "ring-neutral-900" : "ring-transparent hover:ring-neutral-200"
                 )}
                 aria-label={`View image ${i + 1}`}
               >
-                <Image src={src} alt="" fill className="object-cover" sizes="64px" />
+                <Image src={src} alt="" fill className="object-contain p-1" sizes="56px" />
               </button>
             ))}
           </div>

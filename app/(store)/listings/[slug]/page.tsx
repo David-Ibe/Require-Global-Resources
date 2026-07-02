@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ListingCard } from "@/components/store/listing-card";
+import { ListingSpecifications } from "@/components/store/listing-specifications";
 import {
   ProductMobileBar,
   ProductPurchasePanel,
@@ -99,28 +100,26 @@ export default async function ListingDetailPage({ params }: Props) {
       />
 
       <div className="bg-page">
-        <Container className="py-4">
-          <nav className="flex flex-wrap items-center gap-2 text-xs text-quiet">
-            <Link href="/" className="hover:text-navy">
-              Home
-            </Link>
-            <span>/</span>
-            <Link href="/listings" className="hover:text-navy">
-              Shop
-            </Link>
-            <span>/</span>
-            <Link
-              href={`/listings?category=${listing.category}`}
-              className="hover:text-navy"
-            >
-              {categoryLabel}
-            </Link>
-          </nav>
-        </Container>
+        <section className="animate-fade-in bg-surface pb-6 pt-3 md:pb-8 md:pt-4">
+          <Container className="max-w-6xl">
+            <nav className="mb-3 flex flex-wrap items-center gap-2 text-xs text-quiet">
+              <Link href="/" className="hover:text-navy">
+                Home
+              </Link>
+              <span>/</span>
+              <Link href="/listings" className="hover:text-navy">
+                Shop
+              </Link>
+              <span>/</span>
+              <Link
+                href={`/listings?category=${listing.category}`}
+                className="hover:text-navy"
+              >
+                {categoryLabel}
+              </Link>
+            </nav>
 
-        <section className="animate-fade-in bg-surface py-10 md:py-16">
-          <Container>
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+            <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,24rem)]">
               <ProductGallery
                 images={listing.images}
                 alt={listing.name}
@@ -132,6 +131,7 @@ export default async function ListingDetailPage({ params }: Props) {
               <ProductPurchasePanel
                 listing={listing}
                 config={config}
+                categoryLabel={categoryLabel}
                 whatsappHref={whatsappHref}
               />
             </div>
@@ -140,40 +140,10 @@ export default async function ListingDetailPage({ params }: Props) {
 
         <ProductMobileBar listing={listing} whatsappHref={whatsappHref} />
 
-        <section className="bg-page py-section-sm md:py-section">
-          <Container className="max-w-3xl">
-            <h2 className="text-section-title text-navy">
-              Overview
-            </h2>
-            <p className="mt-6 text-[15px] leading-relaxed text-neutral-700">
-              {listing.description}
-            </p>
-          </Container>
-        </section>
-
-        {listing.specs.length > 0 && (
-          <section className="bg-surface py-section-sm md:py-section">
-            <Container className="max-w-3xl">
-              <h2 className="text-section-title text-navy">
-                Specifications
-              </h2>
-              <dl className="mt-8 divide-y divide-border">
-                {listing.specs.map((spec) => (
-                  <div
-                    key={spec.label}
-                    className="grid grid-cols-2 gap-4 py-4 text-sm first:pt-0"
-                  >
-                    <dt className="text-muted">{spec.label}</dt>
-                    <dd className="text-navy">{spec.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Container>
-          </section>
-        )}
+        <ListingSpecifications listing={listing} />
 
         {listing.conditionNote && (
-          <section className="bg-page py-section-sm md:py-section">
+          <section className="bg-page py-8 md:py-10">
             <Container className="max-w-3xl">
               <h2 className="text-section-title text-navy">
                 Condition
@@ -201,7 +171,7 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {listing.disclosures.length > 0 && (
-          <section className="bg-surface py-section-sm md:py-section">
+          <section className="bg-surface py-8 md:py-10">
             <Container className="max-w-3xl">
               <h2 className="text-section-title text-navy">
                 Shipping
@@ -221,7 +191,7 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {listing.faq.length > 0 && (
-          <section className="bg-page py-section-sm md:py-section">
+          <section className="bg-page py-8 md:py-10">
             <Container className="max-w-3xl">
               <h2 className="text-section-title text-navy">
                 FAQ
@@ -246,9 +216,9 @@ export default async function ListingDetailPage({ params }: Props) {
         )}
 
         {related.length > 0 && (
-          <section className="bg-surface py-section-sm md:py-section">
+          <section className="bg-surface py-8 md:py-10">
             <Container>
-              <div className="mb-14 flex items-end justify-between md:mb-16">
+              <div className="mb-8 flex items-end justify-between md:mb-10">
                 <h2 className="text-section-title text-navy">
                   Related
                 </h2>
