@@ -190,28 +190,3 @@ export const HIGH_INTENT_FAQS: HighIntentFaq[] = [
   },
 ];
 
-export const PRODUCT_BADGES = [
-  "Most Popular",
-  "Business Favourite",
-  "Editor's Choice",
-  "New Arrival",
-] as const;
-
-export type ProductBadge = (typeof PRODUCT_BADGES)[number];
-
-export function getListingBadge(slug: string, index: number): ProductBadge | "Require Certified" {
-  if (index === 0) return "Most Popular";
-  if (index === 1) return "Editor's Choice";
-  if (index === 2) return "Business Favourite";
-  if (index === 3) return "New Arrival";
-  return "Require Certified";
-}
-
-export function getListingReviewCount(slug: string): number {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = (hash << 5) - hash + slug.charCodeAt(i);
-    hash |= 0;
-  }
-  return 8 + (Math.abs(hash) % 25);
-}

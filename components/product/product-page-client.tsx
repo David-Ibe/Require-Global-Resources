@@ -236,7 +236,7 @@ export function ProductPageClient({
                   </button>
                 ))}
               </div>
-              <div className="relative h-[48vh] min-h-[320px] flex-1 overflow-hidden rounded-2xl bg-[#f4f4f5] shadow-soft ring-1 ring-rgr-gray300/30 sm:h-[56vh] lg:h-[calc(100vh-11rem)] lg:max-h-[680px]">
+              <div className="relative h-[48vh] min-h-[320px] flex-1 overflow-hidden rounded-2xl bg-image shadow-soft ring-1 ring-rgr-gray300/30 sm:h-[56vh] lg:h-[calc(100vh-11rem)] lg:max-h-[680px]">
                 <Image
                   src={mainImg}
                   alt={product.name}

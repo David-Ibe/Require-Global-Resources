@@ -43,7 +43,7 @@ export function ProductCardHome({
       >
         <Link
           href={`/products/${product.slug}`}
-          className="relative block aspect-[4/3] w-full overflow-hidden bg-[#f4f4f5]"
+          className="relative block aspect-[4/3] w-full overflow-hidden bg-image"
         >
           <Image
             src={img}

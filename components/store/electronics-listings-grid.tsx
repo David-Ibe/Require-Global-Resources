@@ -15,6 +15,7 @@ type Props = {
   ctaLabel?: string;
   id?: string;
   className?: string;
+  featuredSlug?: string | null;
 };
 
 export function ElectronicsListingsGrid({
@@ -27,6 +28,7 @@ export function ElectronicsListingsGrid({
   ctaLabel = "View all",
   id = "listings",
   className,
+  featuredSlug,
 }: Props) {
   const items = (limit ? listings.slice(0, limit) : listings).filter(
     (l) => l.status !== "sold"
@@ -37,7 +39,9 @@ export function ElectronicsListingsGrid({
       <section className="bg-surface py-section-sm md:py-section">
         <Container className="text-center">
           {showHeading && (
-            <h2 className="text-section-title text-navy">{heading}</h2>
+            <h2 className="text-section-title text-navy no-underline decoration-transparent">
+              {heading}
+            </h2>
           )}
           <p className="mt-6 text-[15px] text-muted">No listings available right now.</p>
         </Container>
@@ -51,7 +55,9 @@ export function ElectronicsListingsGrid({
         {showHeading && (
           <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between md:mb-14">
             <div>
-              <h2 className="text-section-title text-navy">{heading}</h2>
+              <h2 className="text-section-title text-navy no-underline decoration-transparent">
+                {heading}
+              </h2>
               {subtitle && (
                 <p className="mt-2 max-w-xl text-[15px] text-muted">{subtitle}</p>
               )}
@@ -69,7 +75,11 @@ export function ElectronicsListingsGrid({
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((listing) => (
-            <ListingCard key={listing.slug} listing={listing} />
+            <ListingCard
+              key={listing.slug}
+              listing={listing}
+              featuredSlug={featuredSlug}
+            />
           ))}
         </div>
       </Container>

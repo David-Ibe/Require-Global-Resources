@@ -30,7 +30,7 @@ export function ProductGallery({ images, alt, videoUrl, videoPoster, category = 
         <button
           type="button"
           onClick={() => setZoomed(true)}
-          className="product-image-zoom relative block aspect-square w-full overflow-hidden rounded-2xl bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          className="product-image-zoom relative block aspect-square w-full overflow-hidden rounded-2xl bg-image focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
           aria-label="Zoom image"
         >
           <Image

@@ -64,7 +64,7 @@ export function ProductCard({
 
   return (
     <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
-      <div className="relative mb-4 h-56 overflow-hidden rounded-xl bg-slate-50">
+      <div className="relative mb-4 h-56 overflow-hidden rounded-xl bg-image">
         <button
           type="button"
           onClick={handleImageClick}

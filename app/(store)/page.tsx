@@ -13,7 +13,11 @@ export default async function HomePage() {
   const featured = pickFeaturedListing(listings);
 
   const gridListings = filterListings(
-    listings.filter((listing) => listing.status !== "sold"),
+    listings.filter(
+      (listing) =>
+        listing.status !== "sold" &&
+        listing.slug !== featured?.slug
+    ),
     { availability: "available", sort: "newest" }
   );
 
@@ -28,6 +32,7 @@ export default async function HomePage() {
         ctaHref="/listings"
         ctaLabel="Refine search"
         className="bg-page"
+        featuredSlug={featured?.slug}
       />
     </div>
   );

@@ -74,7 +74,7 @@ export function FeaturedProductHero({ listing }: Props) {
             className="product-image-zoom group relative order-1 mx-auto block w-full max-w-xl lg:order-2 lg:max-w-none"
             aria-label={`View ${listing.name}`}
           >
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-surface shadow-card">
+            <div className="relative aspect-square overflow-hidden rounded-2xl bg-image shadow-card">
               <div
                 className="showroom-card-glow pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500"
                 style={{

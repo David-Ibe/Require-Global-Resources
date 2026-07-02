@@ -1,5 +1,20 @@
 import type { Config } from "tailwindcss";
 
+/** Remap warm palette slots to accent blue so orange/amber utilities cannot render orange. */
+const accentBlueScale = {
+  50: "#EFF6FF",
+  100: "#DBEAFE",
+  200: "#BFDBFE",
+  300: "#93C5FD",
+  400: "#60A5FA",
+  500: "#2563EB",
+  600: "#1D4ED8",
+  700: "#1E40AF",
+  800: "#1E3A8A",
+  900: "#1E3A8A",
+  950: "#172554",
+} as const;
+
 const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -22,6 +37,7 @@ const config: Config = {
           text: "#1D4ED8",
         },
         page: "#F8F9FB",
+        image: "#E2E8F0",
         surface: "#FFFFFF",
         "section-alt": "#F3F4F6",
         highlight: "#F3F4F6",
@@ -31,6 +47,8 @@ const config: Config = {
         success: "#22C55E",
         error: "#DC2626",
         whatsapp: "#25D366",
+        orange: accentBlueScale,
+        amber: accentBlueScale,
         neutral: {
           50: "#F6F7F9",
           100: "#F0F2F5",

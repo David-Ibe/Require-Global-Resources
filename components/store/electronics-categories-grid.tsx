@@ -58,7 +58,7 @@ export async function ElectronicsCategoriesGrid({ listings }: Props) {
                 className="block"
               >
                 <article className="card-hover group flex h-full flex-col overflow-hidden rounded-xl bg-surface shadow-sm">
-                  <div className="product-image-zoom relative aspect-[16/10] w-full overflow-hidden bg-page">
+                  <div className="product-image-zoom relative aspect-[16/10] w-full overflow-hidden bg-image">
                     <Image
                       src={img}
                       alt=""

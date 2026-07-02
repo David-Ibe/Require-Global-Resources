@@ -3,7 +3,7 @@ export const brandColors = {
   navy: "#08142A",
   blue: "#1246D6",
   blueLight: "#2563EB",
-  gold: "#F5A623",
+  gold: "#378ADD",
   white: "#FFFFFF",
   offWhite: "#F8F9FC",
   gray100: "#F1F5F9",
