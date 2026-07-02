@@ -63,15 +63,15 @@ export function ListingCard({ listing, className, featuredSlug }: Props) {
       <div className="relative">
         <Link
           href={href}
-          className="product-image-zoom relative flex aspect-square items-center justify-center bg-image p-6 md:p-8"
+          className="product-image-zoom relative flex aspect-square items-center justify-center p-2 md:p-3"
           aria-label={`View ${listing.name}`}
         >
           <Image
             src={hero}
             alt={listing.name}
-            width={400}
-            height={400}
-            className="h-auto max-h-[280px] w-auto object-contain drop-shadow-[0_8px_24px_rgba(17,24,39,0.08)] md:max-h-[320px]"
+            width={480}
+            height={480}
+            className="h-full w-full object-contain"
             sizes="(max-width:768px) 100vw, 33vw"
           />
           {isSold && (

@@ -31,7 +31,7 @@ export function FeaturedProductHero({ listing }: Props) {
 
   return (
     <section
-      className="hero-glow animate-fade-in overflow-hidden pt-10 pb-16 md:pt-14 md:pb-24"
+      className="animate-fade-in overflow-hidden bg-surface pt-8 pb-12 md:pt-10 md:pb-16"
       aria-label="Featured product"
     >
       <Container>
@@ -74,26 +74,15 @@ export function FeaturedProductHero({ listing }: Props) {
             className="product-image-zoom group relative order-1 mx-auto block w-full max-w-xl lg:order-2 lg:max-w-none"
             aria-label={`View ${listing.name}`}
           >
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-image shadow-card">
-              <div
-                className="showroom-card-glow pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at 50% 80%, rgba(37,99,235,0.08) 0%, transparent 70%)",
-                }}
-              />
-              <div className="flex h-full items-center justify-center p-8 md:p-12">
-                <Image
-                  src={hero}
-                  alt={listing.name}
-                  width={560}
-                  height={560}
-                  className="h-auto max-h-[min(420px,70vw)] w-auto object-contain drop-shadow-[0_24px_48px_rgba(17,24,39,0.12)]"
-                  sizes="(max-width:768px) 90vw, 560px"
-                  priority
-                />
-              </div>
-            </div>
+            <Image
+              src={hero}
+              alt={listing.name}
+              width={1400}
+              height={1050}
+              className="mx-auto h-auto w-full max-h-[min(480px,55vh)] object-contain"
+              sizes="(max-width:768px) 90vw, 560px"
+              priority
+            />
           </Link>
         </div>
       </Container>

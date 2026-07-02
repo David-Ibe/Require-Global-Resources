@@ -99,9 +99,9 @@ export default async function ListingDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="bg-page">
-        <section className="animate-fade-in bg-surface pb-6 pt-3 md:pb-8 md:pt-4">
-          <Container className="max-w-6xl">
+      <div className="bg-surface">
+        <section className="animate-fade-in pb-6 pt-3 md:pb-8 md:pt-4">
+          <Container className="max-w-7xl">
             <nav className="mb-3 flex flex-wrap items-center gap-2 text-xs text-quiet">
               <Link href="/" className="hover:text-navy">
                 Home
@@ -119,7 +119,7 @@ export default async function ListingDetailPage({ params }: Props) {
               </Link>
             </nav>
 
-            <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,24rem)]">
+            <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(280px,22rem)] lg:gap-10 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,24rem)]">
               <ProductGallery
                 images={listing.images}
                 alt={listing.name}

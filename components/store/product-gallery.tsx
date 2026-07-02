@@ -26,44 +26,55 @@ export function ProductGallery({ images, alt, videoUrl, videoPoster, category = 
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="space-y-4">
         <button
           type="button"
           onClick={() => setZoomed(true)}
-          className="product-image-zoom relative block h-[240px] w-full overflow-hidden rounded-2xl bg-image sm:h-[280px] md:h-[300px] lg:h-[320px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          className="product-image-zoom block w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2"
           aria-label="Zoom image"
         >
           <Image
             src={activeSrc}
             alt={alt}
-            fill
+            width={1400}
+            height={1050}
             priority
-            className="object-contain p-4 md:p-6"
-            sizes="(max-width:768px) 100vw, 560px"
+            className="mx-auto h-auto w-full max-h-[min(560px,70vh)] object-contain"
+            sizes="(max-width:1024px) 100vw, 720px"
           />
         </button>
 
         {gallery.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="flex gap-3 overflow-x-auto pb-1">
             {gallery.map((src, i) => (
               <button
                 key={src + i}
                 type="button"
                 onClick={() => setActive(i)}
                 className={cn(
-                  "relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-image ring-2 ring-offset-1 transition",
-                  active === i ? "ring-neutral-900" : "ring-transparent hover:ring-neutral-200"
+                  "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg transition sm:h-20 sm:w-20",
+                  active === i
+                    ? "opacity-100 ring-2 ring-navy"
+                    : "opacity-60 hover:opacity-100"
                 )}
                 aria-label={`View image ${i + 1}`}
+                aria-current={active === i ? "true" : undefined}
               >
-                <Image src={src} alt="" fill className="object-contain p-1" sizes="56px" />
+                <Image
+                  src={src}
+                  alt=""
+                  width={80}
+                  height={80}
+                  className="h-full w-full object-contain"
+                  sizes="80px"
+                />
               </button>
             ))}
           </div>
         )}
 
         {videoUrl && (
-          <div className="overflow-hidden rounded-2xl bg-neutral-100">
+          <div className="overflow-hidden rounded-2xl">
             <video
               controls
               poster={videoPoster || activeSrc}
