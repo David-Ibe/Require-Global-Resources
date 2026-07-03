@@ -21,6 +21,32 @@ function heroScore(listing: Listing): number {
   return 50;
 }
 
+/** Aspirational one-liner for the homepage hero — outcome over category. */
+export function getFeaturedHeroTagline(listing: Listing): string {
+  const name = listing.name.toLowerCase();
+
+  if (/dell.*pro\s*14|latitude|xps|precision/.test(name)) {
+    return "Built for professionals who expect more.";
+  }
+  if (/thinkpad|lenovo/.test(name)) {
+    return "Performance without compromise.";
+  }
+  if (/macbook|mac mini/.test(name)) {
+    return "Designed for modern work.";
+  }
+  if (/iphone|ipad/.test(name)) {
+    return "Power in your pocket. Precision in every detail.";
+  }
+  if (listing.category === "laptops") {
+    return "Built for professionals who expect more.";
+  }
+  if (listing.category === "phones") {
+    return "Performance without compromise.";
+  }
+
+  return "Genuine products. Delivered with confidence.";
+}
+
 /** Pick a broadly relevant hero product — laptop or Mac Mini, not niche desktops. */
 export function pickFeaturedListing(listings: Listing[]): Listing | null {
   const available = listings.filter((l) => l.status === "available");
