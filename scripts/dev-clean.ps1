@@ -33,7 +33,7 @@ Start-Sleep -Milliseconds 250
 Push-Location $projectRoot
 try {
   # Ensure we ONLY bind to localhost:3000
-  & npx next dev -p 3000 -H localhost
+  & npx next dev -p 3000 -H 127.0.0.1
 } finally {
   Pop-Location
 }

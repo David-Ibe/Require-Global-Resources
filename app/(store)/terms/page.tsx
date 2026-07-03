@@ -24,9 +24,9 @@ export default function TermsPage() {
         <section>
           <h2 className="text-xl font-semibold text-rgr-navy">Introduction</h2>
           <p className="mt-3 text-rgr-gray700">
-            These terms and conditions govern your use of
-            requireglobalresources.com and all purchases made through Require
-            Global Resources. By placing an order you agree to these terms.
+            These terms and conditions govern your use of {brand.website} and
+            all purchases made through {brand.name}. By placing an order you
+            agree to these terms.
           </p>
         </section>
 

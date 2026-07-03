@@ -1,3 +1,4 @@
+import { BrandMarquee } from "@/components/store/brand-marquee";
 import { FeaturedProductHero } from "@/components/store/featured-product-hero";
 import { ElectronicsListingsGrid } from "@/components/store/electronics-listings-grid";
 import { ShopByCategory } from "@/components/store/shop-by-category";
@@ -24,6 +25,7 @@ export default async function HomePage() {
   return (
     <div className="bg-page">
       {featured && <FeaturedProductHero listing={featured} />}
+      <BrandMarquee />
       <ShopByCategory compact />
       <ElectronicsListingsGrid
         listings={gridListings}

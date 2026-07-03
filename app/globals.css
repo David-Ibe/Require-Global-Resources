@@ -129,4 +129,16 @@ a.link-accent:hover {
     opacity: 1;
     transform: translateY(0);
   }
+
+  .marquee-track,
+  .trust-marquee-track {
+    display: flex;
+    width: max-content;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee {
+      animation: none;
+    }
+  }
 }

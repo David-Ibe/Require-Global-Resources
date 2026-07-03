@@ -118,6 +118,56 @@ export const FEATURED_BRANDS: FeaturedBrand[] = [
       { name: "MX Keys", href: "/listings?q=MX+Keys" },
     ],
   },
+  {
+    slug: "sandisk",
+    name: "SanDisk",
+    href: "/brands/sandisk",
+    tagline: "USB drives & memory cards",
+    products: [
+      { name: "USB flash drives", href: "/listings?q=SanDisk" },
+      { name: "SD cards", href: "/listings?q=SanDisk+SD" },
+    ],
+  },
+  {
+    slug: "seagate",
+    name: "Seagate",
+    href: "/brands/seagate",
+    tagline: "External & internal storage",
+    products: [
+      { name: "External drives", href: "/listings?q=Seagate" },
+      { name: "Portable SSD", href: "/listings?q=Seagate+SSD" },
+    ],
+  },
+  {
+    slug: "epson",
+    name: "Epson",
+    href: "/brands/epson",
+    tagline: "Printers & projectors",
+    products: [
+      { name: "Printers", href: "/listings?q=Epson+printer" },
+      { name: "Projectors", href: "/listings?q=Epson+projector" },
+    ],
+  },
+  {
+    slug: "jbl",
+    name: "JBL",
+    href: "/brands/jbl",
+    tagline: "Speakers & headphones",
+    products: [
+      { name: "Bluetooth speakers", href: "/listings?q=JBL" },
+      { name: "Headphones", href: "/listings?q=JBL+headphones" },
+    ],
+  },
+  {
+    slug: "cisco",
+    name: "Cisco",
+    href: "/brands/cisco",
+    tagline: "Networking & business equipment",
+    products: [
+      { name: "Routers", href: "/listings?q=Cisco+router" },
+      { name: "Switches", href: "/listings?q=Cisco+switch" },
+    ],
+  },
 ];
 
 export const TRUST_BRAND_NAMES = [

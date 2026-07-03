@@ -20,7 +20,7 @@ export const brand = {
   },
   location: "Lagos, Nigeria",
   phoneDisplay: "+234 703 988 3247",
-  website: "requireglobal.ng",
+  website: "requireglobal.com.ng",
 } as const;
 
 const configuredWhatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2347039883247";
@@ -39,12 +39,12 @@ export const contact = {
   facebookName: "Require Global",
   facebookUrl:
     process.env.NEXT_PUBLIC_FACEBOOK_URL ?? "https://www.facebook.com/requireglobalng",
-  email: "info@requireglobal.ng",
+  email: "info@requireglobal.com.ng",
   jijiUrl: process.env.NEXT_PUBLIC_JIJI_URL ?? "https://jiji.ng",
 } as const;
 
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobal.ng";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://requireglobal.com.ng";
 
 export const defaultSiteTitle =
   "Require Global — Genuine Electronics. Delivered.";
